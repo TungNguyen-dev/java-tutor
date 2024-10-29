@@ -1,4 +1,4 @@
-package com.tungnn.tutor.java.core17.base.collection.collections;
+package com.tungnn.tutor.java.core17.base.collection.collections.variation;
 
 import java.util.Arrays;
 import java.util.List;

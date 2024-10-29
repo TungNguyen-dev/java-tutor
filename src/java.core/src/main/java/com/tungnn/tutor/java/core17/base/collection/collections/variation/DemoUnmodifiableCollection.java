@@ -1,9 +1,7 @@
-package com.tungnn.tutor.java.core17.base.collection.collections;
+package com.tungnn.tutor.java.core17.base.collection.collections.variation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class DemoUnmodifiableCollection {

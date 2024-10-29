@@ -14,7 +14,7 @@ public class Demo {
     class Sub extends Super {
 
         @Override
-        void test() throws IOException, SQLException {
+        void test() throws IOException {
             super.test();
         }
     }

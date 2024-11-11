@@ -1,4 +1,4 @@
-package com.tungnn.tutor.java.core17.enthuware.test05;
+package com.tungnn.tutor.java.core17.enthuware.test04;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

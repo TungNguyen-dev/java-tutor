@@ -1,4 +1,4 @@
-package com.tungnn.tutor.java.core17.enthuware.test06;
+package com.tungnn.tutor.java.core17.enthuware.test05;
 
 import java.util.Map;
 import java.util.Properties;

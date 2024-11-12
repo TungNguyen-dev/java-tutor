@@ -1,4 +1,4 @@
-package com.tungnn.tutor.java.core17.base.library.stream;
+package com.tungnn.tutor.java.core17.base.libraries.stream;
 
 import java.util.Arrays;
 import java.util.Collection;

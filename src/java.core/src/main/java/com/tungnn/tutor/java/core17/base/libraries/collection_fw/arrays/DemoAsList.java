@@ -1,4 +1,4 @@
-package com.tungnn.tutor.java.core17.base.library.collection.arrays;
+package com.tungnn.tutor.java.core17.base.libraries.collection_fw.arrays;
 
 import java.util.Arrays;
 import java.util.List;

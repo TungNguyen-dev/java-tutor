@@ -1,4 +1,4 @@
-package com.tungnn.tutor.java.core17.base.library.jdbc;
+package com.tungnn.tutor.java.core17.base.libraries.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

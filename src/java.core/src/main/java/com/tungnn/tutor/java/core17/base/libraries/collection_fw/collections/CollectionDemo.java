@@ -1,11 +1,12 @@
-package com.tungnn.tutor.java.core17.base.library.collection.collections;
+package com.tungnn.tutor.java.core17.base.libraries.collection_fw.collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class DemoCollection {
+public class CollectionDemo {
+
     public static void main(String[] args) {
         demoAdd();
         System.out.println();

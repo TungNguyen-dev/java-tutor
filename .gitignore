@@ -1,5 +1,7 @@
 .idea
 **/target
-data
 **/.DS_Store
-storage
+**/.settings
+**/.classpath
+**/.factorypath
+**/.project

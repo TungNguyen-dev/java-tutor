@@ -1,4 +1,4 @@
-package com.tungnn.tutor.springboot.springbatchdemo;
+package com.tungnn.tutor.springboot.batch.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

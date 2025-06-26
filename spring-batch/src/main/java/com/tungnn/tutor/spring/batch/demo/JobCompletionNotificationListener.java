@@ -1,4 +1,4 @@
-package com.tungnn.tutor.springboot.batch.demo;
+package com.tungnn.tutor.spring.batch.demo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.tungnn.tutor.springboot.batch.demo;
+package com.tungnn.tutor.spring.batch.demo;
 
 import javax.sql.DataSource;
 import org.springframework.batch.core.Job;

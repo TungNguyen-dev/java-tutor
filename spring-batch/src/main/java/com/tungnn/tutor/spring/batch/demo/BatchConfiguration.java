@@ -6,6 +6,9 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -19,7 +22,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 public class BatchConfiguration {
 
   @Bean
-  public FlatFileItemReader<Person> reader() {
+  public ItemReader<Person> reader() {
     return new FlatFileItemReaderBuilder<Person>()
         .name("personItemReader")
         .resource(new ClassPathResource("sample-data.csv"))
@@ -30,12 +33,12 @@ public class BatchConfiguration {
   }
 
   @Bean
-  public PersonItemProcessor processor() {
+  public ItemProcessor<Person, Person> processor() {
     return new PersonItemProcessor();
   }
 
   @Bean
-  public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
+  public ItemWriter<Person> writer(DataSource dataSource) {
     return new JdbcBatchItemWriterBuilder<Person>()
         .sql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)")
         .dataSource(dataSource)
@@ -44,8 +47,7 @@ public class BatchConfiguration {
   }
 
   @Bean
-  public Job importUserJob(
-      JobRepository jobRepository, Step step1, JobCompletionNotificationListener listener) {
+  public Job job(JobRepository jobRepository, Step step1, JobCompletionListener listener) {
     return new JobBuilder("importUserJob", jobRepository).listener(listener).start(step1).build();
   }
 

@@ -1,6 +1,8 @@
 package com.tungnn.tutor.spring.context;
 
 import com.tungnn.tutor.spring.context.beans.MyService;
+import com.tungnn.tutor.spring.context.beans.impl.MyServiceImpl;
+import com.tungnn.tutor.spring.context.beans.impl.MyServiceImpl2;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +15,17 @@ public class JavaConfigApplicationContextLoader {
     ApplicationContext context =
         new AnnotationConfigApplicationContext(JavaConfigApplicationContextLoader.class);
 
-    MyService myService = context.getBean(MyService.class);
+    MyService myService = context.getBean("myService1", MyService.class);
     myService.sayHello();
   }
 
   @Bean
-  public MyService myService() {
-    return new MyService();
+  public MyService myService1() {
+    return new MyServiceImpl();
+  }
+
+  @Bean
+  public MyService myService2() {
+    return new MyServiceImpl2();
   }
 }

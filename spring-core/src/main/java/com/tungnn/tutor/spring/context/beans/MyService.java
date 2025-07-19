@@ -1,11 +1,6 @@
 package com.tungnn.tutor.spring.context.beans;
 
-import org.springframework.stereotype.Component;
+public interface MyService {
 
-@Component
-public final class MyService {
-
-  public void sayHello() {
-    System.out.println("Hello, World!");
-  }
+    void sayHello();
 }

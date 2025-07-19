@@ -6,5 +6,5 @@
            https://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- Define your bean -->
-    <bean id="myService" class="com.tungnn.tutor.spring.context.beans.MyService" />
+    <bean id="myService" class="com.tungnn.tutor.spring.context.beans.impl.MyServiceImpl" />
 </beans>

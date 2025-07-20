@@ -1,10 +1,9 @@
-package com.tungnn.tutor.spring.context;
+package com.tungnn.tutor.spring.context.demo.xml;
 
-import com.tungnn.tutor.spring.context.beans.MyService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class XmlApplicationContextLoader {
+public class Application {
 
   public static void main(String[] args) {
     ApplicationContext context = new ClassPathXmlApplicationContext("application-beans.xml");

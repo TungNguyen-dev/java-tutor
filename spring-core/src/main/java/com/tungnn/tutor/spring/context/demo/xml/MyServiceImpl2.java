@@ -1,6 +1,5 @@
-package com.tungnn.tutor.spring.context.beans.impl;
+package com.tungnn.tutor.spring.context.demo.xml;
 
-import com.tungnn.tutor.spring.context.beans.MyService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

@@ -18,7 +18,7 @@ public class UserRestController {
 
   @GetMapping
   public List<User> getUsers() {
-    return List.of(new User(1, "Tung", "<EMAIL>"));
+    return List.of(new User(1, "Tung", "example@gmail.com"));
   }
 
   @GetMapping("/{userId}")

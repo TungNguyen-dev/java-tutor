@@ -1,4 +1,4 @@
-package com.tungnn.tutor.spring.context.beans;
+package com.tungnn.tutor.spring.context.demo.xml;
 
 public interface MyService {
 

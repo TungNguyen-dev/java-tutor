@@ -3,7 +3,6 @@ package com.tungnn.tutor.springboot.data.jpa.demo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-
 import java.util.List;
 
 /** Using Queries */

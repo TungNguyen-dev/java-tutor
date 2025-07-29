@@ -24,22 +24,6 @@ import java.util.stream.Collectors;
 public class DuplicateEliminationAndSortingUtils {
 
   /**
-   * Class-level annotation to define composite unique key fields for objects. This annotation
-   * specifies the names of the fields used to determine the uniqueness and sorting order of objects
-   * in collections.
-   */
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.TYPE)
-  public @interface DuplicateEliminationAndSortingKey {
-    /**
-     * Names of the fields used for determining uniqueness and sorting order of objects.
-     *
-     * @return An array of field names.
-     */
-    String[] fields();
-  }
-
-  /**
    * Eliminates duplicates from a collection of objects and sorts them based on the fields specified
    * in the {@link DuplicateEliminationAndSortingKey} annotation.
    *
@@ -144,6 +128,22 @@ public class DuplicateEliminationAndSortingUtils {
     } else {
       throw new ClassCastException("Field value must implement Comparable: " + value);
     }
+  }
+
+  /**
+   * Class-level annotation to define composite unique key fields for objects. This annotation
+   * specifies the names of the fields used to determine the uniqueness and sorting order of objects
+   * in collections.
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target(ElementType.TYPE)
+  public @interface DuplicateEliminationAndSortingKey {
+    /**
+     * Names of the fields used for determining uniqueness and sorting order of objects.
+     *
+     * @return An array of field names.
+     */
+    String[] fields();
   }
 
   /**

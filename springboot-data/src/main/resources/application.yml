@@ -1,0 +1,26 @@
+server:
+  servlet:
+    context-path: /api/hr
+spring:
+  application:
+    name: springboot-data
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/ORCLPDB1
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.Oracle12cDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        enable_lazy_load_no_trans: true
+        event:
+          merge:
+            entity_copy_observer: allow

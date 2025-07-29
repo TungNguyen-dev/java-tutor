@@ -3,9 +3,7 @@ package com.tungnn.tutor.springboot.data.jpa.demo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-/**
- * Simple CRUD operations
- */
+/** Simple CRUD operations */
 public class EmployeeDAO {
 
   @PersistenceContext private EntityManager entityManager;

@@ -1,6 +1,7 @@
 # SPRING & JPA
 
 ### Persistence Frameworks
+
 Hibernate
 Spring JPA
 Database Driver
@@ -8,19 +9,23 @@ Database Driver
 ### Database Configuration and Connection Pooling
 
 ### Handling Database Schema and Lazy Loading
+
 ddl-auto
 enable_lazy_load_no_trans
 
-
 ## Entity Managers
+
 ### JPA Architecture Overview!
+
 [img.png](img.png)
 
 - PersistenceContext
 - EntityManager
-  - EntityManagerFactory
+    - EntityManagerFactory
 - Entity
+
 ### Entity Management and Transactions
+
 ### Querying and Data Manipulation
 
 # CRUD Operations
@@ -41,6 +46,7 @@ JPA Query API using entityManager.createQuery():
 - NamedParameter: Using named parameters with :name
 
 # TypedQueries
+
 (Inherited from Queries)
 
 Type-safe version of Query API using entityManager.createQuery() with Class parameter:

@@ -7,24 +7,6 @@ import org.junit.jupiter.api.Test;
 
 public class DuplicateEliminationAndSortingUtilsTest {
 
-  @DuplicateEliminationAndSortingUtils.DuplicateEliminationAndSortingKey(fields = {"id", "name"})
-  static class Person {
-    String id;
-    String name;
-    int age;
-
-    Person(String id, String name, int age) {
-      this.id = id;
-      this.name = name;
-      this.age = age;
-    }
-
-    @Override
-    public String toString() {
-      return id + "-" + name + "-" + age;
-    }
-  }
-
   @Test
   public void testEliminateDuplicationAndSort_basic() {
     List<Person> input =
@@ -135,5 +117,23 @@ public class DuplicateEliminationAndSortingUtilsTest {
     System.out.println("Output: " + result);
 
     assertEquals(3, result.size());
+  }
+
+  @DuplicateEliminationAndSortingUtils.DuplicateEliminationAndSortingKey(fields = {"id", "name"})
+  static class Person {
+    String id;
+    String name;
+    int age;
+
+    Person(String id, String name, int age) {
+      this.id = id;
+      this.name = name;
+      this.age = age;
+    }
+
+    @Override
+    public String toString() {
+      return id + "-" + name + "-" + age;
+    }
   }
 }

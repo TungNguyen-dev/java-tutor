@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import lombok.Data;
 import org.hibernate.annotations.NamedQuery;
 
 @Entity
@@ -13,6 +14,7 @@ import org.hibernate.annotations.NamedQuery;
 @NamedQuery(
     name = "Employee.findByLastName",
     query = "select e from Employee e where e.lastName = :lastName")
+@Data
 public class Employee {
   @Id
   @Column(name = "EMPLOYEE_ID", nullable = false)

@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>com.tungnn.tutor.java.springboot</groupId>
-    <artifactId>springboot-jpa-demo</artifactId>
+    <artifactId>springboot-data-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>springboot-jpa-demo</name>
-    <description>springboot-jpa-demo</description>
+    <name>springboot-data-rest</name>
+    <description>springboot-data-rest</description>
 
     <properties>
         <java.version>24</java.version>
@@ -40,6 +40,14 @@
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc11</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-rest-hal-explorer</artifactId>
         </dependency>
     </dependencies>
 

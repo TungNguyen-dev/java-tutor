@@ -6,6 +6,6 @@
            https://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- Define your bean -->
-    <bean id="myService" class="com.tungnn.tutor.java.spring.context.xml.MyServiceImpl"/>
-    <bean id="myService2" class="com.tungnn.tutor.java.spring.context.xml.MyServiceImpl2"/>
+    <bean id="myService" class="com.tungnn.tutor.java.spring.context.xml.service.impl.MyServiceImpl"/>
+    <bean id="myService2" class="com.tungnn.tutor.java.spring.context.xml.service.impl.MyServiceImpl2"/>
 </beans>

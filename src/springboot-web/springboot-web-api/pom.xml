@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>com.tungnn.tutor.java.springboot</groupId>
-    <artifactId>springboot-web-demo</artifactId>
+    <artifactId>springboot-web-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>springboot-web-demo</name>
-    <description>springboot-web-demo</description>
+    <name>springboot-web-api</name>
+    <description>springboot-web-api</description>
 
     <properties>
         <java.version>24</java.version>

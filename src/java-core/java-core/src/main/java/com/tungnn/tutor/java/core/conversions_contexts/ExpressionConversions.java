@@ -5,7 +5,20 @@ import java.util.List;
 
 public class ExpressionConversions {
 
-  static class Super {}
+  static class Super {
+
+    public Super() {
+      System.out.println("Super constructor");
+    }
+
+    public void test_Super() {
+      System.out.println("Super method");
+    }
+
+    public static void test_Super_Static() {
+      System.out.println("Super static method");
+    }
+  }
 
   static class Sub extends Super {}
 
@@ -165,10 +178,28 @@ public class ExpressionConversions {
   }
 
   public static void test_Conversions_Capture() {
-    List<?> wildcardList = new ArrayList<String>();
+    class WildcardError {
+      public void foo(List<?> list) {
+        /*
+        ExpressionConversions.java:215: error: incompatible types: Object cannot be converted to CAP#1
+          list.set(0, list.getFirst());
+        where CAP#1 is a fresh type-variable: CAP#1 extends Object from capture of ?
+         */
+        Object obj = list.getFirst();
+        // list.set(0, obj);
+      }
+    }
+    class WildcardFixed {
+      public void foo(List<?> list) {
+        fooHelper(list);
+      }
 
-    // Capture conversion occurs when the wildcard type is converted to its upper bound
-    List<? extends Object> capturedList = wildcardList;
+      // Helper method created so that the wildcard can be captured through type inference.
+      private <T> void fooHelper(List<T> list) {
+        T obj = list.getFirst();
+        list.set(0, obj);
+      }
+    }
   }
 
   public static void test_Conversions_String() {
@@ -203,22 +234,22 @@ public class ExpressionConversions {
   }
 
   public static void test_Conversions_Forbidden() {
-//     These would cause compilation errors:
-//     boolean b = 1;              // int to boolean not allowed
-//     int i = true;              // boolean to int not allowed
-//     float f = false;           // boolean to float not allowed
-//     boolean b2 = 1.0;          // double to boolean not allowed
-//     String s = 'c';            // char to String not allowed without conversion
-//
-//     These would cause compilation errors:
-//     String str = new Object(); // Cannot convert Object to String
-//     Integer i = new Object(); // Cannot convert Object to Integer
-//     ArrayList<Integer> intList = new ArrayList<String>(); // Incompatible generic types
-//
-//     These would cause compilation errors:
-//     Integer i = true;         // Cannot box boolean to Integer
-//     Boolean b = 1;           // Cannot box int to Boolean
-//     int i = new Boolean(true); // Cannot unbox Boolean to int
-//     boolean b = new Integer(1); // Cannot unbox Integer to boolean
+    //     These would cause compilation errors:
+    //     boolean b = 1;              // int to boolean not allowed
+    //     int i = true;              // boolean to int not allowed
+    //     float f = false;           // boolean to float not allowed
+    //     boolean b2 = 1.0;          // double to boolean not allowed
+    //     String s = 'c';            // char to String not allowed without conversion
+    //
+    //     These would cause compilation errors:
+    //     String str = new Object(); // Cannot convert Object to String
+    //     Integer i = new Object(); // Cannot convert Object to Integer
+    //     ArrayList<Integer> intList = new ArrayList<String>(); // Incompatible generic types
+    //
+    //     These would cause compilation errors:
+    //     Integer i = true;         // Cannot box boolean to Integer
+    //     Boolean b = 1;           // Cannot box int to Boolean
+    //     int i = new Boolean(true); // Cannot unbox Boolean to int
+    //     boolean b = new Integer(1); // Cannot unbox Integer to boolean
   }
 }

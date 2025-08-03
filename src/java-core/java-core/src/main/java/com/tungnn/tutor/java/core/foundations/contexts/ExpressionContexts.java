@@ -1,4 +1,4 @@
-package com.tungnn.tutor.java.core.conversions_contexts;
+package com.tungnn.tutor.java.core.foundations.contexts;
 
 public class ExpressionContexts {
 

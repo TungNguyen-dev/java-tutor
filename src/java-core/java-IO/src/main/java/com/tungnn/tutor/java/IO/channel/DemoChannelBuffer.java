@@ -19,9 +19,9 @@ public class DemoChannelBuffer {
     var writeOptionSet = Set.of(StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     try (var channel = java.nio.channels.FileChannel.open(dst, writeOptionSet)) {
       ByteBuffer buffer = ByteBuffer.wrap(data.toString().getBytes());
-      int bytesRead;
-      bytesRead = channel.write(buffer);
-      System.out.println(bytesRead);
+      int bytesWritten;
+      bytesWritten = channel.write(buffer);
+      System.out.println(bytesWritten);
     }
   }
 

@@ -2,6 +2,7 @@ package com.tungnn.tutor.java.IO.channel;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class DemoChannelBuffer {
 
   public static void write(Path dst, Object data) throws IOException {
     var writeOptionSet = Set.of(StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-    try (var channel = java.nio.channels.FileChannel.open(dst, writeOptionSet)) {
+    try (var channel = FileChannel.open(dst, writeOptionSet)) {
       ByteBuffer buffer = ByteBuffer.wrap(data.toString().getBytes());
       int bytesWritten;
       bytesWritten = channel.write(buffer);
@@ -26,7 +27,7 @@ public class DemoChannelBuffer {
   }
 
   public static void read(Path src) throws IOException {
-    try (var channel = java.nio.channels.FileChannel.open(src)) {
+    try (var channel = FileChannel.open(src)) {
       ByteBuffer buffer = ByteBuffer.allocate(8 * 1024);
       int bytesRead;
       do {

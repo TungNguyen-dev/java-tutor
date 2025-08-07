@@ -1,9 +1,0 @@
-.idea
-**/target
-**/.DS_Store
-**/.settings
-**/.classpath
-**/.factorypath
-**/.project
-**/*.env
-storage

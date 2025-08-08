@@ -2,5 +2,5 @@
 
 ### Execute java program
 ```shell
-java -cp target/classes com.tungnn.tutor.java.core.HelloWorld
+java -cp target/classes tungnn.tutor.java.core.HelloWorld
 ```

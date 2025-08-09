@@ -1,25 +1,75 @@
 package tungnn.tutor.java.core.foundations.types;
 
+import java.io.Serializable;
+
 public class Subtyping {
 
-  static class A<F1, F2> {}
+  public static void main(String[] args) {
+    test_Subtyping_Primitive();
+    test_Subtyping_ClassInterface_NonGenerics();
+  }
 
-  static class C<F1, F2> extends A<F1, F2> {}
+  public static void test_Subtyping_Primitive() {
+    byte b = 10;
+    short s = b; // byte to short
+    int i = s; // short to int
+    long l = i; // int to long
+    float f = l; // long to float
+    double d = f; // float to double
 
-  static class S1 {}
+    char c = 'a';
+    int i2 = c; // char to int
+  }
 
-  static class T1 extends S1 {}
+  public static void test_Subtyping_ClassInterface_NonGenerics() {
+    // Super class
+    class SuperClass {}
+    // Interface
+    interface SuperInterface {}
 
-  static class S2 {}
+    // Subclass
+    class Sub extends SuperClass implements SuperInterface {}
+    Sub sub = new Sub();
 
-  static class T2 extends S2 {}
+    SuperClass superClass = sub;
+    SuperInterface superInterface = sub;
 
-  public static void test_subtyping_Class_Interface() {
-    C<T1, T2> c = null;
+    // Interface with explicit extents
+    Object obj = sub;
+  }
 
-    A<T1, T2> a = c;
+  public static void test_Subtyping_ClassInterface_Generics() {
+    // TODO: In further study.
+  }
 
-    // Using wildcard --> S contain T
-    A<? extends S1, T2> a2 = c;
+  public static void test_Subtyping_Array_Primitive() {
+    // Primitive array
+    int[] intArray = new int[10];
+
+    // Demo
+    Object obj = intArray;
+    Cloneable cloneable = intArray;
+    Serializable serializable = intArray;
+  }
+
+  public static void test_Subtyping_Array_Types() {
+    class Super {}
+    class Sub extends Super {}
+
+    Sub[] subArray = new Sub[10];
+
+    // Demo
+    Super[] superArray = subArray;
+    Object objArray = subArray;
+    Cloneable cloneableArray = subArray;
+    Serializable serializableArray = subArray;
+  }
+
+  public static void test_Subtyping_LUB() {
+    // TODO: In further study.
+  }
+
+  public static void test_Subtyping_TypeProjection() {
+    // TODO: In further study.
   }
 }

@@ -1,4 +1,4 @@
-package tungnn.tutor.java.collection;
+package tungnn.tutor.java.collection.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * {@link DuplicateEliminationAndSortingKey} annotation, specifying the fields that determine
  * uniqueness and sorting order.
  */
-public class DuplicateEliminationAndSortingUtils {
+public final class DuplicateEliminationAndSortingUtil {
 
   /**
    * Eliminates duplicates from a collection of objects and sorts them based on the fields specified

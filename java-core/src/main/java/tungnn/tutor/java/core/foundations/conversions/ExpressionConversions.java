@@ -30,35 +30,15 @@ public class ExpressionConversions {
   }
 
   public static void test_Conversions_Widening_Primitive() {
-    byte b = 100;
-    short s = b; // byte to short
-    int i1 = b; // byte to int
-    long l1 = b; // byte to long
-    float f1 = b; // byte to float
-    double d1 = b; // byte to double
-
-    int i2 = s; // short to int
-    long l2 = s; // short to long
-    float f2 = s; // short to float
-    double d2 = s; // short to double
+    byte b = 1;
+    short s = b; // byte to short widening
+    int i = s; // short to int widening
+    long l = i; // int to long widening
+    float f = l; // long to float widening
+    double d = f; // float to double widening
 
     char c = 'A';
-    int i3 = c; // char to int
-    long l3 = c; // char to long
-    float f3 = c; // char to float
-    double d3 = c; // char to double
-
-    int i4 = 100;
-    long l4 = i4; // int to long
-    float f4 = i4; // int to float
-    double d4 = i4; // int to double
-
-    long l5 = 100L;
-    float f5 = l5; // long to float
-    double d5 = l5; // long to double
-
-    float f6 = 100.0f;
-    double d6 = f6; // float to double
+    int i2 = c; // char to int widening
   }
 
   public static void test_Conversions_Narrowing_Primitive() {

@@ -1,3 +1,3 @@
 module m.A {
-  requires m.B;
+  requires m.D;
 }

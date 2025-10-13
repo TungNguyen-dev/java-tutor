@@ -199,3 +199,8 @@ node_modules
 application-local.yml
 application-local.yaml
 application-local.properties
+
+# JDTLS
+**/.jdtls-cache/
+**/.classpath
+**/.project

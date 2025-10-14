@@ -204,3 +204,5 @@ application-local.properties
 **/.jdtls-cache/
 **/.classpath
 **/.project
+
+**/*.env

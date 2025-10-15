@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport 
+    xmlns="http://jasperreports.sourceforge.net/jasperreports"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+                        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+    name="employee_report"
+    pageWidth="595"
+    pageHeight="842"
+    columnWidth="555"
+    leftMargin="20"
+    rightMargin="20"
+    topMargin="20"
+    bottomMargin="20"
+    uuid="8f1c2c0e-457a-4b6d-87aa-9e67c8ad9b82">
+
+    <!-- ==============================
+         1. PARAMETERS
+    =============================== -->
+    <parameter name="reportTitle" class="java.lang.String"/>
+    <parameter name="createdBy" class="java.lang.String"/>
+
+    <!-- ==============================
+         2. QUERY
+    =============================== -->
+    <queryString>
+        <![CDATA[
+            SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, HIRE_DATE, SALARY
+            FROM HR.EMPLOYEES
+            ORDER BY EMPLOYEE_ID
+        ]]>
+    </queryString>
+
+    <!-- ==============================
+         3. FIELDS
+    =============================== -->
+    <field name="EMPLOYEE_ID" class="java.lang.Integer"/>
+    <field name="FIRST_NAME" class="java.lang.String"/>
+    <field name="LAST_NAME" class="java.lang.String"/>
+    <field name="EMAIL" class="java.lang.String"/>
+    <field name="HIRE_DATE" class="java.sql.Date"/>
+    <field name="SALARY" class="java.math.BigDecimal"/>
+
+    <!-- ==============================
+         4. TITLE BAND
+    =============================== -->
+    <title>
+        <band height="70">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="30" uuid="7c67a7aa-3ef1-4b89-ae62-1f19e5152e12"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{reportTitle}]]></textFieldExpression>
+            </textField>
+
+            <textField>
+                <reportElement x="0" y="40" width="555" height="20" uuid="8b3b74e4-bd8f-4f40-8f49-b5bce4d20aab"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font size="10" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Created by: " + $P{createdBy}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- ==============================
+         5. COLUMN HEADER
+    =============================== -->
+    <columnHeader>
+        <band height="25">
+            <staticText>
+                <reportElement x="0" y="0" width="50" height="25" backcolor="#E0E0E0" uuid="0b78ab2a-53e9-43a9-b48c-1ce89a2f33f8"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle" />
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="50" y="0" width="100" height="25" backcolor="#E0E0E0" uuid="5aab1cb4-cad7-4784-a21e-3e6a2a6b9928"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle" />
+                <text><![CDATA[First Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="150" y="0" width="100" height="25" backcolor="#E0E0E0" uuid="bb02f871-c45d-4d65-b0f4-bb1fdc65f0b2"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle" />
+                <text><![CDATA[Last Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="250" y="0" width="120" height="25" backcolor="#E0E0E0" uuid="f6721e12-2e67-4f59-9619-733c25de98b7"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle" />
+                <text><![CDATA[Email]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="370" y="0" width="90" height="25" backcolor="#E0E0E0" uuid="b8a3fef0-18ea-4e1a-a5bb-f8b3b7b99eb8"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle" />
+                <text><![CDATA[Hire Date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="460" y="0" width="95" height="25" backcolor="#E0E0E0" uuid="4f61a6c1-09a3-4df6-94c3-9f8e44756e0c"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle" />
+                <text><![CDATA[Salary]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- ==============================
+         6. DETAIL BAND
+    =============================== -->
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="50" height="20" uuid="e5920d54-2c5d-44ac-bc0e-20fd0cfdbb6a"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{EMPLOYEE_ID}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="50" y="0" width="100" height="20" uuid="cfd52449-8c3a-4fbb-b9c2-c7f9de4b9a73"/>
+                <textFieldExpression><![CDATA[$F{FIRST_NAME}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="150" y="0" width="100" height="20" uuid="5cc5b46b-c5f1-4f36-885f-7274e26365e4"/>
+                <textFieldExpression><![CDATA[$F{LAST_NAME}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="250" y="0" width="120" height="20" uuid="7e00c59f-91cb-4697-a787-78c2ab167d36"/>
+                <textFieldExpression><![CDATA[$F{EMAIL}]]></textFieldExpression>
+            </textField>
+            <textField pattern="yyyy-MM-dd">
+                <reportElement x="370" y="0" width="90" height="20" uuid="0b41e334-9448-4741-bc73-cacde2922e2c"/>
+                <textFieldExpression><![CDATA[$F{HIRE_DATE}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="460" y="0" width="95" height="20" uuid="cd27db69-1cf8-4cf0-ae11-03f9f57d6ad6"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{SALARY}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <!-- ==============================
+         7. PAGE FOOTER
+    =============================== -->
+    <pageFooter>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="20" uuid="1f59d6df-cbcf-4e29-bc02-9cc61b07c406"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle" />
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+</jasperReport>

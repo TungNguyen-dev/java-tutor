@@ -1,4 +1,4 @@
-package tungnn.tutor.java.apache.poi;
+package tungnn.tutor.java.office.util.example;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class LargeXlsxReading {
+public class LargeXlsxReadingExample {
 
   static void main() throws IOException {
     Path path = Path.of("storage", "largeXlsxReading.xlsx");

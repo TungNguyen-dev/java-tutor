@@ -3,16 +3,13 @@ package tungnn.tutor.java.selenium;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.time.Duration;
 
 public class Demo {
 
   static void main() {
-    System.setProperty("webdriver.chrome.driver", "storage/chromedriver-mac-x64/chromedriver");
-
-    WebDriver driver = new ChromeDriver();
+    WebDriver driver = SeleniumUtil.getChromeDriver();
 
     driver.get("https://www.selenium.dev/selenium/web/web-form.html");
 

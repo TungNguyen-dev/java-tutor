@@ -1,9 +1,8 @@
 package tungnn.tutor.java.flink;
 
+import java.util.List;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
-import java.util.List;
 
 public class FlinkJobDemo {
 

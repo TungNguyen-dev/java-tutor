@@ -1,7 +1,5 @@
 package tungnn.tutor.java.jasper;
 
-import net.sf.jasperreports.engine.*;
-
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -9,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import net.sf.jasperreports.engine.*;
 
 public class JasperReportApp {
 

@@ -1,34 +1,44 @@
 package tungnn.tutor.java.selenium;
 
-import org.openqa.selenium.WebDriver;
+import org.jspecify.annotations.NonNull;
 import tungnn.tutor.java.core.lib.io.ResourceUtil;
 import tungnn.tutor.java.selenium.crawler.CourseraCrawler;
-import tungnn.tutor.java.selenium.util.SeleniumUtil;
+import tungnn.tutor.java.selenium.crawler.CourseraCrawlerPool;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class CourseraCrawApplication {
 
-  private static final String URL =
-      "https://www.coursera.org/programs/fpt-software-complete-learning-program-me8hh?authProvider=fpt-software";
-  private static final Path STORAGE_DIR = Paths.get("storage");
-  private static final Path STORAGE_DIR_NOTES = Paths.get("storage/notes");
-  private static final Path STORAGE_DIR_TODO = Paths.get("storage/01_todo");
-  private static final Path STORAGE_DIR_PROCESSING = Paths.get("storage/02_processing");
-  private static final Path STORAGE_DIR_DONE = Paths.get("storage/03_done");
-  private static final String TEMPLATE;
+  private static final int CRAWLER_POOL_SIZE =
+      Integer.parseInt(System.getenv().getOrDefault("CRAWLER_POOL_SIZE", String.valueOf(3)));
+
+  private static final Path STORAGE_DIR = Path.of("storage", "coursera-crawler");
+  private static final Path STORAGE_DIR_RESULTS =
+      STORAGE_DIR.resolve("results", String.valueOf(Instant.now().getEpochSecond()));
+  private static final Path STORAGE_DIR_TODO = STORAGE_DIR.resolve("01_todo");
+  private static final Path STORAGE_DIR_PROCESSING = STORAGE_DIR.resolve("02_processing");
+  private static final Path STORAGE_DIR_DONE = STORAGE_DIR.resolve("03_done");
+
   private static final DateTimeFormatter ID_FORMAT =
       DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+
+  private static final String TEMPLATE;
 
   static {
     try {
@@ -39,73 +49,107 @@ public class CourseraCrawApplication {
   }
 
   static void main() throws IOException {
-    WebDriver driver = SeleniumUtil.getChromeDriver();
+    try (CourseraCrawlerPool pool = new CourseraCrawlerPool(CRAWLER_POOL_SIZE);
+        ExecutorService executor = Executors.newFixedThreadPool(CRAWLER_POOL_SIZE);
+        Scanner scanner = new Scanner(System.in)) {
 
-    try (Scanner scanner = new Scanner(System.in)) {
-
-      driver.get(URL);
       System.out.println("Press ENTER after logging in...");
       scanner.nextLine();
 
-      CourseraCrawler crawler = new CourseraCrawler(driver);
+      List<Future<?>> futures = new ArrayList<>();
 
       boolean running = true;
       while (running) {
-        // MAJOR: core logic
-        run(crawler);
+        List<Path> todoPathList = getTodoPathList();
+        for (Path todoPath : todoPathList) {
+          String courseName = "Course " + todoPath.getFileName();
+          Path processPath = Files.move(todoPath, STORAGE_DIR_PROCESSING.resolve(courseName));
+          Path targetDir = Files.createDirectories(STORAGE_DIR_RESULTS.resolve(courseName));
+
+          crawlCourse(executor, futures, pool, processPath, targetDir);
+
+          Files.move(processPath, STORAGE_DIR_DONE.resolve(courseName));
+        }
 
         System.out.print("Do you want to crawl again? (y/n): ");
         String input = scanner.nextLine().trim().toLowerCase();
         running = input.equals("y") || input.equals("yes");
       }
 
-      System.out.print("Exiting crawler...");
+      for (Future<?> future : futures) {
+        try {
+          future.get();
+        } catch (InterruptedException | ExecutionException e) {
+          throw new RuntimeException(e);
+        }
+      }
 
-    } finally {
-      driver.quit();
+      System.out.print("Exiting crawler...");
     }
   }
 
-  public static void run(CourseraCrawler crawler) throws IOException {
-    // Load all file in storage/01_todo
-    List<Path> todoList = Files.list(STORAGE_DIR_TODO).sorted().toList();
-
-    // move a file to storage/02_processing
-    for (Path coursePath : todoList) {
-      Path processPath =
-          Files.move(coursePath, STORAGE_DIR_PROCESSING.resolve(coursePath.getFileName()));
-
-      List<String> urlList = Files.readAllLines(processPath);
-      int unitNoSize = Math.max(2, urlList.size() / 10 + 1);
-      AtomicInteger unitCounter = new AtomicInteger(1);
-      for (String url : urlList) {
-        CourseraCrawler.CrawlResult crawlResult;
-        try {
-          crawlResult = crawler.craw(url);
-        } catch (Exception e) {
-          System.out.println("Url crawl failed: " + url);
-          System.out.println(e.getMessage());
-          continue;
-        }
-        String id = LocalDateTime.now().format(ID_FORMAT);
-        String noteName = sanitizeFileName(crawlResult.title());
-        String content =
-            TEMPLATE
-                .replace("{{id}}", id)
-                .replace("{{noteTitle}}", noteName)
-                .replace("{{date}}", LocalDate.now().format(DateTimeFormatter.ISO_DATE))
-                .replace("{{title}}", crawlResult.title())
-                .replace("{{content}}", crawlResult.transcript())
-                .replace("{{url}}", url);
-
-        String noteFileName =
-            formatUnitNumber(unitNoSize, unitCounter.getAndIncrement()) + " - " + noteName + ".md";
-        Path notePath = STORAGE_DIR_NOTES.resolve(noteFileName);
-        Files.writeString(notePath, content, StandardOpenOption.CREATE);
-      }
-
-      Files.move(processPath, STORAGE_DIR_DONE.resolve(processPath.getFileName()));
+  private static @NonNull List<Path> getTodoPathList() throws IOException {
+    List<Path> todoPathList;
+    try (Stream<Path> todoPathStream = Files.list(CourseraCrawApplication.STORAGE_DIR_TODO)) {
+      todoPathList = todoPathStream.sorted().toList();
     }
+    return todoPathList;
+  }
+
+  private static void crawlCourse(
+      ExecutorService executor,
+      List<Future<?>> futures,
+      CourseraCrawlerPool pool,
+      Path coursePath,
+      Path resultDir)
+      throws IOException {
+
+    List<String> urlList = Files.readAllLines(coursePath);
+    int unitNoSize = String.valueOf(urlList.size()).length();
+    AtomicInteger unitCounter = new AtomicInteger(1);
+
+    for (String url : urlList) {
+      Runnable task =
+          () -> {
+            CourseraCrawler crawler = null;
+            try {
+              crawler = pool.borrowCrawler();
+
+              // MAJOR: Main logic
+              CourseraCrawler.CrawlResult result = crawler.craw(url);
+              handleCrawlResult(result, unitNoSize, unitCounter.getAndIncrement(), resultDir);
+              Thread.sleep(5000);
+
+            } catch (InterruptedException | IOException e) {
+              throw new RuntimeException(e);
+            } finally {
+              pool.returnCrawler(crawler);
+            }
+          };
+      futures.add(executor.submit(task));
+    }
+  }
+
+  private static void handleCrawlResult(
+      CourseraCrawler.CrawlResult crawlResult, int unitNoSize, int unitNo, Path targetDir)
+      throws IOException {
+
+    String id = LocalDateTime.now().format(ID_FORMAT);
+    String noteName = sanitizeFileName(crawlResult.title());
+
+    String content =
+        TEMPLATE
+            .replace("{{id}}", id)
+            .replace("{{noteTitle}}", noteName)
+            .replace("{{date}}", LocalDate.now().format(DateTimeFormatter.ISO_DATE))
+            .replace("{{title}}", crawlResult.title())
+            .replace("{{content}}", crawlResult.transcript())
+            .replace("{{url}}", crawlResult.url());
+
+    String noteFileName = formatUnitNumber(unitNoSize, unitNo) + " - " + noteName + ".md";
+    Path targetPath = targetDir.resolve(noteFileName);
+
+    Files.writeString(targetPath, content, StandardOpenOption.CREATE);
   }
 
   private static String sanitizeFileName(String input) {

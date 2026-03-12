@@ -1,15 +1,16 @@
 package tungnn.tutor.java.selenium;
 
-import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import tungnn.tutor.java.selenium.util.SeleniumUtil;
 
+import java.time.Duration;
+
 public class Demo {
 
   static void main() {
-    WebDriver driver = SeleniumUtil.getChromeDriver();
+    WebDriver driver = SeleniumUtil.createChromeDriver();
 
     driver.get("https://www.selenium.dev/selenium/web/web-form.html");
 

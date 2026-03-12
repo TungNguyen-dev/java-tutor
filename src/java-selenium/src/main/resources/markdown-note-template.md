@@ -6,7 +6,6 @@ email: tungnn.hn@gmail.com
 date: {{date}}
 tags:
 ---
----
 
 # {{title}}
 

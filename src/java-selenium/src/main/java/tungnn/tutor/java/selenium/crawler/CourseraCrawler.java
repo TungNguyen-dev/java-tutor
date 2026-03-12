@@ -11,25 +11,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class CourseraCrawler {
+public class CourseraCrawler implements AutoCloseable {
 
-  private static final Duration TIMEOUT = Duration.ofMinutes(5);
+  private static final String COURSERA_URL =
+      "https://www.coursera.org/programs/fpt-software-complete-learning-program-me8hh?authProvider=fpt-software";
+  private static final Duration WAIT_TIMEOUT = Duration.ofMinutes(5);
 
   private final WebDriver driver;
   private final WebDriverWait wait;
 
   public CourseraCrawler(WebDriver driver) {
     this.driver = driver;
-    this.wait = new WebDriverWait(driver, TIMEOUT);
+    this.wait = new WebDriverWait(driver, WAIT_TIMEOUT);
+    driver.get(COURSERA_URL);
   }
 
-  public record CrawlResult(String title, String transcript) {}
+  public record CrawlResult(String title, String transcript, String url) {}
 
   public CrawlResult craw(String url) {
     driver.get(url);
     String title = extractTitle();
     String transcript = extractTranscript();
-    return new CrawlResult(title, transcript);
+    return new CrawlResult(title, transcript, url);
   }
 
   private String extractTitle() {
@@ -48,5 +51,10 @@ public class CourseraCrawler {
         .map(String::trim)
         .filter(text -> !text.isEmpty())
         .collect(Collectors.joining(" "));
+  }
+
+  @Override
+  public void close() {
+    driver.quit();
   }
 }

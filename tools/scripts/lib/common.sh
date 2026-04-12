@@ -1,54 +1,97 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+
+#######################################
+# Global Defaults
+#######################################
+: "${LOG_FILE:=app.log}"
 
 #######################################
 # Logging
 #######################################
-log() {
-  local level="$1"
-  shift
-  printf "[%s] [%s] %s\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$level" "$*"
+log_info() {
+  echo "[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOG_FILE"
+}
+
+log_warn() {
+  echo "[WARN] $(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOG_FILE"
+}
+
+log_error() {
+  echo "[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOG_FILE" >&2
 }
 
 #######################################
-# Load env
+# Exit Handling
 #######################################
-load_env() {
-  local env_file="$1"
+die() {
+  log_error "$*"
+  exit 1
+}
 
-  if [[ -f "$env_file" ]]; then
-    log INFO "Loading env from $env_file"
-    set -a
-    # shellcheck disable=SC1090
-    source "$env_file"
-    set +a
-  else
-    log WARN "Env file not found: $env_file"
+#######################################
+# Command Utilities
+#######################################
+require_command() {
+  local cmd="$1"
+  command -v "$cmd" >/dev/null 2>&1 || die "Required command not found: $cmd"
+}
+
+#######################################
+# File & Directory Validation
+#######################################
+require_file() {
+  local file="$1"
+  [[ -f "$file" ]] || die "File not found: $file"
+}
+
+require_dir() {
+  local dir="$1"
+  [[ -d "$dir" ]] || die "Directory not found: $dir"
+}
+
+ensure_dir() {
+  local dir="$1"
+  if [[ ! -d "$dir" ]]; then
+    log_info "Creating directory: $dir"
+    mkdir -p "$dir"
   fi
 }
 
 #######################################
-# Validate required commands
-# Usage:
-#   require_cmd java git curl
+# OS Detection
 #######################################
-require_cmd() {
-  local missing=()
+is_macos() {
+  [[ "$OSTYPE" == "darwin"* ]]
+}
 
-  for cmd in "$@"; do
-    if ! command -v "$cmd" >/dev/null 2>&1; then
-      missing+=("$cmd")
-    fi
-  done
-
-  if (( ${#missing[@]} > 0 )); then
-    log ERROR "Missing required command(s): ${missing[*]}"
-    exit 1
-  fi
+is_linux() {
+  [[ "$OSTYPE" == "linux-gnu"* ]]
 }
 
 #######################################
-# Error trap
+# Temp Utilities
 #######################################
-setup_error_trap() {
-  trap 'log ERROR "Failed at line $LINENO"; exit 1' ERR
+make_temp_dir() {
+  mktemp -d 2>/dev/null || mktemp -d -t 'tmp'
+}
+
+#######################################
+# String Utilities
+#######################################
+is_empty() {
+  [[ -z "${1:-}" ]]
+}
+
+#######################################
+# Debug
+#######################################
+enable_debug() {
+  set -x
+}
+
+#######################################
+# Trap (optional usage in main script)
+#######################################
+setup_trap() {
+  trap 'log_error "Script failed at line $LINENO"; exit 1' ERR
 }

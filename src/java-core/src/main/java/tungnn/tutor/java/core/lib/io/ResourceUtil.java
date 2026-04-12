@@ -6,26 +6,33 @@ import java.util.Objects;
 
 public final class ResourceUtil {
 
-  private static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
-
   private ResourceUtil() {}
 
-  public static InputStream getResourceAsStream(String resourceName) {
-    return CLASS_LOADER.getResourceAsStream(resourceName);
+  private static ClassLoader getClassLoader() {
+    ClassLoader cl = Thread.currentThread().getContextClassLoader();
+    return (cl != null) ? cl : ResourceUtil.class.getClassLoader();
   }
 
-  public static String getResourceAsString(String resourceName) throws IOException {
-    Objects.requireNonNull(resourceName, "resourceName must not be null");
+  public static InputStream getResourceAsStream(String resourceName) {
+    return getClassLoader().getResourceAsStream(resourceName);
+  }
 
-    StringBuilder builder = new StringBuilder();
-    try (InputStream in = getResourceAsStream(resourceName);
-        InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
-        BufferedReader br = new BufferedReader(isr)) {
-      int b;
-      while ((b = br.read()) != -1) {
-        builder.append((char) b);
+  public static String getResourceAsString(String resourceName) {
+    try {
+      Objects.requireNonNull(resourceName, "resourceName must not be null");
+
+      StringBuilder builder = new StringBuilder();
+      try (InputStream in = getResourceAsStream(resourceName);
+          InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
+          BufferedReader br = new BufferedReader(isr)) {
+        int b;
+        while ((b = br.read()) != -1) {
+          builder.append((char) b);
+        }
       }
+      return builder.toString();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
-    return builder.toString();
   }
 }

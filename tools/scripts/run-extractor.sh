@@ -25,7 +25,7 @@ main() {
 
   log_info "Starting app..."
   export CRAWLER_POOL_SIZE="${CRAWLER_POOL_SIZE:-3}"
-  caffeinate -i java -jar "$JAR_FILE" crawl 2>&1 | tee -a "$LOG_FILE"
+  caffeinate -i java -jar "$JAR_FILE" extract 2>&1 | tee -a "$LOG_FILE"
 }
 
 main "$@"

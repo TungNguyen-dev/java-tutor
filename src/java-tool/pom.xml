@@ -77,7 +77,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>tungnn.tutor.java.tool.Application</mainClass>
+                                    <mainClass>tungnn.tutor.java.tool.v1.Application</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

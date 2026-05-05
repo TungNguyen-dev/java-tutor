@@ -1,4 +1,4 @@
-package tungnn.tutor.java.pattern.design_pattern.p1_factory_method.product;
+package tungnn.tutor.java.pattern.design_pattern.p1_factory_method.another.product;
 
 public abstract class Pizza {
   String name;

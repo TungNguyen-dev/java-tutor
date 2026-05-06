@@ -1,42 +1,38 @@
-package tungnn.tutor.java.pattern.design_pattern.p1_factory_method;
+void main() {
+  ProductCreator product1Creator = new FirstProductCreator();
+  Product product1 = product1Creator.createProduct();
+  System.out.println(product1.getClass().getSimpleName());
 
-abstract class Product {}
-
-class FirstProduct extends Product {}
-
-class SecondProduct extends Product {}
+  ProductCreator product2Creator = new SecondProductCreator();
+  Product product2 = product2Creator.createProduct();
+  System.out.println(product2.getClass().getSimpleName());
+}
 
 // ---
 
-interface ProductCreator {
+public abstract class Product {}
 
+public class FirstProduct extends Product {}
+
+public class SecondProduct extends Product {}
+
+// ---
+
+public interface ProductCreator {
   // Abstract FactoryMethod
   Product createProduct();
 }
 
-class FirstProductCreator implements ProductCreator {
+public class FirstProductCreator implements ProductCreator {
   @Override
   public Product createProduct() {
     return new FirstProduct();
   }
 }
 
-class SecondProductCreator implements ProductCreator {
+public class SecondProductCreator implements ProductCreator {
   @Override
   public Product createProduct() {
     return new SecondProduct();
-  }
-}
-
-public class FactoryMethod {
-
-  static void main() {
-    ProductCreator product1Creator = new FirstProductCreator();
-    Product product1 = product1Creator.createProduct();
-    System.out.println(product1.getClass().getSimpleName());
-
-    ProductCreator product2Creator = new SecondProductCreator();
-    Product product2 = product2Creator.createProduct();
-    System.out.println(product2.getClass().getSimpleName());
   }
 }

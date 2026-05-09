@@ -40,8 +40,9 @@ public class CrawlCommand implements Runnable {
   }
 
   private void processSingleDir(Path dir, CrawlService service) {
-    try (Stream<Path> courses = Files.list(dir)) {
+    try (Stream<Path> courses = Files.walk(dir)) {
       courses
+          .filter(Files::isRegularFile)
           .sorted()
           .forEach(
               coursePath -> {

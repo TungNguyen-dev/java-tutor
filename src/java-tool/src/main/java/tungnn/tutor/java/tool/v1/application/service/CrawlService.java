@@ -84,8 +84,8 @@ public class CrawlService {
 
   private CrawlPageEnum getPageType(CrawlCourseRequest request) {
     var path = request.coursePath().toString();
-    if (path.contains("01-todo-coursera")) return CrawlPageEnum.COURSERA;
-    if (path.contains("01-todo-youtube")) return CrawlPageEnum.YOUTUBE;
+    if (path.contains("01-coursera")) return CrawlPageEnum.COURSERA;
+    if (path.contains("02-youtube")) return CrawlPageEnum.YOUTUBE;
     throw new IllegalArgumentException("Unsupported course platform in path: " + path);
   }
 

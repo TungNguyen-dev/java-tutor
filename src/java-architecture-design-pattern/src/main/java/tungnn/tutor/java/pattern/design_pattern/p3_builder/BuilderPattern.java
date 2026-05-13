@@ -1,3 +1,14 @@
+void main() {
+  HouseDirector director = new HouseDirector();
+
+  // Xây nhà gỗ đơn giản
+  HouseBuilder woodBuilder = new WoodHouseBuilder();
+  director.constructSimpleHouse(woodBuilder);
+  House simpleWoodHouse = woodBuilder.getResult();
+
+  System.out.println("Result: " + simpleWoodHouse);
+}
+
 class House {
   private String walls;
   private String doors;
@@ -90,15 +101,4 @@ class WoodHouseBuilder implements HouseBuilder {
   public House getResult() {
     return this.house;
   }
-}
-
-void main() {
-  HouseDirector director = new HouseDirector();
-
-  // Xây nhà gỗ đơn giản
-  HouseBuilder woodBuilder = new WoodHouseBuilder();
-  director.constructSimpleHouse(woodBuilder);
-  House simpleWoodHouse = woodBuilder.getResult();
-
-  System.out.println("Result: " + simpleWoodHouse);
 }

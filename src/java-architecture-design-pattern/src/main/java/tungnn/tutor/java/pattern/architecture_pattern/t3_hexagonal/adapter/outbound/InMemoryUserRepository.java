@@ -1,7 +1,7 @@
 package tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.adapter.persistence;
 
 import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.model.User;
-import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.port.persistence.UserRepository;
+import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.port.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;

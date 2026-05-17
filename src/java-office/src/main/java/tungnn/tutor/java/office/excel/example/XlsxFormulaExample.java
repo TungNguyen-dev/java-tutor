@@ -1,4 +1,4 @@
-package tungnn.tutor.java.office.util.example;
+package tungnn.tutor.java.office.excel.example;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,16 +1,16 @@
 package tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.service;
 
 import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.model.User;
-import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.port.persistence.UserRepository;
-import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.port.usecase.CreateUserUseCase;
+import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.port.UserRepository;
+import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.port.UserService;
 
 import java.util.UUID;
 
-public class CreateUserService implements CreateUserUseCase {
+public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
 
-  public CreateUserService(UserRepository userRepository) {
+  public UserServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 

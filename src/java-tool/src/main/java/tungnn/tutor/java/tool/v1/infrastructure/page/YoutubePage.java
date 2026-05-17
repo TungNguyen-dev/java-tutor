@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import tungnn.tutor.java.tool.v1.domain.dto.CrawlRequest;
 
+import java.time.Duration;
+
 public class YoutubePage extends BasePage {
 
   private final String summarizePage = "https://notegpt.io/youtube-video-summarizer";
@@ -26,6 +28,11 @@ public class YoutubePage extends BasePage {
   @Override
   protected String getContent(CrawlRequest request) {
     navigateTo(summarizePage);
+    try {
+      Thread.sleep(Duration.ofMillis(1500));
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
     inputVideoUrl(request.url());
     submit();
     waitForSummaryReady();

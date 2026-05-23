@@ -1,7 +1,7 @@
 package tungnn.tutor.java.tool.v1.infrastructure;
 
 import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.selenium.util.SeleniumUtil;
+import tungnn.tutor.java.selenium.SeleniumUtil;
 
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;

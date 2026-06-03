@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>tungnn.tutor.java</groupId>
+    <artifactId>java-tutor</artifactId>
+    <version>1.0.0</version>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>src/java-core</module>
+        <module>src/java-architecture-pattern</module>
+        <module>src/java-design-pattern</module>
+        <module>src/java-flink</module>
+        <module>src/java-kafka</module>
+        <module>src/java-jackson</module>
+        <module>src/java-jasper</module>
+        <module>src/java-jol</module>
+        <module>src/java-parser</module>
+        <module>src/java-office</module>
+        <module>src/java-selenium</module>
+        <module>src/java-mail</module>
+    </modules>
+</project>

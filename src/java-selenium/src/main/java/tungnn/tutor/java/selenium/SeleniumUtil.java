@@ -1,14 +1,14 @@
 package tungnn.tutor.java.selenium;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WindowType;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 public final class SeleniumUtil {
 
@@ -30,16 +30,12 @@ public final class SeleniumUtil {
     return new ArrayList<>(drivers);
   }
 
-  public static WebDriver createChromeDriverWithProfile(String category, String profileName) {
+  public static WebDriver createChromeDriverWithProfile(String profile) {
     var options = new ChromeOptions();
 
-    var cleanCategory = category.replaceAll("[^a-zA-Z0-9-_]", "_");
-    var cleanProfile = profileName.replaceAll("[^a-zA-Z0-9-_]", "_");
-
-    var profilePath =
-        Path.of(System.getProperty("user.dir"), "chrome_profiles", cleanCategory, cleanProfile);
-
+    var profilePath = Path.of(System.getProperty("user.dir"), ".data", "chrome_profiles", profile);
     options.addArguments("--user-data-dir=" + profilePath);
+
     options.addArguments("--profile-directory=Default");
     options.addArguments("--no-first-run");
     options.addArguments("--no-default-browser-check");
@@ -47,32 +43,20 @@ public final class SeleniumUtil {
     return new ChromeDriver(options);
   }
 
-  public static List<WebDriver> createChromeDriversWithProfiles(String category, int num) {
+  public static List<WebDriver> createChromeDriversWithProfiles(int num) {
     var drivers = Collections.synchronizedList(new ArrayList<WebDriver>());
 
     try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
       for (int i = 0; i < num; i++) {
-        final var index = i;
-        executor.submit(
+        var specificProfileName = "profile" + "_" + i;
+        Runnable task =
             () -> {
-              var specificProfileName = "Profile" + "_" + index;
-              drivers.add(createChromeDriverWithProfile(category, specificProfileName));
-            });
+              drivers.add(createChromeDriverWithProfile(specificProfileName));
+            };
+        executor.submit(task);
       }
     }
 
     return new ArrayList<>(drivers);
-  }
-
-  public static void openNewTab(WebDriver driver, String url) {
-    driver.switchTo().newWindow(WindowType.TAB);
-    driver.get(url);
-  }
-
-  public static void switchToFirstTab(WebDriver driver) {
-    var tabs = new ArrayList<>(driver.getWindowHandles());
-    if (!tabs.isEmpty()) {
-      driver.switchTo().window(tabs.getFirst());
-    }
   }
 }

@@ -1,4 +1,4 @@
-package tungnn.tutor.java.core.lib.io;
+package tungnn.tutor.java.core.lib.io.resource;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

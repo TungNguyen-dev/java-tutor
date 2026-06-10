@@ -29,5 +29,6 @@
         <module>src/java-office</module>
         <module>src/java-selenium</module>
         <module>src/java-mail</module>
+        <module>src/java-csv</module>
     </modules>
 </project>

@@ -30,5 +30,6 @@
         <module>src/java-selenium</module>
         <module>src/java-mail</module>
         <module>src/java-csv</module>
+        <module>src/java-aws</module>
     </modules>
 </project>

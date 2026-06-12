@@ -31,5 +31,6 @@
         <module>src/java-mail</module>
         <module>src/java-csv</module>
         <module>src/java-aws</module>
+        <module>src/java-mime</module>
     </modules>
 </project>

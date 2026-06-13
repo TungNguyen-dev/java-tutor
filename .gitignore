@@ -207,3 +207,5 @@ application-local.properties
 
 **/*.env
 storage
+
+.aws

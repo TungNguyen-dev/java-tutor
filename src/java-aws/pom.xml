@@ -18,15 +18,19 @@
     <artifactId>java-aws</artifactId>
 
     <!-- =========================
-         Build Properties
+         Build Configuration
     ========================== -->
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <!-- Java -->
+        <java.version>25</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- AWS SDK Version -->
+        <!-- Versions -->
         <aws.sdk.version>2.25.60</aws.sdk.version>
+        <slf4j.version>2.0.13</slf4j.version>
+        <log4j.version>2.25.4</log4j.version>
     </properties>
 
     <!-- =========================
@@ -34,10 +38,19 @@
     ========================== -->
     <dependencyManagement>
         <dependencies>
+            <!-- AWS SDK BOM -->
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
                 <version>${aws.sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>${log4j.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -49,19 +62,30 @@
     ========================== -->
     <dependencies>
 
-        <!-- ===== Core ===== -->
+        <!-- ===== AWS SDK: Core ===== -->
+        <!-- sdk-core thường không cần khai báo explicit -->
+        <!-- chỉ giữ nếu bạn thực sự dùng trực tiếp -->
+        <!--
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sdk-core</artifactId>
         </dependency>
+        -->
 
-        <!-- ===== Identity & Access ===== -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>metrics-spi</artifactId>
+        </dependency>
+
+        <!-- ===== AWS SDK: Services ===== -->
+
+        <!-- Identity -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>iam</artifactId>
         </dependency>
 
-        <!-- ===== Compute ===== -->
+        <!-- Compute -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>ec2</artifactId>
@@ -72,7 +96,7 @@
             <artifactId>lambda</artifactId>
         </dependency>
 
-        <!-- ===== Container Services ===== -->
+        <!-- Containers -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>ecs</artifactId>
@@ -83,28 +107,54 @@
             <artifactId>ecr</artifactId>
         </dependency>
 
-        <!-- ===== Storage ===== -->
+        <!-- Storage -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
         </dependency>
 
-        <!-- ===== Database ===== -->
+        <!-- Database -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>rds</artifactId>
         </dependency>
 
-        <!-- ===== Monitoring ===== -->
+        <!-- Monitoring -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>cloudwatch</artifactId>
         </dependency>
 
-        <!-- ===== Orchestration ===== -->
+        <!-- Orchestration -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sfn</artifactId>
+        </dependency>
+
+        <!-- ===== Logging (SLF4J + Log4j2) ===== -->
+
+        <!-- SLF4J API (abstraction layer) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- Log4j2 Implementation -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+
+        <!-- Bridge: SLF4J → Log4j2 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
         </dependency>
 
     </dependencies>

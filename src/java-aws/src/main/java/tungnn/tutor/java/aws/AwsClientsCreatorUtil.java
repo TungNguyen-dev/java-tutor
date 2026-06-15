@@ -1,5 +1,6 @@
 package tungnn.tutor.java.aws;
 
+import java.time.Duration;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
@@ -10,24 +11,20 @@ import software.amazon.awssdk.core.retry.RetryMode;
 import software.amazon.awssdk.metrics.LoggingMetricPublisher;
 import software.amazon.awssdk.regions.Region;
 
-import java.time.Duration;
-
 public final class AwsClientsCreatorUtil {
-
-  private AwsClientsCreatorUtil() {}
-
-  // =========================
-  // Environment-driven config
-  // =========================
 
   private static final boolean ENABLE_METRICS =
       Boolean.parseBoolean(System.getenv().getOrDefault("AWS_SDK_ENABLE_METRICS", "false"));
 
+  // =========================
+  // Environment-driven config
+  // =========================
   private static final Region DEFAULT_REGION =
       Region.of(System.getenv().getOrDefault("AWS_REGION", "ap-southeast-1"));
-
   private static final String USER_AGENT_PREFIX =
       System.getenv().getOrDefault("AWS_SDK_USER_AGENT_PREFIX", "env/dev");
+
+  private AwsClientsCreatorUtil() {}
 
   // =========================
   // Credentials Provider

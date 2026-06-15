@@ -1,9 +1,8 @@
 package tungnn.tutor.java.aws.service.iam;
 
+import java.util.List;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.iam.model.*;
-
-import java.util.List;
 
 public final class PolicyUtil {
 

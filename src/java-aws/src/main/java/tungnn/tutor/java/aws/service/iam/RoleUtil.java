@@ -1,11 +1,10 @@
 package tungnn.tutor.java.aws.service.iam;
 
+import java.util.List;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.iam.model.CreateRoleRequest;
 import software.amazon.awssdk.services.iam.model.DeleteRoleRequest;
 import software.amazon.awssdk.services.iam.model.Role;
-
-import java.util.List;
 
 public final class RoleUtil {
 

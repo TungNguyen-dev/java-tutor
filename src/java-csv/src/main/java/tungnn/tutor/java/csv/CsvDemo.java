@@ -1,13 +1,10 @@
 package tungnn.tutor.java.csv;
 
-import org.apache.commons.csv.CSVFormat;
-
 import java.nio.file.Path;
 import java.util.List;
+import org.apache.commons.csv.CSVFormat;
 
 public class CsvDemo {
-
-  public record User(String id, String name, String email, int age) {}
 
   static void main(String[] args) {
     demoCsvWithRecord();
@@ -37,4 +34,6 @@ public class CsvDemo {
     System.out.println("=== Users ===");
     readUsers.forEach(System.out::println);
   }
+
+  public record User(String id, String name, String email, int age) {}
 }

@@ -27,6 +27,16 @@ interface Subject {
   void notifyObservers();
 }
 
+// The Observer interface - all displays must implement this
+interface Observer {
+  void update(float temp, float humidity, float pressure);
+}
+
+// Interface for visual elements
+interface DisplayElement {
+  void display();
+}
+
 // The concrete subject
 class WeatherData implements Subject {
   private List<Observer> observers;
@@ -65,11 +75,6 @@ class WeatherData implements Subject {
   }
 }
 
-// The Observer interface - all displays must implement this
-interface Observer {
-  void update(float temp, float humidity, float pressure);
-}
-
 // The concrete observer
 class CurrentConditionsDisplay implements Observer, DisplayElement {
   private float temperature;
@@ -91,9 +96,4 @@ class CurrentConditionsDisplay implements Observer, DisplayElement {
     System.out.println(
         "Current conditions: " + temperature + "F degrees and " + humidity + "% humidity");
   }
-}
-
-// Interface for visual elements
-interface DisplayElement {
-  void display();
 }

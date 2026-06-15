@@ -1,12 +1,11 @@
 package tungnn.tutor.java.tool.infrastructure.page;
 
+import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import tungnn.tutor.java.tool.domain.dto.CrawlRequest;
 import tungnn.tutor.java.tool.domain.dto.CrawlResult;
 import tungnn.tutor.java.tool.shared.CrawlConstant;
-
-import java.time.Duration;
 
 public abstract class BasePage {
 

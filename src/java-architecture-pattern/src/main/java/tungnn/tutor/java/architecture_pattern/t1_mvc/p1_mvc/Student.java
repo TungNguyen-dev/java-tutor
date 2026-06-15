@@ -6,8 +6,8 @@ import java.util.List;
 public class Student {
 
   private final String id;
-  private String name;
   private final List<StudentObserver> observers = new ArrayList<>();
+  private String name;
 
   public Student(String id, String name) {
     this.id = id;
@@ -18,13 +18,13 @@ public class Student {
     observers.add(observer);
   }
 
+  public String getName() {
+    return name;
+  }
+
   public void setName(String name) {
     this.name = name;
     notifyAllObservers(); // Tự động thông báo khi dữ liệu thay đổi
-  }
-
-  public String getName() {
-    return name;
   }
 
   public String getId() {

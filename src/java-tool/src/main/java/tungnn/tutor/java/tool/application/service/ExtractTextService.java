@@ -1,5 +1,9 @@
 package tungnn.tutor.java.tool.application.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.Instant;
+import java.util.concurrent.Executors;
 import org.openqa.selenium.WebDriver;
 import tungnn.tutor.java.tool.application.dto.ExtractCourseRequest;
 import tungnn.tutor.java.tool.domain.dto.ExtractTextRequest;
@@ -7,11 +11,6 @@ import tungnn.tutor.java.tool.domain.task.ExtractTextTask;
 import tungnn.tutor.java.tool.infrastructure.WebDriverPool;
 import tungnn.tutor.java.tool.infrastructure.WebDriverPoolFactory;
 import tungnn.tutor.java.tool.shared.ExtractTextConstant;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.time.Instant;
-import java.util.concurrent.Executors;
 
 public class ExtractTextService {
 

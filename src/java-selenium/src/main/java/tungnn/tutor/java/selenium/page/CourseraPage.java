@@ -1,14 +1,13 @@
 package tungnn.tutor.java.selenium.page;
 
+import java.time.Duration;
+import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import tungnn.tutor.java.selenium.page.crawler.PageCrawlResult;
 import tungnn.tutor.java.selenium.page.crawler.PageCrawler;
-
-import java.time.Duration;
-import java.util.stream.Collectors;
 
 public class CourseraPage extends BasePage implements PageCrawler {
 

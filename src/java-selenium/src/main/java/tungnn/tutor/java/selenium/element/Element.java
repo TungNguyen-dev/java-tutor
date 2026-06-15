@@ -1,14 +1,13 @@
 package tungnn.tutor.java.selenium.element;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public final class Element {
 
@@ -31,17 +30,13 @@ public final class Element {
     this.wait = new WebDriverWait(driver, timeout);
   }
 
-  private boolean isWrappedElement() {
-    return element != null;
+  public static Element $(WebDriver driver, By locator) {
+    return new Element(driver, locator, Duration.ofSeconds(10));
   }
 
   // =========================================================
   // ================= FACTORY METHODS =======================
   // =========================================================
-
-  public static Element $(WebDriver driver, By locator) {
-    return new Element(driver, locator, Duration.ofSeconds(10));
-  }
 
   public static Element $(WebDriver driver, By locator, Duration timeout) {
     return new Element(driver, locator, timeout);
@@ -49,6 +44,10 @@ public final class Element {
 
   public static Element wrap(WebDriver driver, WebElement element, Duration timeout) {
     return new Element(driver, element, timeout);
+  }
+
+  private boolean isWrappedElement() {
+    return element != null;
   }
 
   // =========================================================

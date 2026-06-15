@@ -1,11 +1,10 @@
 package tungnn.tutor.java.tool.infrastructure;
 
-import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.selenium.SeleniumUtil;
-
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.openqa.selenium.WebDriver;
+import tungnn.tutor.java.selenium.SeleniumUtil;
 
 public class WebDriverPool implements AutoCloseable {
 

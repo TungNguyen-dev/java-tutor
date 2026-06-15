@@ -1,12 +1,11 @@
 package tungnn.tutor.java.tool.infrastructure.page;
 
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import tungnn.tutor.java.tool.domain.dto.CrawlRequest;
-
-import java.time.Duration;
 
 public class YoutubePage extends BasePage {
 

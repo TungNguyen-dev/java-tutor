@@ -1,3 +1,9 @@
+// Client chỉ chấp nhận kiểu Duck
+static void testDuck(DuckTargetInterface duck) {
+  duck.quack();
+  duck.fly();
+}
+
 void main(String[] args) {
   // Tạo một con gà tây thực thụ
   WildTurkeyAdaptee turkey = new WildTurkeyAdaptee();
@@ -11,12 +17,6 @@ void main(String[] args) {
 
   System.out.println("\nThe TurkeyAdapter says (as a Duck):");
   testDuck(turkeyAdapter);
-}
-
-// Client chỉ chấp nhận kiểu Duck
-static void testDuck(DuckTargetInterface duck) {
-  duck.quack();
-  duck.fly();
 }
 
 // Target Interface

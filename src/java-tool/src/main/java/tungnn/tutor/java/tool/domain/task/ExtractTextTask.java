@@ -1,15 +1,14 @@
 package tungnn.tutor.java.tool.domain.task;
 
-import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.tool.domain.dto.ExtractTextRequest;
-import tungnn.tutor.java.tool.domain.dto.ExtractTextResult;
-import tungnn.tutor.java.tool.infrastructure.ImageToTextPage;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.UUID;
+import org.openqa.selenium.WebDriver;
+import tungnn.tutor.java.tool.domain.dto.ExtractTextRequest;
+import tungnn.tutor.java.tool.domain.dto.ExtractTextResult;
+import tungnn.tutor.java.tool.infrastructure.ImageToTextPage;
 
 public class ExtractTextTask extends BaseTask<ExtractTextResult> {
 

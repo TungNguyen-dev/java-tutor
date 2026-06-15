@@ -1,5 +1,8 @@
 package tungnn.tutor.java.tool.infrastructure;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -7,10 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import tungnn.tutor.java.tool.shared.CrawlConstant;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Objects;
 
 public class ImageToTextPage {
 

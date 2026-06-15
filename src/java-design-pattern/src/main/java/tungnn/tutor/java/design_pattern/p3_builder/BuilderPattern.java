@@ -9,6 +9,18 @@ void main() {
   System.out.println("Result: " + simpleWoodHouse);
 }
 
+interface HouseBuilder {
+  void buildWalls();
+
+  void buildDoors();
+
+  void buildRoof();
+
+  void buildPool();
+
+  House getResult();
+}
+
 class House {
   private String walls;
   private String doors;
@@ -44,18 +56,6 @@ class House {
         + (hasSwimmingPool ? "Yes" : "No")
         + "]";
   }
-}
-
-interface HouseBuilder {
-  void buildWalls();
-
-  void buildDoors();
-
-  void buildRoof();
-
-  void buildPool();
-
-  House getResult();
 }
 
 class HouseDirector {

@@ -1,9 +1,5 @@
 package tungnn.tutor.java.csv;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-
 import java.io.BufferedReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.RecordComponent;
@@ -15,6 +11,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 public final class CsvUtil {
 
@@ -99,8 +98,6 @@ public final class CsvUtil {
     }
   }
 
-  private record RecordMetadata<E>(Constructor<E> constructor, String[] names, Class<?>[] types) {}
-
   private static <E> Function<E, Object>[] resolveAccessors(Class<E> clazz) {
 
     if (!clazz.isRecord()) {
@@ -171,4 +168,6 @@ public final class CsvUtil {
 
     throw new UnsupportedOperationException("Unsupported type: " + type);
   }
+
+  private record RecordMetadata<E>(Constructor<E> constructor, String[] names, Class<?>[] types) {}
 }

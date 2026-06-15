@@ -1,11 +1,10 @@
 package tungnn.tutor.java.tool.domain.task;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Callable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseTask<T> implements Callable<T> {
 

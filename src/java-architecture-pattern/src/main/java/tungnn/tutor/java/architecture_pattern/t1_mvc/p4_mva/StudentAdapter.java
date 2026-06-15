@@ -6,7 +6,8 @@ public class StudentAdapter {
   private ParentStudentView parentView;
   private JsonExportView jsonView;
 
-  public StudentAdapter(Student model, AdminStudentView av, ParentStudentView pv, JsonExportView jv) {
+  public StudentAdapter(
+      Student model, AdminStudentView av, ParentStudentView pv, JsonExportView jv) {
     this.model = model;
     this.adminView = av;
     this.parentView = pv;
@@ -27,8 +28,9 @@ public class StudentAdapter {
 
     // 3. Logic chuyển đổi định dạng cho Hệ thống
     if (jsonView != null) {
-      String json = String.format("{\"student\": \"%s\", \"score\": %.1f}",
-              model.getName(), model.getScore());
+      String json =
+          String.format(
+              "{\"student\": \"%s\", \"score\": %.1f}", model.getName(), model.getScore());
       jsonView.export(json);
     }
   }

@@ -1,12 +1,11 @@
 package tungnn.tutor.java.selenium.page;
 
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import tungnn.tutor.java.selenium.element.Element;
 import tungnn.tutor.java.selenium.page.crawler.PageCrawlResult;
 import tungnn.tutor.java.selenium.page.crawler.PageCrawler;
-
-import java.time.Duration;
 
 public class JavaJLSPage extends BasePage implements PageCrawler {
 

@@ -49,7 +49,7 @@ public class LargeXlsxReadingExample {
           cell.setCellValue(cellNum);
         }
         // Manual flushing
-        if (rowNum % 100 == 0){
+        if (rowNum % 100 == 0) {
           sh.flushRows();
         }
       }

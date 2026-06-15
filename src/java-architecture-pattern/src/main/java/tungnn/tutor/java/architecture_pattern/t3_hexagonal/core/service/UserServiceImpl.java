@@ -1,9 +1,8 @@
 package tungnn.tutor.java.architecture_pattern.t3_hexagonal.core.service;
 
+import java.util.UUID;
 import tungnn.tutor.java.architecture_pattern.t3_hexagonal.core.domain.entity.User;
 import tungnn.tutor.java.architecture_pattern.t3_hexagonal.core.port.outbound.UserRepository;
-
-import java.util.UUID;
 
 public class UserServiceImpl implements UserService {
 

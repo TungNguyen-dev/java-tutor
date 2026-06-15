@@ -32,5 +32,6 @@
         <module>src/java-csv</module>
         <module>src/java-aws</module>
         <module>src/java-mime</module>
+        <module>src/java-tutor-starter</module>
     </modules>
 </project>

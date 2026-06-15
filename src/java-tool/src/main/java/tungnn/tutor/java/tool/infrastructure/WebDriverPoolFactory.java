@@ -6,12 +6,12 @@ public class WebDriverPoolFactory {
 
   private WebDriverPoolFactory() {}
 
+  public static WebDriverPool getInstance() {
+    return Holder.INSTANCE;
+  }
+
   private static class Holder {
     private static final WebDriverPool INSTANCE =
         new WebDriverPool(CrawlConstant.CRAWLER_POOL_SIZE, CrawlConstant.STARTUP_URLS);
-  }
-
-  public static WebDriverPool getInstance() {
-    return Holder.INSTANCE;
   }
 }

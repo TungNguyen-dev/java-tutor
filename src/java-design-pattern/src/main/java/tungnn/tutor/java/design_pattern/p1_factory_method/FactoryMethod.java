@@ -10,18 +10,18 @@ void main() {
 
 // ---
 
-public abstract class Product {}
-
-public class FirstProduct extends Product {}
-
-public class SecondProduct extends Product {}
-
-// ---
-
 public interface ProductCreator {
   // Abstract FactoryMethod
   Product createProduct();
 }
+
+public abstract class Product {}
+
+public class FirstProduct extends Product {}
+
+// ---
+
+public class SecondProduct extends Product {}
 
 public class FirstProductCreator implements ProductCreator {
   @Override

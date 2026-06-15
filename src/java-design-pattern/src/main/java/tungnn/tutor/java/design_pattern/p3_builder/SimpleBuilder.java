@@ -8,6 +8,14 @@ void main() {
 
 public record House(String walls, String doors, String roof, boolean hasSwimmingPool) {
 
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static Builder woodHouse() {
+    return builder().walls("Wood Walls").doors("Wood Door").roof("Wood Roof");
+  }
+
   public static class Builder {
     private String walls;
     private String doors;
@@ -40,13 +48,5 @@ public record House(String walls, String doors, String roof, boolean hasSwimming
       }
       return new House(walls, doors, roof, hasSwimmingPool);
     }
-  }
-
-  public static Builder builder() {
-    return new Builder();
-  }
-
-  public static Builder woodHouse() {
-    return builder().walls("Wood Walls").doors("Wood Door").roof("Wood Roof");
   }
 }

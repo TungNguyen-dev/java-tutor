@@ -1,14 +1,5 @@
 package tungnn.tutor.java.tool.application.service;
 
-import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.tool.application.dto.CrawlCourseRequest;
-import tungnn.tutor.java.tool.domain.dto.CrawlRequest;
-import tungnn.tutor.java.tool.domain.task.CrawlTask;
-import tungnn.tutor.java.tool.infrastructure.WebDriverPool;
-import tungnn.tutor.java.tool.infrastructure.WebDriverPoolFactory;
-import tungnn.tutor.java.tool.shared.CrawlConstant;
-import tungnn.tutor.java.tool.shared.CrawlPageEnum;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -17,6 +8,14 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import org.openqa.selenium.WebDriver;
+import tungnn.tutor.java.tool.application.dto.CrawlCourseRequest;
+import tungnn.tutor.java.tool.domain.dto.CrawlRequest;
+import tungnn.tutor.java.tool.domain.task.CrawlTask;
+import tungnn.tutor.java.tool.infrastructure.WebDriverPool;
+import tungnn.tutor.java.tool.infrastructure.WebDriverPoolFactory;
+import tungnn.tutor.java.tool.shared.CrawlConstant;
+import tungnn.tutor.java.tool.shared.CrawlPageEnum;
 
 public class CrawlService {
 

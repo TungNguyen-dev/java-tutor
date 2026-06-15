@@ -24,6 +24,11 @@ public interface InsuranceVisitor {
   void visit(CoffeeShop coffeeShop);
 }
 
+// The Element Interface
+public interface Building {
+  void accept(InsuranceVisitor visitor);
+}
+
 // Concrete Visitor
 public class InsuranceAgent implements InsuranceVisitor {
   @Override
@@ -40,11 +45,6 @@ public class InsuranceAgent implements InsuranceVisitor {
   public void visit(CoffeeShop coffeeShop) {
     System.out.println("Selling fire and flood insurance to the coffee shop.");
   }
-}
-
-// The Element Interface
-public interface Building {
-  void accept(InsuranceVisitor visitor);
 }
 
 // Concrete Elements

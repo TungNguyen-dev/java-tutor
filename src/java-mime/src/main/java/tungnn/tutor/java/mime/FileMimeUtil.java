@@ -1,13 +1,12 @@
 package tungnn.tutor.java.mime;
 
-import org.apache.tika.Tika;
-import org.apache.tika.mime.MimeType;
-import org.apache.tika.mime.MimeTypes;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.apache.tika.Tika;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypes;
 
 public class FileMimeUtil {
 

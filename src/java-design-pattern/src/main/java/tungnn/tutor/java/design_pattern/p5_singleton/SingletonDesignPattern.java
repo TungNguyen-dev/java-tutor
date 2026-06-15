@@ -9,11 +9,11 @@ void main(String[] args) {
 
 static class Foo {
 
-  private static class Holder {
-    private static final Foo INSTANCE = new Foo();
-  }
-
   public static Foo getInstance() {
     return Holder.INSTANCE;
+  }
+
+  private static class Holder {
+    private static final Foo INSTANCE = new Foo();
   }
 }

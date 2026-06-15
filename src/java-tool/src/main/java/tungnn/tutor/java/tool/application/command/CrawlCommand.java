@@ -1,16 +1,15 @@
 package tungnn.tutor.java.tool.application.command;
 
-import picocli.CommandLine;
-import tungnn.tutor.java.tool.application.dto.CrawlCourseRequest;
-import tungnn.tutor.java.tool.application.service.CrawlService;
-import tungnn.tutor.java.tool.infrastructure.WebDriverPoolFactory;
-import tungnn.tutor.java.tool.shared.CrawlConstant;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 import java.util.stream.Stream;
+import picocli.CommandLine;
+import tungnn.tutor.java.tool.application.dto.CrawlCourseRequest;
+import tungnn.tutor.java.tool.application.service.CrawlService;
+import tungnn.tutor.java.tool.infrastructure.WebDriverPoolFactory;
+import tungnn.tutor.java.tool.shared.CrawlConstant;
 
 @CommandLine.Command(name = "crawl", description = "Bắt đầu tiến trình cào dữ liệu")
 public class CrawlCommand implements Runnable {

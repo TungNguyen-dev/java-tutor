@@ -1,8 +1,5 @@
 package tungnn.tutor.java.tool.infrastructure;
 
-import tungnn.tutor.java.tool.infrastructure.dto.ObsidianWriteRequest;
-import tungnn.tutor.java.tool.shared.CrawlConstant;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,8 +7,20 @@ import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Map;
+import tungnn.tutor.java.tool.infrastructure.dto.ObsidianWriteRequest;
+import tungnn.tutor.java.tool.shared.CrawlConstant;
 
 public class ObsidianWriter {
+
+  private static Path getResultPath(ObsidianWriteRequest request, String title) {
+    var filename = request.unitNo() + " - " + sanitizeFileName(title) + ".md";
+    return request.resultDir().resolve(filename);
+  }
+
+  private static String sanitizeFileName(String input) {
+    String sanitized = input.replaceAll("[^a-zA-Z0-9._-]", "_");
+    return sanitized.length() > 100 ? sanitized.substring(0, 100) : sanitized;
+  }
 
   public void save(ObsidianWriteRequest request) {
     try {
@@ -53,15 +62,5 @@ public class ObsidianWriter {
     if (parent != null && Files.notExists(parent)) {
       Files.createDirectories(parent);
     }
-  }
-
-  private static Path getResultPath(ObsidianWriteRequest request, String title) {
-    var filename = request.unitNo() + " - " + sanitizeFileName(title) + ".md";
-    return request.resultDir().resolve(filename);
-  }
-
-  private static String sanitizeFileName(String input) {
-    String sanitized = input.replaceAll("[^a-zA-Z0-9._-]", "_");
-    return sanitized.length() > 100 ? sanitized.substring(0, 100) : sanitized;
   }
 }

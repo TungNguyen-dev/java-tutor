@@ -1,14 +1,13 @@
 package tungnn.tutor.java.starter.application;
 
+import java.nio.file.Path;
+import java.util.List;
 import org.openqa.selenium.WebDriver;
 import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 import tungnn.tutor.java.core.lib.io.filesystem.FileUtil;
 import tungnn.tutor.java.selenium.SeleniumUtil;
 import tungnn.tutor.java.selenium.page.AwsDocSdkPage;
 import tungnn.tutor.java.starter.infrastructure.obsidian.ObsidianNote;
-
-import java.nio.file.Path;
-import java.util.List;
 
 public class CrawAwsDocSdkUseCase {
 

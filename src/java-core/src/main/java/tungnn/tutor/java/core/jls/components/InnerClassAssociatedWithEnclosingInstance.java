@@ -15,8 +15,7 @@ class Outer {
    * Interfaces declared within a class are implicitly static,
    * so they are never considered inner classes.
    */
-  interface NeverInner {
-  }
+  interface NeverInner {}
 
   static class NestedButNotInner {
     // Accessing a static member of Inner (if it were legal)
@@ -46,8 +45,7 @@ class Outer {
      * Nested static classes are permitted inside an inner class declaration,
      * but they are not considered “inner” themselves (no enclosing instance).
      */
-    static class VeryNestedButNotInner extends NestedButNotInner {
-    }
+    static class VeryNestedButNotInner extends NestedButNotInner {}
   }
 }
 

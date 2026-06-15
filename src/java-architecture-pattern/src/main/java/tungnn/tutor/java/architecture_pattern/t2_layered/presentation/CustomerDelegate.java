@@ -3,9 +3,9 @@ package tungnn.tutor.java.architecture_pattern.t2_layered.presentation;
 import tungnn.tutor.java.architecture_pattern.t2_layered.business.Customer;
 
 public class CustomerDelegate {
-    private Customer customerService = new Customer();
+  private Customer customerService = new Customer();
 
-    public void handleRegistration(String name) {
-        customerService.register(name);
-    }
+  public void handleRegistration(String name) {
+    customerService.register(name);
+  }
 }

@@ -2,10 +2,9 @@ package tungnn.tutor.java.tool;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
+import java.util.List;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-
-import java.util.List;
 
 @Command(name = "", mixinStandardHelpOptions = true, version = "1.0")
 public class Application implements Runnable {

@@ -2,8 +2,9 @@ package tungnn.tutor.java.architecture_pattern.t3_hexagonal;
 
 import tungnn.tutor.java.architecture_pattern.t3_hexagonal.adapter.inbound.UserController;
 import tungnn.tutor.java.architecture_pattern.t3_hexagonal.adapter.outbound.InMemoryUserRepository;
-import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.port.persistence.UserRepository;
-import tungnn.tutor.java.pattern.architecture_pattern.t3_hexagonal.domain.service.CreateUserService;
+import tungnn.tutor.java.architecture_pattern.t3_hexagonal.core.port.outbound.UserRepository;
+import tungnn.tutor.java.architecture_pattern.t3_hexagonal.core.service.UserService;
+import tungnn.tutor.java.architecture_pattern.t3_hexagonal.core.service.UserServiceImpl;
 
 public class Application {
 
@@ -12,7 +13,7 @@ public class Application {
     UserRepository userRepository = new InMemoryUserRepository();
 
     // Core (use case)
-    CreateUserService createUserService = new CreateUserService(userRepository);
+    UserService createUserService = new UserServiceImpl(userRepository);
 
     // Adapter (in)
     UserController controller = new UserController(createUserService);

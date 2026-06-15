@@ -1,5 +1,6 @@
 package tungnn.tutor.java.selenium.page;
 
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -7,8 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import tungnn.tutor.java.selenium.element.Element;
 import tungnn.tutor.java.selenium.element.Elements;
-
-import java.time.Duration;
 
 public abstract class BasePage {
 

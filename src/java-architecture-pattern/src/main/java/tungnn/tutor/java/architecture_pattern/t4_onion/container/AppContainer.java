@@ -2,12 +2,11 @@ package tungnn.tutor.java.architecture_pattern.t4_onion.container;
 
 // container/AppContainer.java
 
+import java.util.HashMap;
+import java.util.Map;
 import tungnn.tutor.java.architecture_pattern.t4_onion.application.OrderService;
 import tungnn.tutor.java.architecture_pattern.t4_onion.domain.OrderRepository;
 import tungnn.tutor.java.architecture_pattern.t4_onion.infrastructure.InMemoryOrderRepository;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class AppContainer {
   private final Map<Class<?>, Object> services = new HashMap<>();

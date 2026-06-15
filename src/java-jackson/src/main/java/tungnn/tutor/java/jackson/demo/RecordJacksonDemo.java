@@ -1,4 +1,4 @@
-package tungnn.tutor.java.jackson;
+package tungnn.tutor.java.jackson.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -21,14 +21,13 @@ public class CsvDemo {
             new User("3", "Binh", "binh@gmail.com", 20));
 
     // 2. Write CSV
-    CsvUtil.write(userPath, CSVFormat.DEFAULT, users, User.class);
+    CsvUtil.write(CSVFormat.DEFAULT, userPath, users, User.class);
 
     // 3. Read CSV
     var readUsers =
         CsvUtil.read(
-            userPath,
-            CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build(),
-            User.class);
+                CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build(), userPath,
+                User.class);
 
     // 4. Print result
     System.out.println("=== Users ===");

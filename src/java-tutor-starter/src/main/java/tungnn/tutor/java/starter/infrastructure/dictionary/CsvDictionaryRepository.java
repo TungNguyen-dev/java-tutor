@@ -31,7 +31,7 @@ public class CsvDictionaryRepository implements DictionaryRepository {
         Files.createFile(path);
 
         // write empty with header
-        CsvUtil.write(path, csvFormat, List.of(), DictionaryItem.class);
+        CsvUtil.write(csvFormat, path, List.of(), DictionaryItem.class);
       }
     } catch (Exception e) {
       throw new RuntimeException("Cannot initialize CSV file", e);
@@ -40,7 +40,7 @@ public class CsvDictionaryRepository implements DictionaryRepository {
 
   @Override
   public List<DictionaryItem> findAll() {
-    return CsvUtil.read(path, csvFormat, DictionaryItem.class);
+    return CsvUtil.read(csvFormat, path, DictionaryItem.class);
   }
 
   @Override
@@ -57,7 +57,7 @@ public class CsvDictionaryRepository implements DictionaryRepository {
       merged.put(item.id(), item);
     }
 
-    CsvUtil.write(path, csvFormat, merged.values(), DictionaryItem.class);
+    CsvUtil.write(csvFormat, path, merged.values(), DictionaryItem.class);
   }
 
   @Override
@@ -66,6 +66,6 @@ public class CsvDictionaryRepository implements DictionaryRepository {
     List<DictionaryItem> all = new ArrayList<>(findAll());
     all.add(item);
 
-    CsvUtil.write(path, csvFormat, all, DictionaryItem.class);
+    CsvUtil.write(csvFormat, path, all, DictionaryItem.class);
   }
 }

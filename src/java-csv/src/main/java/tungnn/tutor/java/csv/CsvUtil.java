@@ -1,5 +1,9 @@
 package tungnn.tutor.java.csv;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.BufferedReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.RecordComponent;
@@ -11,15 +15,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
+import java.util.stream.Stream;
 
 public final class CsvUtil {
 
   private CsvUtil() {}
 
-  public static <E> List<E> read(Path path, CSVFormat csvFormat, Class<E> clazz) {
+  public static <E> List<E> read(CSVFormat csvFormat, Path path, Class<E> clazz) {
 
     try (BufferedReader reader = Files.newBufferedReader(path);
         CSVParser parser = csvFormat.parse(reader)) {
@@ -45,7 +47,45 @@ public final class CsvUtil {
     }
   }
 
-  public static <E> void write(Path path, CSVFormat csvFormat, Collection<E> data, Class<E> clazz) {
+  public static <E> Stream<E> readAsStream(CSVFormat csvFormat, Path path, Class<E> clazz) {
+    try {
+      BufferedReader reader = Files.newBufferedReader(path);
+      CSVParser parser = csvFormat.parse(reader);
+
+      var metadata = resolveRecordMetadata(clazz);
+      var constructor = metadata.constructor;
+      var names = metadata.names;
+      var types = metadata.types;
+
+      return parser.stream()
+          .map(
+              csvRecord -> {
+                Object[] args = new Object[names.length];
+                for (int i = 0; i < names.length; i++) {
+                  args[i] = readValue(csvRecord, names[i], types[i]);
+                }
+                return newInstance(constructor, args);
+              })
+          .onClose(
+              () -> {
+                try {
+                  parser.close();
+                } catch (Exception e) {
+                  throw new RuntimeException(e);
+                }
+                try {
+                  reader.close();
+                } catch (Exception e) {
+                  throw new RuntimeException(e);
+                }
+              });
+
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to read CSV as stream: " + path, e);
+    }
+  }
+
+  public static <E> void write(CSVFormat csvFormat, Path path, Collection<E> data, Class<E> clazz) {
 
     try (var writer = Files.newBufferedWriter(path);
         var printer = csvFormat.print(writer)) {
@@ -68,6 +108,42 @@ public final class CsvUtil {
 
     } catch (Exception e) {
       throw new RuntimeException("Failed to write CSV: " + path, e);
+    }
+  }
+
+  public static <E> void writeAsStream(
+      CSVFormat csvFormat, Path path, Stream<E> data, Class<E> clazz) {
+
+    try (var writer = Files.newBufferedWriter(path);
+        var printer = csvFormat.print(writer);
+        data) {
+
+      var metadata = resolveRecordMetadata(clazz);
+      var names = metadata.names;
+
+      // Write header
+      printer.printRecord((Object[]) names);
+
+      var accessors = resolveAccessors(clazz);
+
+      data.forEach(
+          element -> {
+            Object[] values = new Object[names.length];
+            for (int i = 0; i < names.length; i++) {
+              values[i] = accessors[i].apply(element);
+            }
+
+            try {
+              printer.printRecord(values);
+            } catch (Exception e) {
+              throw new RuntimeException("Failed to write record", e);
+            }
+          });
+
+      printer.flush();
+
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to write CSV as stream: " + path, e);
     }
   }
 

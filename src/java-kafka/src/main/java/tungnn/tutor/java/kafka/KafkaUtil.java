@@ -1,11 +1,10 @@
 package tungnn.tutor.java.kafka;
 
+import java.util.Properties;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
-
-import java.util.Properties;
 
 public final class KafkaUtil {
 

@@ -26,8 +26,9 @@ public class CsvDemo {
     // 3. Read CSV
     var readUsers =
         CsvUtil.read(
-                CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build(), userPath,
-                User.class);
+            CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build(),
+            userPath,
+            User.class);
 
     // 4. Print result
     System.out.println("=== Users ===");

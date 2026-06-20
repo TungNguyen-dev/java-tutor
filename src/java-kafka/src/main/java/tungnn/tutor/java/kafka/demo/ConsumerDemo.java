@@ -1,13 +1,12 @@
 package tungnn.tutor.java.kafka.demo;
 
+import java.time.Duration;
+import java.util.Collections;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import tungnn.tutor.java.kafka.KafkaConfig;
 import tungnn.tutor.java.kafka.KafkaUtil;
-
-import java.time.Duration;
-import java.util.Collections;
 
 public class ConsumerDemo {
 

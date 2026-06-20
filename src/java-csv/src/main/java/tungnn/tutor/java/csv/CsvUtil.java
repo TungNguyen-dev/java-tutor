@@ -1,9 +1,5 @@
 package tungnn.tutor.java.csv;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-
 import java.io.BufferedReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.RecordComponent;
@@ -16,6 +12,9 @@ import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 public final class CsvUtil {
 

@@ -4,9 +4,9 @@ import java.util.List;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.iam.model.*;
 
-public final class PolicyUtil {
+public final class IamPolicyUtil {
 
-  private PolicyUtil() {}
+  private IamPolicyUtil() {}
 
   public static List<Policy> listAllPolicies(IamClient client) {
     return client

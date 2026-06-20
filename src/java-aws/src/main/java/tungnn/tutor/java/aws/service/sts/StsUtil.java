@@ -1,11 +1,11 @@
 package tungnn.tutor.java.aws.service.sts;
 
-import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.services.sts.StsClient;
-import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
-
 import java.util.Objects;
+import java.util.UUID;
+import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
+import software.amazon.awssdk.services.sts.StsClient;
+import software.amazon.awssdk.services.sts.auth.StsAssumeRoleCredentialsProvider;
+import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
 
 public final class StsUtil {
 
@@ -13,17 +13,13 @@ public final class StsUtil {
     throw new UnsupportedOperationException("Utility class");
   }
 
-  public static AwsSessionCredentials assumeRoleCredentials(
-      StsClient stsClient,
-      String roleArn,
-      String roleSessionName,
-      String mfaSerialNumber,
-      String mfaTokenCode) {
+  public static AwsSessionCredentials assumeRoleWithCredentials(
+      StsClient stsClient, String roleArn, String mfaSerialNumber, String mfaTokenCode) {
 
     Objects.requireNonNull(stsClient);
     Objects.requireNonNull(roleArn);
-    Objects.requireNonNull(roleSessionName);
 
+    var roleSessionName = "session-" + UUID.randomUUID();
     var builder = AssumeRoleRequest.builder().roleArn(roleArn).roleSessionName(roleSessionName);
 
     if (mfaSerialNumber != null && mfaTokenCode != null) {
@@ -41,21 +37,17 @@ public final class StsUtil {
         credentials.accessKeyId(), credentials.secretAccessKey(), credentials.sessionToken());
   }
 
-  public static StaticCredentialsProvider assumeRoleAndPersistProfile(
-      StsClient stsClient,
-      String roleArn,
-      String roleSessionName,
-      String mfaSerialNumber,
-      String mfaTokenCode,
-      String profile) {
+  public static StsAssumeRoleCredentialsProvider createAssumeRoleCredentialsProvider(
+      StsClient stsClient, String roleArn) {
 
-    Objects.requireNonNull(profile, "profile must not be null");
+    Objects.requireNonNull(stsClient);
+    Objects.requireNonNull(roleArn);
 
-    var credentials =
-        assumeRoleCredentials(stsClient, roleArn, roleSessionName, mfaSerialNumber, mfaTokenCode);
+    var roleSessionName = "session-" + UUID.randomUUID();
 
-    AwsCredentialsFileWriter.writeProfile(profile, credentials);
-
-    return StaticCredentialsProvider.create(credentials);
+    return StsAssumeRoleCredentialsProvider.builder()
+        .stsClient(stsClient)
+        .refreshRequest(r -> r.roleArn(roleArn).roleSessionName(roleSessionName))
+        .build();
   }
 }

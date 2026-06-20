@@ -6,9 +6,9 @@ import software.amazon.awssdk.services.iam.model.CreateRoleRequest;
 import software.amazon.awssdk.services.iam.model.DeleteRoleRequest;
 import software.amazon.awssdk.services.iam.model.Role;
 
-public final class RoleUtil {
+public final class IamRoleUtil {
 
-  private RoleUtil() {}
+  private IamRoleUtil() {}
 
   public static List<Role> listAllRoles(IamClient client) {
     return client.listRolesPaginator().stream().flatMap(r -> r.roles().stream()).toList();

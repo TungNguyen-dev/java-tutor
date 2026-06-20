@@ -4,9 +4,9 @@ import java.util.List;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.iam.model.*;
 
-public final class UserUtil {
+public final class IamUserUtil {
 
-  private UserUtil() {}
+  private IamUserUtil() {}
 
   public static List<User> listAllUsers(IamClient client) {
     return client.listUsersPaginator().stream().flatMap(r -> r.users().stream()).toList();

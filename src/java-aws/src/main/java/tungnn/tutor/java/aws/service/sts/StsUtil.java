@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.UUID;
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.services.sts.StsClient;
-import software.amazon.awssdk.services.sts.auth.StsAssumeRoleCredentialsProvider;
 import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
 
 public final class StsUtil {
@@ -35,19 +34,5 @@ public final class StsUtil {
 
     return AwsSessionCredentials.create(
         credentials.accessKeyId(), credentials.secretAccessKey(), credentials.sessionToken());
-  }
-
-  public static StsAssumeRoleCredentialsProvider createAssumeRoleCredentialsProvider(
-      StsClient stsClient, String roleArn) {
-
-    Objects.requireNonNull(stsClient);
-    Objects.requireNonNull(roleArn);
-
-    var roleSessionName = "session-" + UUID.randomUUID();
-
-    return StsAssumeRoleCredentialsProvider.builder()
-        .stsClient(stsClient)
-        .refreshRequest(r -> r.roleArn(roleArn).roleSessionName(roleSessionName))
-        .build();
   }
 }

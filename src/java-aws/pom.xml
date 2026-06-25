@@ -170,6 +170,14 @@
             <artifactId>log4j-slf4j2-impl</artifactId>
         </dependency>
 
+        <!-- Ini for config file -->
+        <dependency>
+            <groupId>tungnn.tutor.java</groupId>
+            <artifactId>java-ini</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

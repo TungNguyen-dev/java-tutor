@@ -76,5 +76,10 @@
             <artifactId>java-aws</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>tungnn.tutor.java</groupId>
+            <artifactId>java-ini</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 </project>

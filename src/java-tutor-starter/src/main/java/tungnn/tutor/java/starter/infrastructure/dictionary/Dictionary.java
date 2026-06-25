@@ -1,10 +1,12 @@
 package tungnn.tutor.java.starter.infrastructure.dictionary;
 
 import java.text.Normalizer;
-import java.util.*;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import tungnn.tutor.java.core.lib.collection.CollectionChunks;
 
 public class Dictionary {
 
@@ -36,47 +38,7 @@ public class Dictionary {
         byId.values().stream()
             .filter(item -> item.translation() == null || item.translation().isBlank());
 
-    CollectionChunks.chunkStream(missingItems, 50).forEach(this::translateDictItems);
-  }
-
-  private void translateDictItems(List<DictionaryItem> items) {
-    var originals = items.stream().map(DictionaryItem::original).toList();
-
-    var translations = translator.translate(originals);
-
-    if (translations.size() != items.size()) {
-      throw new IllegalStateException("Translation size mismatch");
-    }
-
-    List<DictionaryItem> updatedItems = new ArrayList<>(items.size());
-
-    for (int i = 0; i < items.size(); i++) {
-      var oldItem = items.get(i);
-      var translation = translations.get(i);
-
-      if (translation == null || translation.isBlank()) {
-        continue;
-      }
-
-      // Immutable update (create new instance)
-      var newItem = oldItem.withTranslation(translation);
-
-      // Atomic replace by id
-      byId.compute(
-          oldItem.id(),
-          (id, current) -> {
-            if (current == null) return null;
-            return newItem;
-          });
-
-      // Update secondary index
-      String normalized = normalize(oldItem.original());
-      byOriginal.put(normalized, newItem);
-
-      updatedItems.add(newItem);
-    }
-
-    repository.saveAll(updatedItems);
+    translator.translate(missingItems);
   }
 
   public boolean containsOriginal(String original) {

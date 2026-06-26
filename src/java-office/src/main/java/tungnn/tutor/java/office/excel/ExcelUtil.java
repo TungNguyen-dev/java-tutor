@@ -45,6 +45,23 @@ public class ExcelUtil {
     return workbook.createSheet(sheetName);
   }
 
+  public static Sheet cloneSheet(Workbook workbook, int sheetIndex, String newName) {
+    Sheet clonedSheet = workbook.cloneSheet(sheetIndex);
+    if (newName != null && !newName.isBlank()) {
+      int clonedIndex = workbook.getSheetIndex(clonedSheet);
+      workbook.setSheetName(clonedIndex, newName);
+    }
+    return clonedSheet;
+  }
+
+  public static Sheet cloneSheet(Workbook workbook, String templateName, String sheetName) {
+    int sheetIndex = workbook.getSheetIndex(templateName);
+    if (sheetIndex == -1) {
+      throw new IllegalArgumentException("Source sheet '" + templateName + "' does not exist.");
+    }
+    return cloneSheet(workbook, sheetIndex, sheetName);
+  }
+
   public static void setSheetAsSelected(Workbook workbook, int index) {
     workbook.setSelectedTab(index);
   }

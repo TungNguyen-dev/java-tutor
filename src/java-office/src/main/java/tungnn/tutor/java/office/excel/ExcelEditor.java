@@ -38,6 +38,18 @@ public final class ExcelEditor {
     return targetRow;
   }
 
+  public static void cloneRows(Sheet sheet, int srcRowStart, int srcRowEnd, int dstRowStart) {
+    if (srcRowStart > srcRowEnd) {
+      return;
+    }
+
+    int rowOffset = dstRowStart - srcRowStart;
+    for (int currentSrc = srcRowStart; currentSrc <= srcRowEnd; currentSrc++) {
+      int currentDst = currentSrc + rowOffset;
+      cloneRow(sheet, currentDst, currentSrc);
+    }
+  }
+
   public static Row insertRow(Sheet sheet, int templateRowIndex) {
     int lastRow = sheet.getLastRowNum();
     int targetRowIndex = templateRowIndex + 1;
@@ -67,6 +79,20 @@ public final class ExcelEditor {
 
     copyMergedRegions(sheet, sourceRow.getRowNum(), targetRow.getRowNum());
     return targetRow;
+  }
+
+  public static Cell getOrCreateCell(Sheet sheet, int rowNum, int colNum) {
+    Row row = sheet.getRow(rowNum);
+    if (row == null) {
+      row = sheet.createRow(rowNum);
+    }
+
+    Cell cell = row.getCell(colNum);
+    if (cell == null) {
+      cell = row.createCell(colNum);
+    }
+
+    return cell;
   }
 
   public static void copyCell(Cell sourceCell, Cell targetCell, boolean copyValue) {

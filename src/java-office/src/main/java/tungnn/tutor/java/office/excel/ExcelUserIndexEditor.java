@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
 
-public class ExcelUserIndexEditor {
+public final class ExcelUserIndexEditor {
 
   private ExcelUserIndexEditor() {}
 
@@ -17,51 +17,32 @@ public class ExcelUserIndexEditor {
     return ExcelEditor.cloneRow(sheet, rowNum - 1, templateRowNum - 1);
   }
 
+  public static void cloneRows(Sheet sheet, int srcRowStart, int srcRowEnd, int dstRowStart) {
+    ExcelEditor.cloneRows(sheet, srcRowStart - 1, srcRowEnd - 1, dstRowStart - 1);
+  }
+
   public static Row insertRow(Sheet sheet, int templateRowNum) {
     return ExcelEditor.insertRow(sheet, templateRowNum - 1);
   }
 
   public static Cell getOrCreateCell(Sheet sheet, int rowNum, int colNum) {
-    Row row = sheet.getRow(rowNum - 1);
-    if (row == null) row = sheet.createRow(rowNum - 1);
-
-    Cell cell = row.getCell(colNum - 1);
-    if (cell == null) cell = row.createCell(colNum - 1);
-
-    return cell;
+    return ExcelEditor.getOrCreateCell(sheet, rowNum - 1, colNum - 1);
   }
 
   // =========================================================================
   // CELL REFERENCE METHODS (Get/Set by "A1", "B5")
   // =========================================================================
 
-  /**
-   * Gets a cell by its Excel reference address (e.g., "A1", "C5"). Creates it if it doesn't exist.
-   */
   public static Cell getOrCreateCellByAddress(Sheet sheet, String address) {
-    CellReference ref = new CellReference(address);
-    Row row = sheet.getRow(ref.getRow());
-    if (row == null) {
-      row = sheet.createRow(ref.getRow());
-    }
-    Cell cell = row.getCell(ref.getCol());
-    if (cell == null) {
-      cell = row.createCell(ref.getCol());
-    }
-    return cell;
+    var ref = new CellReference(address);
+    return getOrCreateCell(sheet, ref.getRow(), ref.getCol());
   }
 
-  /** Sets a value to a cell by its Excel reference address, leveraging ExcelUtil data handling */
   public static void setCellValueByAddress(Sheet sheet, String address, Object value) {
-    CellReference ref = new CellReference(address);
-    Row row = sheet.getRow(ref.getRow());
-    if (row == null) {
-      row = sheet.createRow(ref.getRow());
-    }
-    ExcelUtil.createCell(row, ref.getCol(), value);
+    var cell = getOrCreateCellByAddress(sheet, address);
+    cell.setCellValue(value.toString());
   }
 
-  /** Gets content from a cell by its Excel reference address */
   public static Object getCellValueByAddress(Sheet sheet, String address) {
     CellReference ref = new CellReference(address);
     Row row = sheet.getRow(ref.getRow());

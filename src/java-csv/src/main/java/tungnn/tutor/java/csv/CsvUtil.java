@@ -1,141 +1,95 @@
 package tungnn.tutor.java.csv;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import tungnn.tutor.java.core.lib.reflection.PropertyMetadata;
+import tungnn.tutor.java.core.lib.reflection.PropertyReflectionUtil;
+import tungnn.tutor.java.core.lib.reflection.ReflectionUtil;
+
 import java.io.BufferedReader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.RecordComponent;
+import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 
 public final class CsvUtil {
 
   private CsvUtil() {}
 
+  // ==========================================
+  // READ METHODS
+  // ==========================================
+
   public static <E> List<E> read(CSVFormat csvFormat, Path path, Class<E> clazz) {
-
-    try (BufferedReader reader = Files.newBufferedReader(path);
-        CSVParser parser = csvFormat.parse(reader)) {
-
-      var metadata = resolveRecordMetadata(clazz);
-      var constructor = metadata.constructor;
-      var names = metadata.names;
-      var types = metadata.types;
-
-      return parser.stream()
-          .map(
-              csvRecord -> {
-                Object[] args = new Object[names.length];
-                for (int i = 0; i < names.length; i++) {
-                  args[i] = readValue(csvRecord, names[i], types[i]);
-                }
-                return newInstance(constructor, args);
-              })
-          .collect(Collectors.toList());
-
+    try (var stream = readAsStream(csvFormat, path, clazz)) {
+      return stream.toList();
     } catch (Exception e) {
       throw new RuntimeException("Failed to read CSV: " + path, e);
     }
   }
 
   public static <E> Stream<E> readAsStream(CSVFormat csvFormat, Path path, Class<E> clazz) {
+    BufferedReader reader = null;
+    CSVParser parser = null;
     try {
-      BufferedReader reader = Files.newBufferedReader(path);
-      CSVParser parser = csvFormat.parse(reader);
+      reader = Files.newBufferedReader(path);
+      parser = csvFormat.parse(reader);
 
-      var metadata = resolveRecordMetadata(clazz);
-      var constructor = metadata.constructor;
-      var names = metadata.names;
-      var types = metadata.types;
+      var propertiesMetadata = PropertyReflectionUtil.resolveProperties(clazz);
+
+      final var finalReader = reader;
+      final var finalParser = parser;
 
       return parser.stream()
-          .map(
-              csvRecord -> {
-                Object[] args = new Object[names.length];
-                for (int i = 0; i < names.length; i++) {
-                  args[i] = readValue(csvRecord, names[i], types[i]);
-                }
-                return newInstance(constructor, args);
-              })
-          .onClose(
-              () -> {
-                try {
-                  parser.close();
-                } catch (Exception e) {
-                  throw new RuntimeException(e);
-                }
-                try {
-                  reader.close();
-                } catch (Exception e) {
-                  throw new RuntimeException(e);
-                }
-              });
+          .map(csvRecord -> mapRecordToEntity(csvRecord, propertiesMetadata, clazz))
+          .onClose(() -> closeResources(finalParser, finalReader));
 
     } catch (Exception e) {
+      closeResources(parser, reader);
       throw new RuntimeException("Failed to read CSV as stream: " + path, e);
     }
   }
 
+  // ==========================================
+  // WRITE METHODS
+  // ==========================================
+
   public static <E> void write(CSVFormat csvFormat, Path path, Collection<E> data, Class<E> clazz) {
-
-    try (var writer = Files.newBufferedWriter(path);
-        var printer = csvFormat.print(writer)) {
-
-      var metadata = resolveRecordMetadata(clazz);
-      var names = metadata.names;
-
-      // Write header
-      printer.printRecord((Object[]) names);
-
-      var accessors = resolveAccessors(clazz);
-
-      for (E element : data) {
-        Object[] values = new Object[names.length];
-        for (int i = 0; i < names.length; i++) {
-          values[i] = accessors[i].apply(element);
-        }
-        printer.printRecord(values);
-      }
-
+    try (var stream = data.stream()) {
+      writeStream(csvFormat, path, stream, clazz);
     } catch (Exception e) {
       throw new RuntimeException("Failed to write CSV: " + path, e);
     }
   }
 
-  public static <E> void writeAsStream(
+  public static <E> void writeStream(
       CSVFormat csvFormat, Path path, Stream<E> data, Class<E> clazz) {
+    try (BufferedWriter writer = Files.newBufferedWriter(path);
+        CSVPrinter printer = csvFormat.print(writer)) {
 
-    try (var writer = Files.newBufferedWriter(path);
-        var printer = csvFormat.print(writer);
-        data) {
+      var properties = PropertyReflectionUtil.resolveProperties(clazz);
 
-      var metadata = resolveRecordMetadata(clazz);
-      var names = metadata.names;
+      String[] headers = properties.stream().map(p -> p.field().getName()).toArray(String[]::new);
+      printer.printRecord((Object[]) headers);
 
-      // Write header
-      printer.printRecord((Object[]) names);
-
-      var accessors = resolveAccessors(clazz);
+      var accessors = resolveAccessors(properties);
 
       data.forEach(
           element -> {
-            Object[] values = new Object[names.length];
-            for (int i = 0; i < names.length; i++) {
+            Object[] values = new Object[headers.length];
+            for (int i = 0; i < headers.length; i++) {
               values[i] = accessors[i].apply(element);
             }
-
             try {
               printer.printRecord(values);
-            } catch (Exception e) {
-              throw new RuntimeException("Failed to write record", e);
+            } catch (Exception ex) {
+              throw new RuntimeException("Failed to write record", ex);
             }
           });
 
@@ -146,84 +100,64 @@ public final class CsvUtil {
     }
   }
 
-  // =========================
-  // Record Metadata
-  // =========================
-  private static <E> RecordMetadata<E> resolveRecordMetadata(Class<E> clazz) {
-    if (!clazz.isRecord()) {
-      throw new IllegalArgumentException("Only record is supported: " + clazz);
+  // ==========================================
+  // CORE MAPPING & REFLECTION LOGIC
+  // ==========================================
+
+  private static <E> E mapRecordToEntity(
+      CSVRecord csvRecord, List<PropertyMetadata> properties, Class<E> clazz) {
+    Object[] args = new Object[properties.size()];
+    for (int i = 0; i < properties.size(); i++) {
+      var prop = properties.get(i);
+      args[i] = readValue(csvRecord, prop.field().getName(), prop.field().getType());
     }
-
-    try {
-      var components = clazz.getRecordComponents();
-
-      String[] names =
-          Arrays.stream(components).map(RecordComponent::getName).toArray(String[]::new);
-
-      Class<?>[] types =
-          Arrays.stream(components).map(RecordComponent::getType).toArray(Class[]::new);
-
-      Constructor<E> constructor = clazz.getDeclaredConstructor(types);
-      constructor.setAccessible(true);
-
-      return new RecordMetadata<>(constructor, names, types);
-
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to resolve record metadata: " + clazz, e);
-    }
+    return ReflectionUtil.newInstance(clazz, args);
   }
 
-  private static <E> Function<E, Object>[] resolveAccessors(Class<E> clazz) {
+  @SuppressWarnings("unchecked")
+  private static <E> Function<E, Object>[] resolveAccessors(List<PropertyMetadata> properties) {
+    Function<E, Object>[] accessors = new Function[properties.size()];
+    for (int i = 0; i < properties.size(); i++) {
+      var prop = properties.get(i);
 
-    if (!clazz.isRecord()) {
-      throw new IllegalArgumentException("Only record is supported: " + clazz);
-    }
-
-    var components = clazz.getRecordComponents();
-
-    @SuppressWarnings("unchecked")
-    Function<E, Object>[] accessors = new Function[components.length];
-
-    try {
-      for (int i = 0; i < components.length; i++) {
-        var method = components[i].getAccessor();
-        method.setAccessible(true);
-
+      if (prop.readable() && prop.accessor() != null) {
+        var accessorMethod = prop.accessor();
         accessors[i] =
             e -> {
               try {
-                return method.invoke(e);
+                if (!accessorMethod.canAccess(e)) accessorMethod.setAccessible(true);
+                return accessorMethod.invoke(e);
+              } catch (Exception ex) {
+                throw new RuntimeException(ex);
+              }
+            };
+      } else {
+        var field = prop.field();
+        accessors[i] =
+            e -> {
+              try {
+                if (!field.canAccess(e)) field.setAccessible(true);
+                return field.get(e);
               } catch (Exception ex) {
                 throw new RuntimeException(ex);
               }
             };
       }
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to resolve accessors", e);
     }
-
     return accessors;
   }
 
-  private static <E> E newInstance(Constructor<E> constructor, Object[] args) {
-    try {
-      return constructor.newInstance(args);
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to instantiate " + constructor.getDeclaringClass(), e);
-    }
-  }
-
   private static Object readValue(CSVRecord record, String name, Class<?> type) {
-    String raw;
+    String raw =
+        record.isMapped(name)
+            ? record.get(name)
+            : record.isMapped(name.toLowerCase(Locale.ROOT))
+                ? record.get(name.toLowerCase(Locale.ROOT))
+                : null;
 
-    if (record.isMapped(name)) {
-      raw = record.get(name);
-    } else if (record.isMapped(name.toLowerCase(Locale.ROOT))) {
-      raw = record.get(name.toLowerCase(Locale.ROOT));
-    } else {
+    if (raw == null) {
       throw new IllegalArgumentException("Missing column: " + name);
     }
-
     return convert(raw, type);
   }
 
@@ -234,7 +168,6 @@ public final class CsvUtil {
       }
       return null;
     }
-
     if (type == String.class) return value;
     if (type == int.class || type == Integer.class) return Integer.parseInt(value);
     if (type == long.class || type == Long.class) return Long.parseLong(value);
@@ -244,5 +177,14 @@ public final class CsvUtil {
     throw new UnsupportedOperationException("Unsupported type: " + type);
   }
 
-  private record RecordMetadata<E>(Constructor<E> constructor, String[] names, Class<?>[] types) {}
+  private static void closeResources(AutoCloseable... closeables) {
+    for (var closeable : closeables) {
+      if (closeable != null) {
+        try {
+          closeable.close();
+        } catch (Exception _) {
+        }
+      }
+    }
+  }
 }

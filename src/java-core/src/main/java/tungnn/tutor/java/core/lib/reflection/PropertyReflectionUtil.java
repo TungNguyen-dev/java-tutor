@@ -3,8 +3,10 @@ package tungnn.tutor.java.core.lib.reflection;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.RecordComponent;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,21 +39,29 @@ public final class PropertyReflectionUtil {
   }
 
   private static Method resolveAccessor(Field field, Map<String, Method> methods) {
-    var property = capitalize(field.getName());
+    var fieldName = field.getName();
+    var fieldType = field.getType();
 
-    for (var candidate :
-        List.of(
-            field.getName(),
-            "get" + property,
-            "is" + property,
-            "has" + property,
-            "should" + property)) {
+    Set<String> candidates = new LinkedHashSet<>();
 
+    if (fieldType == boolean.class) {
+      if (fieldName.startsWith("is")
+          && fieldName.length() > 2
+          && Character.isUpperCase(fieldName.charAt(2))) {
+        candidates.add(fieldName); // isActive()
+      } else {
+        candidates.add("is" + capitalize(fieldName)); // active -> isActive()
+      }
+    } else {
+      candidates.add("get" + capitalize(fieldName));
+    }
+
+    for (var candidate : candidates) {
       var method = methods.get(candidate);
 
       if (method != null
           && method.getParameterCount() == 0
-          && field.getType().isAssignableFrom(method.getReturnType())) {
+          && fieldType.isAssignableFrom(method.getReturnType())) {
         return method;
       }
     }
@@ -60,7 +70,20 @@ public final class PropertyReflectionUtil {
   }
 
   private static Method resolveMutator(Field field, Map<String, Method> methods) {
-    var method = methods.get("set" + capitalize(field.getName()));
+    var fieldName = field.getName();
+    var fieldType = field.getType();
+    String setterName;
+
+    if (fieldType == boolean.class
+        && fieldName.startsWith("is")
+        && fieldName.length() > 2
+        && Character.isUpperCase(fieldName.charAt(2))) {
+      setterName = "set" + fieldName.substring(2); // isActive -> setActive()
+    } else {
+      setterName = "set" + capitalize(fieldName); // active -> setActive(), name -> setName()
+    }
+
+    var method = methods.get(setterName);
 
     if (method == null) {
       return null;

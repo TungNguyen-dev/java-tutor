@@ -1,10 +1,11 @@
 package tungnn.tutor.java.aws;
 
+import software.amazon.awssdk.profiles.Profile;
+import software.amazon.awssdk.profiles.ProfileFile;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import software.amazon.awssdk.profiles.Profile;
-import software.amazon.awssdk.profiles.ProfileFile;
 
 public final class AwsProfileRegistry {
 

@@ -3,7 +3,7 @@ package tungnn.tutor.java.aws.demo;
 import java.util.Scanner;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.sts.StsClient;
-import tungnn.tutor.java.aws.AwsDefaultClientsFactory;
+import tungnn.tutor.java.aws.AwsDefaultClientFactory;
 import tungnn.tutor.java.aws.AwsProfileRegistry;
 import tungnn.tutor.java.aws.service.iam.IamRoleUtil;
 import tungnn.tutor.java.aws.usecase.AwsAssumeRoleWithMfaUseCase;
@@ -13,7 +13,7 @@ public class DemoAssumeRole {
 
   static void main() {
     var profileRegistry = new AwsProfileRegistry();
-    var clientsFactory = new AwsDefaultClientsFactory();
+    var clientsFactory = new AwsDefaultClientFactory();
 
     // Create stsClient with defaultProfile
     var defaultProfile = profileRegistry.defaultProfile();

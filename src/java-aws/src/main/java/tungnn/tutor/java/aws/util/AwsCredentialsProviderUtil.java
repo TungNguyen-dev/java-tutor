@@ -3,7 +3,7 @@ package tungnn.tutor.java.aws.util;
 import java.util.Objects;
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.profiles.Profile;
-import tungnn.tutor.java.aws.AwsClientsFactory;
+import tungnn.tutor.java.aws.AwsClientFactory;
 import tungnn.tutor.java.aws.AwsProfileRegistry;
 
 public final class AwsCredentialsProviderUtil {
@@ -30,7 +30,7 @@ public final class AwsCredentialsProviderUtil {
   }
 
   public static void reloadCredentials(
-      AwsProfileRegistry profileRegistry, AwsClientsFactory clientsFactory) {
+      AwsProfileRegistry profileRegistry, AwsClientFactory clientsFactory) {
     profileRegistry.reload();
     clientsFactory.clearCache();
   }

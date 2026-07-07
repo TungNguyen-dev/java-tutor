@@ -1,9 +1,5 @@
 package tungnn.tutor.java.aws;
 
-import java.time.Duration;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import software.amazon.awssdk.awscore.AwsClient;
 import software.amazon.awssdk.awscore.client.builder.AwsClientBuilder;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
@@ -14,40 +10,21 @@ import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.regions.Region;
 import tungnn.tutor.java.aws.util.AwsCredentialsProviderUtil;
 
-public final class AwsDefaultClientsFactory implements AwsClientsFactory {
+import java.time.Duration;
 
-  private static final String REGION_PROPERTY = "region";
-  private static final String DEFAULT_REGION = "ap-southeast-1";
+public class AwsDefaultClientFactory extends AwsAbstractClientFactory {
 
   private static final Duration API_CALL_TIMEOUT = Duration.ofSeconds(30);
   private static final Duration API_CALL_ATTEMPT_TIMEOUT = Duration.ofSeconds(10);
-
   private static final boolean METRICS_ENABLED =
       Boolean.parseBoolean(System.getenv("AWS_SDK_ENABLE_METRICS"));
 
-  private final ConcurrentMap<ClientCacheKey, AwsClient> cache = new ConcurrentHashMap<>();
-
   @Override
-  @SuppressWarnings("unchecked")
-  public <C extends AwsClient> C getClient(
-      Class<C> clientType, AwsClientBuilder<?, C> builder, Profile profile) {
-
-    Objects.requireNonNull(clientType, "clientType must not be null");
-    Objects.requireNonNull(builder, "builder must not be null");
-    Objects.requireNonNull(profile, "profile must not be null");
-
-    var key = new ClientCacheKey(clientType, profile.name());
-
-    return (C) cache.computeIfAbsent(key, ignored -> createClient(builder, profile));
-  }
-
-  @Override
-  public void clearCache() {
-    cache.clear();
-  }
-
-  private <C extends AwsClient> C createClient(AwsClientBuilder<?, C> builder, Profile profile) {
-    var region = Region.of(profile.property(REGION_PROPERTY).orElse(DEFAULT_REGION));
+  protected <C extends AwsClient> C createClient(AwsClientBuilder<?, C> builder, Profile profile) {
+    var region =
+        profile.properties().containsKey("region")
+            ? Region.of(profile.property("region").orElseThrow())
+            : Region.AP_SOUTHEAST_1;
 
     return builder
         .region(region)
@@ -56,7 +33,8 @@ public final class AwsDefaultClientsFactory implements AwsClientsFactory {
         .build();
   }
 
-  private ClientOverrideConfiguration createOverrideConfiguration(Profile profile) {
+  @Override
+  protected ClientOverrideConfiguration createOverrideConfiguration(Profile profile) {
     var builder =
         ClientOverrideConfiguration.builder()
             .apiCallTimeout(API_CALL_TIMEOUT)
@@ -71,6 +49,4 @@ public final class AwsDefaultClientsFactory implements AwsClientsFactory {
 
     return builder.build();
   }
-
-  private record ClientCacheKey(Class<?> clientType, String profileName) {}
 }

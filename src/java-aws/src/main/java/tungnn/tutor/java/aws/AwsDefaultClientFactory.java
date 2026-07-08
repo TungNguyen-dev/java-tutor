@@ -1,5 +1,6 @@
 package tungnn.tutor.java.aws;
 
+import java.time.Duration;
 import software.amazon.awssdk.awscore.AwsClient;
 import software.amazon.awssdk.awscore.client.builder.AwsClientBuilder;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
@@ -9,8 +10,6 @@ import software.amazon.awssdk.metrics.LoggingMetricPublisher;
 import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.regions.Region;
 import tungnn.tutor.java.aws.util.AwsCredentialsProviderUtil;
-
-import java.time.Duration;
 
 public class AwsDefaultClientFactory extends AwsAbstractClientFactory {
 

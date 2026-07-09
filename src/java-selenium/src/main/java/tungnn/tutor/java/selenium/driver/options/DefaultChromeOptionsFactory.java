@@ -23,4 +23,14 @@ public class DefaultChromeOptionsFactory implements ChromeOptionsFactory {
   public ChromeOptions createChromeOptions() {
     return createChromeOptions(null);
   }
+
+  @Override
+  public ChromeOptions createChromeOptionsWithBiDiEnabled(String profileName) {
+    var options = createChromeOptions(profileName);
+
+    // Enable WebDriver BiDi Features
+    options.setCapability("webSocketUrl", true);
+
+    return options;
+  }
 }

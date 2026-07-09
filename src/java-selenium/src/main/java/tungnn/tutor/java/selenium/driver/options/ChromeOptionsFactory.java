@@ -7,4 +7,6 @@ public interface ChromeOptionsFactory {
   ChromeOptions createChromeOptions(String profile);
 
   ChromeOptions createChromeOptions();
+
+  ChromeOptions createChromeOptionsWithBiDiEnabled(String profileName);
 }

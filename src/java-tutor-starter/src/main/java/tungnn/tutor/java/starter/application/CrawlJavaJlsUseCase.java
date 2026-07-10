@@ -6,7 +6,7 @@ import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 import tungnn.tutor.java.core.lib.io.filesystem.FileUtil;
 import tungnn.tutor.java.selenium.SeleniumUtil;
 import tungnn.tutor.java.starter.infrastructure.obsidian.ObsidianNote;
-import tungnn.tutor.java.starter.page.JavaJLSPage;
+import tungnn.tutor.java.starter.infrastructure.webpage.JavaJLSPage;
 
 public class CrawlJavaJlsUseCase {
 

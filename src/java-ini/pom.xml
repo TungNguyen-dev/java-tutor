@@ -7,6 +7,7 @@
         <groupId>tungnn.tutor.java</groupId>
         <artifactId>java-tutor</artifactId>
         <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>java-ini</artifactId>

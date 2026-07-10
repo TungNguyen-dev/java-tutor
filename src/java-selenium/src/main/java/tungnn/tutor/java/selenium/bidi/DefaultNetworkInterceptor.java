@@ -1,8 +1,5 @@
 package tungnn.tutor.java.selenium.bidi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.module.Network;
@@ -11,11 +8,15 @@ import org.openqa.selenium.bidi.network.BeforeRequestSent;
 import org.openqa.selenium.bidi.network.InterceptPhase;
 import org.openqa.selenium.bidi.network.ResponseDetails;
 
-public class SimpleNetworkInterceptor implements NetworkInterceptor {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+public class DefaultNetworkInterceptor implements NetworkInterceptor {
   private final Network network;
   private final List<String> interceptIds;
 
-  public SimpleNetworkInterceptor(WebDriver driver) {
+  public DefaultNetworkInterceptor(WebDriver driver) {
     if (!(driver instanceof HasBiDi)) {
       throw new IllegalArgumentException("Driver được cấp không hỗ trợ giao thức WebDriver BiDi!");
     }

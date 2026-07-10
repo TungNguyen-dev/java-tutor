@@ -21,6 +21,11 @@ public final class ExcelUserIndexEditor {
     ExcelEditor.cloneRows(sheet, srcRowStart - 1, srcRowEnd - 1, dstRowStart - 1);
   }
 
+  public static void cloneRows(
+      Sheet srcSheet, int srcFrom, int srcTo, Sheet dstSheet, int dstFrom) {
+    ExcelEditor.cloneRows(srcSheet, srcFrom - 1, srcTo - 1, dstSheet, dstFrom - 1);
+  }
+
   public static Row insertRow(Sheet sheet, int templateRowNum) {
     return ExcelEditor.insertRow(sheet, templateRowNum - 1);
   }

@@ -50,6 +50,68 @@ public final class ExcelEditor {
     }
   }
 
+  public static void cloneRows(
+      Sheet srcSheet, int srcFrom, int srcTo, Sheet dstSheet, int dstFrom) {
+
+    if (srcSheet == null || dstSheet == null) {
+      throw new IllegalArgumentException("Source sheet and destination sheet must not be null");
+    }
+    if (srcFrom > srcTo) {
+      throw new IllegalArgumentException("Source 'from' row cannot be greater than 'to' row");
+    }
+
+    Row lastClonedRow = null;
+    int rowCount = srcTo - srcFrom + 1;
+
+    if (srcSheet == dstSheet && dstFrom > srcFrom) {
+      dstSheet.shiftRows(dstFrom, dstSheet.getLastRowNum(), rowCount);
+    }
+
+    for (int i = 0; i < rowCount; i++) {
+      int srcRowNum = srcFrom + i;
+      int dstRowNum = dstFrom + i;
+
+      Row srcRow = srcSheet.getRow(srcRowNum);
+      Row dstRow = dstSheet.getRow(dstRowNum);
+
+      if (dstRow != null) {
+        dstSheet.removeRow(dstRow);
+      }
+      dstRow = dstSheet.createRow(dstRowNum);
+      lastClonedRow = dstRow;
+
+      if (srcRow == null) {
+        continue;
+      }
+
+      dstRow.setHeight(srcRow.getHeight());
+
+      short lastCellNum = srcRow.getLastCellNum();
+      if (lastCellNum >= 0) {
+        for (int j = 0; j < lastCellNum; j++) {
+          Cell srcCell = srcRow.getCell(j);
+          if (srcCell != null) {
+            Cell dstCell = dstRow.createCell(j);
+            copyCell(srcCell, dstCell, true);
+          }
+        }
+      }
+    }
+
+    for (CellRangeAddress mergedRegion : srcSheet.getMergedRegions()) {
+      if (mergedRegion.getFirstRow() >= srcFrom && mergedRegion.getLastRow() <= srcTo) {
+        int rowOffset = dstFrom - srcFrom;
+        CellRangeAddress newRegion =
+            new CellRangeAddress(
+                mergedRegion.getFirstRow() + rowOffset,
+                mergedRegion.getLastRow() + rowOffset,
+                mergedRegion.getFirstColumn(),
+                mergedRegion.getLastColumn());
+        dstSheet.addMergedRegion(newRegion);
+      }
+    }
+  }
+
   public static Row insertRow(Sheet sheet, int templateRowIndex) {
     int lastRow = sheet.getLastRowNum();
     int targetRowIndex = templateRowIndex + 1;

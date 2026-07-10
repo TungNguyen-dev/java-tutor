@@ -1,12 +1,12 @@
-package tungnn.tutor.java.selenium.page;
+package tungnn.tutor.java.starter.infrastructure.webpage;
 
 import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import tungnn.tutor.java.selenium.page.crawler.PageCrawlResult;
-import tungnn.tutor.java.selenium.page.crawler.PageCrawler;
+import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawlResult;
+import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawler;
 
 public class YoutubePage extends BasePage implements PageCrawler {
 

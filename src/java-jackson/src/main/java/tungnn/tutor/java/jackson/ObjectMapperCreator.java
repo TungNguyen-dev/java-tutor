@@ -1,19 +1,17 @@
 package tungnn.tutor.java.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 
-public final class MapperCreator {
+public final class ObjectMapperCreator {
 
-  private MapperCreator() {}
+  private ObjectMapperCreator() {}
 
   public static ObjectMapper createDefault() {
     ObjectMapper mapper = new ObjectMapper();
 
     // Serialization
-    mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+    mapper.setDefaultPropertyInclusion(JsonInclude.Include.ALWAYS);
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     // Deserialization
@@ -33,6 +31,14 @@ public final class MapperCreator {
 
     mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     mapper.enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    return mapper;
+  }
+
+  public static ObjectMapper createSnakeCase() {
+    ObjectMapper mapper = createDefault();
+
+    mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
     return mapper;
   }

@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import tungnn.tutor.java.jackson.JsonException;
 import tungnn.tutor.java.jackson.JsonUtil;
-import tungnn.tutor.java.jackson.MapperCreator;
+import tungnn.tutor.java.jackson.ObjectMapperCreator;
 
 public class JsonDemoRunner {
 
   public static void main(String[] args) {
-    ObjectMapper mapper = MapperCreator.createPretty();
+    ObjectMapper mapper = ObjectMapperCreator.createPretty();
 
     // =========================
     // 1. Object -> JSON -> Object

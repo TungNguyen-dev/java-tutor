@@ -1,8 +1,9 @@
 package tungnn.tutor.java.starter.infrastructure.translation;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface TextTranslator {
 
-  List<TextTranslationResponse> translate(List<TextTranslationRequest> list);
+  Collection<TextTranslationResponse> translate(
+      Collection<TextTranslationRequest> translationRequests);
 }

@@ -144,6 +144,18 @@
             <artifactId>ssm</artifactId>
         </dependency>
 
+        <!-- Event Bridge -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>eventbridge</artifactId>
+        </dependency>
+
+        <!-- Scheduler -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>scheduler</artifactId>
+        </dependency>
+
         <!-- ===== Logging (SLF4J + Log4j2) ===== -->
 
         <!-- SLF4J API (abstraction layer) -->

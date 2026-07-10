@@ -1,4 +1,4 @@
-package tungnn.tutor.java.selenium;
+package tungnn.tutor.java.selenium.driver.pool;
 
 import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
@@ -6,8 +6,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.openqa.selenium.WebDriver;
+import tungnn.tutor.java.selenium.SeleniumUtil;
 
-public class DefaultWebDriverPool implements WebDriverPool {
+public class SimpleWebDriverPool implements WebDriverPool {
 
   private final BlockingQueue<WebDriver> pool;
   private final int maxSize;
@@ -16,10 +17,11 @@ public class DefaultWebDriverPool implements WebDriverPool {
   private final AtomicBoolean initialized = new AtomicBoolean(false);
   private volatile boolean closed = false;
 
-  public DefaultWebDriverPool(int maxSize, Duration borrowTimeout) {
+  public SimpleWebDriverPool(int maxSize, Duration borrowTimeout) {
     this.maxSize = maxSize;
     this.borrowTimeout = borrowTimeout;
-    this.pool = new LinkedBlockingQueue<>(maxSize); // bounded
+    this.pool = new LinkedBlockingQueue<>(maxSize);
+    init();
   }
 
   // =========================
@@ -104,6 +106,11 @@ public class DefaultWebDriverPool implements WebDriverPool {
     while ((driver = pool.poll()) != null) {
       safeQuit(driver);
     }
+  }
+
+  @Override
+  public int poolSize() {
+    return maxSize;
   }
 
   @Override

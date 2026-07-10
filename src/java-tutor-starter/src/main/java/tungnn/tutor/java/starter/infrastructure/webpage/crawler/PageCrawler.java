@@ -1,4 +1,4 @@
-package tungnn.tutor.java.selenium.page.crawler;
+package tungnn.tutor.java.starter.infrastructure.webpage.crawler;
 
 public interface PageCrawler {
 

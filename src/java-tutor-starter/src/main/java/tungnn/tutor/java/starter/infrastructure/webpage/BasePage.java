@@ -1,4 +1,4 @@
-package tungnn.tutor.java.selenium.page;
+package tungnn.tutor.java.starter.infrastructure.webpage;
 
 import java.time.Duration;
 import org.openqa.selenium.By;
@@ -6,6 +6,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import tungnn.tutor.java.core.lib.multithread.ThreadUtil;
 import tungnn.tutor.java.selenium.element.Element;
 import tungnn.tutor.java.selenium.element.Elements;
 
@@ -42,6 +43,7 @@ public abstract class BasePage {
   /** Điều hướng đến một URL bất kỳ. */
   protected void navigateTo(String url) {
     driver.get(url);
+    ThreadUtil.sleep(1000);
   }
 
   /** Làm mới (Refresh) trang hiện tại. */
@@ -109,5 +111,9 @@ public abstract class BasePage {
   /** Hủy (Dismiss) một cửa sổ Alert Pop-up. */
   protected void dismissAlert() {
     wait.until(ExpectedConditions.alertIsPresent()).dismiss();
+  }
+
+  public WebDriver webDriver() {
+    return driver;
   }
 }

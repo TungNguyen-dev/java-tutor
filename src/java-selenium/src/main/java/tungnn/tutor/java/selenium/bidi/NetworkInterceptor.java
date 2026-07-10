@@ -1,11 +1,10 @@
 package tungnn.tutor.java.selenium.bidi;
 
+import java.util.function.Consumer;
 import org.openqa.selenium.bidi.module.Network; // Đảm bảo đúng module Network của BiDi
 import org.openqa.selenium.bidi.network.BeforeRequestSent;
 import org.openqa.selenium.bidi.network.InterceptPhase;
 import org.openqa.selenium.bidi.network.ResponseDetails;
-
-import java.util.function.Consumer;
 
 /** Interface định nghĩa các lõi tính năng Network Interaction sử dụng WebDriver BiDi. */
 public interface NetworkInterceptor extends AutoCloseable {

@@ -53,7 +53,7 @@
         </dependency>
         <dependency>
             <groupId>tungnn.tutor.java</groupId>
-            <artifactId>java-parser</artifactId>
+            <artifactId>java-ast</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

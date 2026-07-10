@@ -25,7 +25,7 @@
         <module>src/java-jackson</module>
         <module>src/java-jasper</module>
         <module>src/java-jol</module>
-        <module>src/java-parser</module>
+        <module>src/java-ast</module>
         <module>src/java-office</module>
         <module>src/java-selenium</module>
         <module>src/java-mail</module>

@@ -1,4 +1,4 @@
-package tungnn.tutor.java.parser;
+package tungnn.tutor.java.ast.java;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.*;

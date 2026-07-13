@@ -156,6 +156,16 @@
             <artifactId>scheduler</artifactId>
         </dependency>
 
+        <!-- Ses -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>ses</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sesv2</artifactId>
+        </dependency>
+
         <!-- ===== Logging (SLF4J + Log4j2) ===== -->
 
         <!-- SLF4J API (abstraction layer) -->

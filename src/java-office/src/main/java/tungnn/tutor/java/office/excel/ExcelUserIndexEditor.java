@@ -40,7 +40,7 @@ public final class ExcelUserIndexEditor {
 
   public static Cell getOrCreateCellByAddress(Sheet sheet, String address) {
     var ref = new CellReference(address);
-    return getOrCreateCell(sheet, ref.getRow(), ref.getCol());
+    return ExcelEditor.getOrCreateCell(sheet, ref.getRow(), ref.getCol());
   }
 
   public static void setCellValueByAddress(Sheet sheet, String address, Object value) {

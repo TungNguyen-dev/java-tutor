@@ -1,13 +1,12 @@
 package tungnn.tutor.java.selenium.driver.pool;
 
-import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.selenium.SeleniumUtil;
-
 import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.openqa.selenium.WebDriver;
+import tungnn.tutor.java.selenium.SeleniumUtil;
 
 public class DefaultWebDriverPool implements WebDriverPool {
 

@@ -1,5 +1,8 @@
 package tungnn.tutor.java.selenium.bidi;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.module.Network;
@@ -7,10 +10,6 @@ import org.openqa.selenium.bidi.network.AddInterceptParameters;
 import org.openqa.selenium.bidi.network.BeforeRequestSent;
 import org.openqa.selenium.bidi.network.InterceptPhase;
 import org.openqa.selenium.bidi.network.ResponseDetails;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class DefaultNetworkInterceptor implements NetworkInterceptor {
   private final Network network;

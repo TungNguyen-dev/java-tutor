@@ -1,9 +1,8 @@
 package tungnn.tutor.java.aws.service.eventbridge;
 
+import java.util.List;
 import software.amazon.awssdk.services.eventbridge.EventBridgeClient;
 import software.amazon.awssdk.services.eventbridge.model.*;
-
-import java.util.List;
 
 public final class TagUtil {
 

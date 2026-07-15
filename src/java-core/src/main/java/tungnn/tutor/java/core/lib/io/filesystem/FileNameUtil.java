@@ -104,4 +104,21 @@ public final class FileNameUtil {
     String format = prefix + " %0" + width + "d";
     return String.format(format, number);
   }
+
+  public static String appendFilenameSuffix(String filename, String suffix) {
+    int dotIndex = filename.lastIndexOf('.');
+
+    if (dotIndex <= 0) {
+      return filename.endsWith(suffix) ? filename : filename + suffix;
+    }
+
+    String name = filename.substring(0, dotIndex);
+    String extension = filename.substring(dotIndex);
+
+    if (name.endsWith(suffix)) {
+      return filename;
+    }
+
+    return name + suffix + extension;
+  }
 }

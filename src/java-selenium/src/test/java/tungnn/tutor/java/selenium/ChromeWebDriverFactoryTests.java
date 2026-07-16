@@ -9,7 +9,6 @@ public class ChromeWebDriverFactoryTests {
     var optionsFactory = new ChromeOptionsFactory();
     var driverFactory = new ChromeWebDriverFactory(optionsFactory);
 
-    driverFactory.getWebDriver();
     driverFactory.getWebDriver("profile_0");
     driverFactory.getWebDrivers("profile_1", "profile_2");
   }

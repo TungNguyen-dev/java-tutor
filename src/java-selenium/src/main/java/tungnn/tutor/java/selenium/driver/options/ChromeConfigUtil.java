@@ -6,10 +6,10 @@ import java.nio.file.Path;
 import java.util.Map;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public final class ChromeConfig {
+public final class ChromeConfigUtil {
 
-  public static final String DRIVER_PROP = "webdriver.chrome.driver";
-  public static final String BINARY_PROP = "webdriver.chrome.binary";
+  public static final String DRIVER_ENV = "WEBDRIVER_CHROME_DRIVER";
+  public static final String BINARY_ENV = "WEBDRIVER_CHROME_BINARY";
 
   public static final String DEFAULT_DRIVER_PATH =
       Path.of(
@@ -37,17 +37,17 @@ public final class ChromeConfig {
   public static final Path PROFILE_ROOT_DIR =
       Path.of(System.getProperty("user.home"), ".data", "selenium", "chrome", "chrome-profiles");
 
-  private ChromeConfig() {}
+  private ChromeConfigUtil() {}
 
   public static void initializeDriverProperty() {
-    var currentDriver = System.getProperty(DRIVER_PROP);
+    var currentDriver = System.getenv(DRIVER_ENV);
     if (currentDriver == null || currentDriver.isBlank()) {
-      System.setProperty(DRIVER_PROP, DEFAULT_DRIVER_PATH);
+      System.setProperty(DRIVER_ENV, DEFAULT_DRIVER_PATH);
     }
   }
 
   public static void configureChromeBinary(ChromeOptions options) {
-    var binaryPath = System.getProperty(BINARY_PROP);
+    var binaryPath = System.getenv(BINARY_ENV);
     if (binaryPath == null || binaryPath.isBlank()) {
       options.setBinary(DEFAULT_BINARY_PATH);
     } else {

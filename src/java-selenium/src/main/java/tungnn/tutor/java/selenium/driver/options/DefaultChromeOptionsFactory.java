@@ -6,14 +6,14 @@ public class DefaultChromeOptionsFactory implements ChromeOptionsFactory {
 
   @Override
   public ChromeOptions createChromeOptions(String profileName) {
-    ChromeConfig.initializeDriverProperty();
+    ChromeConfigUtil.initializeDriverProperty();
 
     var options = new ChromeOptions();
-    ChromeConfig.configureChromeBinary(options);
-    ChromeConfig.configureArguments(options);
+    ChromeConfigUtil.configureChromeBinary(options);
+    ChromeConfigUtil.configureArguments(options);
 
     if (profileName != null) {
-      ChromeConfig.configureProfile(options, profileName);
+      ChromeConfigUtil.configureProfile(options, profileName);
     }
 
     return options;

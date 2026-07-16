@@ -18,7 +18,7 @@ public abstract class AbstractDocumentTranslator implements DocumentTranslator {
   @Override
   public Path translateDocument(Path docPath, LanguageCode targetLanguage) {
     try {
-      var outputPath = getOutputPath(docPath);
+      var outputPath = getOutputPath(docPath, targetLanguage);
 
       doTranslate(docPath, outputPath, targetLanguage);
 
@@ -32,10 +32,12 @@ public abstract class AbstractDocumentTranslator implements DocumentTranslator {
   protected abstract void doTranslate(Path inputPath, Path outputPath, LanguageCode targetLanguage)
       throws IOException;
 
-  protected Path getOutputPath(Path path) {
+  protected Path getOutputPath(Path path, LanguageCode languageCode) {
     return path.getParent()
         .resolve(
             FileNameUtil.appendFilenameSuffix(
-                path.getFileName().toString(), "_translated_" + Instant.now().toEpochMilli()));
+                path.getFileName().toString(),
+                "_%s_".formatted(languageCode.getCode().toUpperCase())
+                    + Instant.now().toEpochMilli()));
   }
 }

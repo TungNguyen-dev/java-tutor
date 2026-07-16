@@ -15,6 +15,9 @@ public enum LanguageCode {
   FR("fr", "French"),
   DE("de", "German");
 
+  // Pre-built lookup for O(1), case-insensitive parsing.
+  private static final Map<String, LanguageCode> BY_CODE =
+      Stream.of(values()).collect(Collectors.toUnmodifiableMap(l -> l.code, Function.identity()));
   private final String code;
   private final String languageName;
 
@@ -22,18 +25,6 @@ public enum LanguageCode {
     this.code = code;
     this.languageName = languageName;
   }
-
-  public String getCode() {
-    return code;
-  }
-
-  public String getLanguageName() {
-    return languageName;
-  }
-
-  // Pre-built lookup for O(1), case-insensitive parsing.
-  private static final Map<String, LanguageCode> BY_CODE =
-      Stream.of(values()).collect(Collectors.toUnmodifiableMap(l -> l.code, Function.identity()));
 
   /** Parse an ISO code ("en", "EN", " vi ") -> Optional. */
   public static Optional<LanguageCode> fromCode(String code) {
@@ -45,5 +36,13 @@ public enum LanguageCode {
   public static LanguageCode requireCode(String code) {
     return fromCode(code)
         .orElseThrow(() -> new IllegalArgumentException("Unsupported language code: " + code));
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public String getLanguageName() {
+    return languageName;
   }
 }

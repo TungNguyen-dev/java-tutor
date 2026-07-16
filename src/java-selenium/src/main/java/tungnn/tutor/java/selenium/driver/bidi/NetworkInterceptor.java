@@ -1,4 +1,4 @@
-package tungnn.tutor.java.selenium.bidi;
+package tungnn.tutor.java.selenium.driver.bidi;
 
 import java.util.function.Consumer;
 import org.openqa.selenium.bidi.module.Network; // Đảm bảo đúng module Network của BiDi

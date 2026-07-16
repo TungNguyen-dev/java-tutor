@@ -6,10 +6,10 @@ import java.nio.file.Path;
 import java.util.Map;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public final class ChromeConfigUtil {
+public final class ChromeOptionUtil {
 
-  public static final String DRIVER_ENV = "WEBDRIVER_CHROME_DRIVER";
-  public static final String BINARY_ENV = "WEBDRIVER_CHROME_BINARY";
+  public static final String DRIVER_PATH_ENV = "WEBDRIVER_CHROME_DRIVER_PATH";
+  public static final String BINARY_PATH_ENV = "WEBDRIVER_CHROME_BINARY_PATH";
 
   public static final String DEFAULT_DRIVER_PATH =
       Path.of(
@@ -37,17 +37,19 @@ public final class ChromeConfigUtil {
   public static final Path PROFILE_ROOT_DIR =
       Path.of(System.getProperty("user.home"), ".data", "selenium", "chrome", "chrome-profiles");
 
-  private ChromeConfigUtil() {}
+  private ChromeOptionUtil() {}
 
   public static void initializeDriverProperty() {
-    var currentDriver = System.getenv(DRIVER_ENV);
-    if (currentDriver == null || currentDriver.isBlank()) {
-      System.setProperty(DRIVER_ENV, DEFAULT_DRIVER_PATH);
+    var driverPath = System.getenv(DRIVER_PATH_ENV);
+    if (driverPath == null || driverPath.isBlank()) {
+      System.setProperty("webdriver.chrome.driver", DEFAULT_DRIVER_PATH);
+    } else {
+      System.setProperty("webdriver.chrome.driver", driverPath);
     }
   }
 
   public static void configureChromeBinary(ChromeOptions options) {
-    var binaryPath = System.getenv(BINARY_ENV);
+    var binaryPath = System.getenv(BINARY_PATH_ENV);
     if (binaryPath == null || binaryPath.isBlank()) {
       options.setBinary(DEFAULT_BINARY_PATH);
     } else {

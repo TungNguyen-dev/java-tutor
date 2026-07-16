@@ -2,11 +2,32 @@ package tungnn.tutor.java.selenium.driver.options;
 
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public interface ChromeOptionsFactory {
+public class ChromeOptionsFactory {
 
-  ChromeOptions createChromeOptions(String profile);
+  public ChromeOptions createChromeOptions(String profileName) {
+    ChromeOptionUtil.initializeDriverProperty();
 
-  ChromeOptions createChromeOptions();
+    var options = new ChromeOptions();
+    ChromeOptionUtil.configureChromeBinary(options);
+    ChromeOptionUtil.configureArguments(options);
 
-  ChromeOptions createChromeOptionsWithBiDiEnabled(String profileName);
+    if (profileName != null) {
+      ChromeOptionUtil.configureProfile(options, profileName);
+    }
+
+    return options;
+  }
+
+  public ChromeOptions createChromeOptions() {
+    return createChromeOptions(null);
+  }
+
+  public ChromeOptions createChromeOptionsWithBiDiEnabled(String profileName) {
+    var options = createChromeOptions(profileName);
+
+    // Enable WebDriver BiDi Features
+    options.setCapability("webSocketUrl", true);
+
+    return options;
+  }
 }

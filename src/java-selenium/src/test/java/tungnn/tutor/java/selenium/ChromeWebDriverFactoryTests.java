@@ -1,12 +1,12 @@
 package tungnn.tutor.java.selenium;
 
 import tungnn.tutor.java.selenium.driver.ChromeWebDriverFactory;
-import tungnn.tutor.java.selenium.driver.options.DefaultChromeOptionsFactory;
+import tungnn.tutor.java.selenium.driver.options.ChromeOptionsFactory;
 
 public class ChromeWebDriverFactoryTests {
 
   static void main() {
-    var optionsFactory = new DefaultChromeOptionsFactory();
+    var optionsFactory = new ChromeOptionsFactory();
     var driverFactory = new ChromeWebDriverFactory(optionsFactory);
 
     driverFactory.getWebDriver();

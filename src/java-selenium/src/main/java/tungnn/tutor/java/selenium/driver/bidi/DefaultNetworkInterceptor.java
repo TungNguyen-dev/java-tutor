@@ -1,4 +1,4 @@
-package tungnn.tutor.java.selenium.bidi;
+package tungnn.tutor.java.selenium.driver.bidi;
 
 import java.util.ArrayList;
 import java.util.List;

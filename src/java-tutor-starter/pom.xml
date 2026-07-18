@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>tungnn.tutor.java</groupId>
-            <artifactId>java-office</artifactId>
+            <artifactId>java-document</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
@@ -79,11 +79,6 @@
         <dependency>
             <groupId>tungnn.tutor.java</groupId>
             <artifactId>java-ini</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>tungnn.tutor.java</groupId>
-            <artifactId>java-pdf</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

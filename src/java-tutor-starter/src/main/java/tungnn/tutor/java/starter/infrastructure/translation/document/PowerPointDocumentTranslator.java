@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import tungnn.tutor.java.office.powerpoint.PowerPointUtil;
+import tungnn.tutor.java.document.powerpoint.PowerPointUtil;
 import tungnn.tutor.java.starter.infrastructure.translation.shared.LanguageCode;
 import tungnn.tutor.java.starter.infrastructure.translation.text.TextTranslation;
 import tungnn.tutor.java.starter.infrastructure.translation.text.TextTranslator;

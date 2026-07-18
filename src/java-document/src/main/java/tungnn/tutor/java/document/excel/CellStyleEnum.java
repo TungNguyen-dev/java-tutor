@@ -1,0 +1,16 @@
+package tungnn.tutor.java.document.excel;
+
+public enum CellStyleEnum {
+  HEADER_MAIN,
+  HEADER_SUB,
+  TEXT_LEFT,
+  TEXT_CENTER,
+  TEXT_RIGHT,
+  NUMBER_INTEGER,
+  NUMBER_DECIMAL,
+  NUMBER_CURRENCY,
+  NUMBER_PERCENTAGE,
+  DATE_DEFAULT,
+  DATETIME_DEFAULT,
+  TOTAL_ROW
+}

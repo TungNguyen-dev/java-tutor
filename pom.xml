@@ -34,7 +34,7 @@
         <module>src/java-jasper</module>
         <module>src/java-jol</module>
         <module>src/java-ast</module>
-        <module>src/java-office</module>
+        <module>src/java-document</module>
         <module>src/java-selenium</module>
         <module>src/java-mail</module>
         <module>src/java-csv</module>
@@ -42,6 +42,5 @@
         <module>src/java-mime</module>
         <module>src/java-ini</module>
         <module>src/java-tutor-starter</module>
-        <module>src/java-pdf</module>
     </modules>
 </project>

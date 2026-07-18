@@ -36,8 +36,10 @@ public class PdfDocumentTranslator extends AbstractDocumentTranslator {
           wordChunks.stream()
               .map(chunk -> withTranslatedText(chunk, translations.get(chunk.text())))
               .collect(Collectors.toList());
-
       PdfDocumentUtil.writeDocument(outputPath, translatedChunks);
+
+      var documentTranslated = PdfDocumentUtil.readDocument(Files.newInputStream(outputPath));
+      PdfDocumentUtil.mergeSideBySide(document, documentTranslated, outputPath);
     }
   }
 

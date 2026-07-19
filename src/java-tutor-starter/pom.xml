@@ -81,5 +81,10 @@
             <artifactId>java-ini</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>tungnn.tutor.java</groupId>
+            <artifactId>java-ocr</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

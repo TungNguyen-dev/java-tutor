@@ -42,5 +42,6 @@
         <module>src/java-mime</module>
         <module>src/java-ini</module>
         <module>src/java-tutor-starter</module>
+        <module>src/java-ocr</module>
     </modules>
 </project>

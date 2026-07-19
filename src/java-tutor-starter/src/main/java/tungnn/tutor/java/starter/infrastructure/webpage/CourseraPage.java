@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import tungnn.tutor.java.core.lib.multithread.ThreadUtil;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawlResult;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawler;
 
@@ -28,6 +29,20 @@ public class CourseraPage extends BasePage implements PageCrawler {
   @Override
   public PageCrawlResult crawl(String url) {
     navigateTo(url);
+    ThreadUtil.sleep(1000);
+
+    var buttonTranscriptLocator =
+        By.cssSelector("[data-testid='item-tool-panel-button-transcript']");
+
+    var buttonTranscript = $(buttonTranscriptLocator);
+
+    buttonTranscript.waitClickable();
+
+    if (!"true".equalsIgnoreCase(buttonTranscript.attribute("aria-pressed"))) {
+      buttonTranscript.click();
+      ThreadUtil.sleep(1000);
+    }
+
     return new PageCrawlResult(url, getLessonTitle(), getLessonContent());
   }
 

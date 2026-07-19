@@ -16,15 +16,17 @@ public record ObsidianNote(String title, String content, List<String> references
       date: {{date}}
       tags:
       ---
+      ---
+
       # {{title}}
 
       {{content}}
 
       ---
+
       """;
 
-  @Override
-  public String toString() {
+  public String toMarkdown() {
     var now = LocalDateTime.now();
     var today = now.toLocalDate();
 

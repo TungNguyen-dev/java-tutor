@@ -209,3 +209,5 @@ application-local.properties
 storage
 
 .aws
+
+.data

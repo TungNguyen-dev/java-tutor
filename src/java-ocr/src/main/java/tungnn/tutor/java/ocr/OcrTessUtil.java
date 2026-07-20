@@ -1,14 +1,18 @@
 package tungnn.tutor.java.ocr;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public final class OcrTessUtil {
+
+  private static final String TESSDATA_PROP = "tessdata.path";
+  private static final String TESSDATA_ENV = "TESSDATA_PATH";
+
+  private OcrTessUtil() {}
 
   static void main() {
     var tesseract = OcrTessUtil.createTesseract();
@@ -18,8 +22,6 @@ public final class OcrTessUtil {
     var result = recognizeText(tesseract, "eng", path);
     System.out.println(result);
   }
-
-  private OcrTessUtil() {}
 
   public static ITesseract createTesseract() {
     ITesseract tesseract = new Tesseract();
@@ -32,9 +34,6 @@ public final class OcrTessUtil {
 
     return tesseract;
   }
-
-  private static final String TESSDATA_PROP = "tessdata.path";
-  private static final String TESSDATA_ENV = "TESSDATA_PATH";
 
   private static Path getTessDataPath() {
     String path = System.getProperty(TESSDATA_PROP);

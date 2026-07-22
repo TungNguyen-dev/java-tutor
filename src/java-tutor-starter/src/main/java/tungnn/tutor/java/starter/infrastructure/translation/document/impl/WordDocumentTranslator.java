@@ -96,16 +96,9 @@ public class WordDocumentTranslator extends AbstractDocumentTranslator {
   }
 
   @Override
-  protected Path getContextFile(Path docPath) {
+  protected String getContext(Path docPath) {
     var document = document(docPath);
-    var context = WordUtil.extractAllText(document);
-    try {
-      var path = Files.createTempFile("word-context-file-", ".txt");
-      Files.writeString(path, context);
-      return path;
-    } catch (IOException e) {
-      throw new UncheckedIOException("Failed to create Word context file for: " + docPath, e);
-    }
+    return WordUtil.extractAllText(document);
   }
 
   private boolean shouldTranslateParagraph(XWPFParagraph paragraph) {

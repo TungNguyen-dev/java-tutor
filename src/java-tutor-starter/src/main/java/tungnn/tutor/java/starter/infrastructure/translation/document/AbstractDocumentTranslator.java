@@ -4,15 +4,15 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 import tungnn.tutor.java.starter.infrastructure.translation.document.model.TranslationRequest;
 import tungnn.tutor.java.starter.infrastructure.translation.document.model.TranslationResponse;
+import tungnn.tutor.java.starter.infrastructure.translation.shared.LanguageCode;
 import tungnn.tutor.java.starter.infrastructure.translation.text.TextTranslation;
 import tungnn.tutor.java.starter.infrastructure.translation.text.TextTranslator2;
+import tungnn.tutor.java.starter.infrastructure.translation.text.TranslateOption;
 
 public abstract class AbstractDocumentTranslator implements DocumentTranslator {
 
@@ -35,11 +35,12 @@ public abstract class AbstractDocumentTranslator implements DocumentTranslator {
       var textRefs = collectTextRefs(docPath);
       var texts = textRefs.stream().map(TextRef::getText).toList();
 
-      var contextFile = getContextFile(docPath);
-      var metaFiles = Stream.of(contextFile).filter(Objects::nonNull).toList();
+      var context = getContext(docPath);
+      var glossaryFiles = getGlossaryFiles(List.of(LanguageCode.JA));
+      var option = new TranslateOption(context, glossaryFiles);
 
       var textTranslationMap =
-          textTranslator.translate(texts, languageCode, metaFiles).stream()
+          textTranslator.translate(texts, languageCode, option).stream()
               .collect(Collectors.toMap(TextTranslation::sourceText, TextTranslation::targetText));
 
       textRefs.forEach(textRef -> textRef.setText(textTranslationMap.get(textRef.getText())));
@@ -80,5 +81,14 @@ public abstract class AbstractDocumentTranslator implements DocumentTranslator {
 
   protected abstract List<TextRef> collectTextRefs(Path docPath);
 
-  protected abstract Path getContextFile(Path docPath);
+  protected abstract String getContext(Path docPath);
+
+  protected List<Path> getGlossaryFiles(List<LanguageCode> languageCodes) {
+    var dir = Path.of(System.getenv("TRANSLATION_GLOSSARY_DIR"));
+    return languageCodes.stream()
+        .map(
+            languageCode ->
+                dir.resolve("glossary-file-%s.txt".formatted(languageCode.getCode().toLowerCase())))
+        .toList();
+  }
 }

@@ -1,7 +1,6 @@
 package tungnn.tutor.java.starter.infrastructure.translation.document.impl;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,16 +57,9 @@ public class ExcelDocumentTranslator extends AbstractDocumentTranslator {
   }
 
   @Override
-  protected Path getContextFile(Path docPath) {
+  protected String getContext(Path docPath) {
     var wb = (Workbook) documentMap.get(docPath);
-    var context = ExcelUtil.extractAllText(wb);
-    try {
-      var path = Files.createTempFile("excel-context-file-", ".txt");
-      Files.writeString(path, context);
-      return path;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    return ExcelUtil.extractAllText(wb);
   }
 
   private boolean shouldNotTranslateCell(Cell cell) {

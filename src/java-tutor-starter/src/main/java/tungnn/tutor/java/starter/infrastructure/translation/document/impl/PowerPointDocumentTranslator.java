@@ -72,16 +72,9 @@ public class PowerPointDocumentTranslator extends AbstractDocumentTranslator {
   }
 
   @Override
-  protected Path getContextFile(Path docPath) {
+  protected String getContext(Path docPath) {
     var presentation = presentation(docPath);
-    var context = PowerPointUtil.extractAllText(presentation);
-    try {
-      var path = Files.createTempFile("powerpoint-context-file-", ".txt");
-      Files.writeString(path, context);
-      return path;
-    } catch (IOException e) {
-      throw new UncheckedIOException("Failed to create PowerPoint context file for: " + docPath, e);
-    }
+    return PowerPointUtil.extractAllText(presentation);
   }
 
   private boolean shouldTranslateValue(String value) {

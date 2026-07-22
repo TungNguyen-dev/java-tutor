@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.imageio.ImageIO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import tungnn.tutor.java.document.pdf.PdfDocumentUtil;
 import tungnn.tutor.java.document.pdf.stripper.WordAwareStripper;
@@ -73,14 +72,16 @@ public class PdfDocumentTranslator extends AbstractDocumentTranslator {
   }
 
   @Override
-  protected Path getContextFile(Path docPath) {
+  protected String getContext(Path docPath) {
     var original = document(docPath);
     try {
-      var image = PdfDocumentUtil.convertToSingleImage(original, 150);
-      var path = Files.createTempFile("pdf-context-file-", ".png");
-      ImageIO.write(image, "PNG", path.toFile());
-      return path;
-    } catch (IOException e) {
+      var sb = new StringBuilder();
+      var words = PdfDocumentUtil.extractWordChunk(original, stripper);
+      for (var chunk : words) {
+        sb.append(chunk.text()).append(" ");
+      }
+      return sb.toString();
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }

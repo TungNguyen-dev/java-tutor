@@ -1,9 +1,12 @@
 package tungnn.tutor.java.document.pdf;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.List;
 import org.apache.fontbox.ttf.CmapLookup;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
@@ -15,6 +18,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.util.Matrix;
 import tungnn.tutor.java.document.pdf.stripper.PositionAwareStripper;
 import tungnn.tutor.java.document.pdf.stripper.WordAwareStripper;
@@ -178,6 +183,42 @@ public class PdfDocumentUtil {
 
       result.save(output.toFile());
     }
+  }
+
+  public static BufferedImage convertToSingleImage(PDDocument document, int dpi)
+      throws IOException {
+    var renderer = new PDFRenderer(document);
+    var pages = new ArrayList<BufferedImage>();
+
+    // 1) Render từng trang
+    for (int i = 0; i < document.getNumberOfPages(); i++) {
+      pages.add(renderer.renderImageWithDPI(i, dpi, ImageType.RGB));
+    }
+    if (pages.isEmpty()) {
+      throw new IllegalStateException("PDF has no pages: nothing to render");
+    }
+
+    // 2) Tính kích thước canvas: rộng = trang rộng nhất, cao = tổng chiều cao
+    var totalWidth = pages.stream().mapToInt(BufferedImage::getWidth).max().orElse(0);
+    var totalHeight = pages.stream().mapToInt(BufferedImage::getHeight).sum();
+
+    // 3) Vẽ lần lượt các trang xuống canvas
+    var combined = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_INT_RGB);
+    var g = combined.createGraphics();
+    try {
+      g.setColor(Color.WHITE);
+      g.fillRect(0, 0, totalWidth, totalHeight); // nền trắng cho trang hẹp hơn
+      var y = 0;
+      for (var page : pages) {
+        g.drawImage(page, 0, y, null);
+        y += page.getHeight();
+        page.flush(); // giải phóng sớm
+      }
+    } finally {
+      g.dispose();
+    }
+
+    return combined;
   }
 
   private static String filterSupportedChars(PDType0Font font, String text) {

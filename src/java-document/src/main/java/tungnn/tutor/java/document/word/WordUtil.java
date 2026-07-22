@@ -3,11 +3,13 @@ package tungnn.tutor.java.document.word;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.*;
 
 public final class WordUtil {
@@ -53,6 +55,14 @@ public final class WordUtil {
             runs.forEach(run -> run.setText(translated, 0));
           }
         });
+  }
+
+  public static String extractAllText(XWPFDocument document) {
+    try (var extractor = new XWPFWordExtractor(document)) {
+      return extractor.getText().strip();
+    } catch (IOException e) {
+      throw new UncheckedIOException("Failed to extract text from Word document", e);
+    }
   }
 
   private static void collectBodyElements(

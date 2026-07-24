@@ -1,11 +1,5 @@
 package tungnn.tutor.java.starter.infrastructure.translation.v1.document.impl;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.poi.xslf.usermodel.*;
 import tungnn.tutor.java.document.powerpoint.PowerPointUtil;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.AbstractDocumentTranslator;
@@ -13,6 +7,13 @@ import tungnn.tutor.java.starter.infrastructure.translation.v2.document.Document
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.cache.TextTranslationCache;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.model.DocumentTranslationRequest;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.text.TextTranslator;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PowerPointDocumentTranslator extends AbstractDocumentTranslator<XMLSlideShow> {
 
@@ -57,9 +58,9 @@ public class PowerPointDocumentTranslator extends AbstractDocumentTranslator<XML
   private void collectTextShape(XSLFTextShape textShape, List<DocumentText> out) {
     for (var paragraph : textShape.getTextParagraphs()) {
       for (var run : paragraph.getTextRuns()) {
-        if (shouldTranslateValue(run.getRawText())) {
-          out.add(new PptDocumentText(run));
-        }
+//        if (shouldTranslateValue(run.getRawText())) {
+//          out.add(new PptDocumentText(run));
+//        }
       }
     }
   }

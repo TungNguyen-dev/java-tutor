@@ -1,38 +1,43 @@
 package tungnn.tutor.java.starter.application.command;
 
-import java.nio.file.Path;
-import java.util.List;
-import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 import tungnn.tutor.java.core.lib.io.filesystem.FileUtil;
 import tungnn.tutor.java.selenium.driver.ChromeWebDriverFactory;
 import tungnn.tutor.java.selenium.driver.options.ChromeOptionsFactory;
 import tungnn.tutor.java.starter.infrastructure.obsidian.ObsidianNote;
 import tungnn.tutor.java.starter.infrastructure.webpage.JavaJLSPage;
-import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawlResult;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 public class CrawlApplicationJavaJlsUseCase {
 
   private static final Path URL_FILE = Path.of("storage", "jls-java26.txt");
   private static final Path OUTPUT_DIR = Path.of("storage", "jls26");
 
-  static void main() {
+  private int chapterCount = 0;
+  private int noteCount = 0;
+  private Path currentDir = OUTPUT_DIR;
+
+  static void main() throws IOException {
+    new CrawlApplicationJavaJlsUseCase().run();
+  }
+
+  private void run() throws IOException {
     var driverFactory = new ChromeWebDriverFactory(new ChromeOptionsFactory());
     var driver = driverFactory.getWebDrivers(1).getFirst();
     try {
       var page = new JavaJLSPage(driver);
-
-      List<String> urls = readUrls();
-      int indexWidth = String.valueOf(urls.size()).length();
-
-      for (int i = 0; i < urls.size(); i++) {
-        crawlAndSave(page, urls.get(i), i + 1, indexWidth);
+      for (var url : readUrls()) {
+        crawlAndSave(page, url);
       }
     } finally {
       driver.quit();
     }
   }
 
-  private static List<String> readUrls() {
+  private List<String> readUrls() {
     return FileUtil.readString(URL_FILE)
         .lines()
         .map(String::strip)
@@ -40,13 +45,22 @@ public class CrawlApplicationJavaJlsUseCase {
         .toList();
   }
 
-  private static void crawlAndSave(JavaJLSPage page, String url, int index, int indexWidth) {
-    PageCrawlResult result = page.crawl(url);
+  private void crawlAndSave(JavaJLSPage page, String url) throws IOException {
+    var result = page.crawl(url);
+    var sectionTitle = extractSectionTitle(result.title());
 
-    String paddedIndex = String.format("%0" + indexWidth + "d", index);
-    String filename = "%s - %s.md".formatted(paddedIndex, FileNameUtil.sanitize(result.title()));
+    if (result.title().contains("Chapter")) {
+      currentDir = OUTPUT_DIR.resolve("%d - %s".formatted(++chapterCount, sectionTitle));
+      Files.createDirectories(currentDir);
+      noteCount = 0;
+    }
 
+    var filename = "%02d - %s.md".formatted(++noteCount, sectionTitle);
     var note = new ObsidianNote(result.title(), result.content(), List.of(result.url()));
-    FileUtil.writeString(OUTPUT_DIR.resolve(filename), note.toMarkdown());
+    FileUtil.writeString(currentDir.resolve(filename), note.toMarkdown());
+  }
+
+  private String extractSectionTitle(String title) {
+    return title.substring(title.lastIndexOf('.') + 1).strip();
   }
 }

@@ -15,6 +15,8 @@ public record ObsidianNote(String title, String content, List<String> references
       email: tungnn.hn@gmail.com
       date: {{date}}
       tags:
+      - java
+      - jls26
       ---
       ---
 

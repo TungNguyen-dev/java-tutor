@@ -1,16 +1,15 @@
 package tungnn.tutor.java.starter.infrastructure.translation.v1.text.orchestrator;
 
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Semaphore;
 import tungnn.tutor.java.core.lib.collection.CollectionChunks;
 import tungnn.tutor.java.starter.infrastructure.translation.v1.exception.TranslationException;
 import tungnn.tutor.java.starter.infrastructure.translation.v1.shared.TextReference;
 import tungnn.tutor.java.starter.infrastructure.translation.v1.text.TextTranslationRequest;
 import tungnn.tutor.java.starter.infrastructure.translation.v1.text.TextTranslationResponse;
 import tungnn.tutor.java.starter.infrastructure.translation.v1.text.TextTranslator;
-
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Semaphore;
 
 public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestrator {
 
@@ -74,17 +73,26 @@ public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestr
       semaphore.acquire();
       acquired = true;
 
-      var idToReference = new HashMap<String, TextReference>();
-      var units = new ArrayList<TextTranslationRequest.TextUnit>(chunk.size());
+      var idToReferences = new HashMap<String, List<TextReference>>();
+      var textToId = new HashMap<String, String>();
+      var units = new ArrayList<TextTranslationRequest.TextUnit>();
+
       for (var reference : chunk) {
-        var id = generateId();
-        idToReference.put(id, reference);
-        units.add(new TextTranslationRequest.TextUnit(id, reference.getText()));
+        var text = reference.getText();
+        var id =
+            textToId.computeIfAbsent(
+                text,
+                t -> {
+                  var newId = generateId();
+                  units.add(new TextTranslationRequest.TextUnit(newId, t));
+                  return newId;
+                });
+        idToReferences.computeIfAbsent(id, k -> new ArrayList<>()).add(reference);
       }
 
       var request = new TextTranslationRequest(units, context.targetLanguage());
       var response = textTranslator.translate(request);
-      return ChunkTranslateResult.success(buildResult(idToReference, response));
+      return ChunkTranslateResult.success(buildResult(idToReferences, response));
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       return ChunkTranslateResult.fail(e);
@@ -98,12 +106,14 @@ public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestr
   }
 
   private List<TranslationResult.Entry> buildResult(
-      Map<String, TextReference> idToReference, TextTranslationResponse response) {
-    var entries = new ArrayList<TranslationResult.Entry>(response.translations().size());
+      Map<String, List<TextReference>> idToReferences, TextTranslationResponse response) {
+    var entries = new ArrayList<TranslationResult.Entry>();
     for (var translated : response.translations()) {
-      var reference = idToReference.get(translated.textId());
-      if (reference != null) {
-        entries.add(new TranslationResult.Entry(reference, translated.translatedText()));
+      var references = idToReferences.get(translated.textId());
+      if (references != null) {
+        for (var reference : references) {
+          entries.add(new TranslationResult.Entry(reference, translated.translatedText()));
+        }
       }
     }
     return entries;

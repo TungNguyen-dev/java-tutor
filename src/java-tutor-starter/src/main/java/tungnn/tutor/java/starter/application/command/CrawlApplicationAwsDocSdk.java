@@ -1,16 +1,15 @@
 package tungnn.tutor.java.starter.application.command;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 import tungnn.tutor.java.core.lib.io.filesystem.FileUtil;
 import tungnn.tutor.java.selenium.driver.ChromeWebDriverFactory;
 import tungnn.tutor.java.selenium.driver.options.ChromeOptionsFactory;
 import tungnn.tutor.java.starter.infrastructure.obsidian.ObsidianNote;
 import tungnn.tutor.java.starter.infrastructure.webpage.AwsDocSdkPage;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 
 public class CrawlApplicationAwsDocSdk {
 

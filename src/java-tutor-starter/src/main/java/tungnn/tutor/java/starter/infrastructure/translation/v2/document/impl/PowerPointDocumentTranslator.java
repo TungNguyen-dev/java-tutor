@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.poi.xslf.usermodel.*;
-import tungnn.tutor.java.document.powerpoint.PowerPointUtil;
+import tungnn.tutor.java.document.office.powerpoint.PowerPointUtil;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.AbstractDocumentTranslator;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.DocumentText;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.cache.TextTranslationCache;

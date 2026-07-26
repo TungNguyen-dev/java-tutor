@@ -1,4 +1,4 @@
-package tungnn.tutor.java.document.excel;
+package tungnn.tutor.java.document.office.excel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +10,6 @@ import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.HeaderFooter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.*;
-import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
 import org.apache.poi.xssf.usermodel.*;
 
 public class ExcelUtil {
@@ -75,17 +74,7 @@ public class ExcelUtil {
   // ==========================================
 
   public static String extractAllText(Workbook workbook) {
-    if (!(workbook instanceof XSSFWorkbook xssfWorkbook)) {
-      throw new IllegalArgumentException(
-          "Advanced text extraction currently only supports XSSFWorkbook (.xlsx)");
-    }
-    try (var extractor = new XSSFExcelExtractor(xssfWorkbook)) {
-      extractor.setFormulasNotResults(true);
-      extractor.setIncludeSheetNames(true);
-      return extractor.getText();
-    } catch (IOException e) {
-      throw new RuntimeException("Error extracting text data from Excel", e);
-    }
+    throw new UnsupportedOperationException("Use TextExtractorUtil#extractext() instead.");
   }
 
   // ==========================================

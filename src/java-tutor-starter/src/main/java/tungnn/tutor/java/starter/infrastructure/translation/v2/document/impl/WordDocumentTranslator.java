@@ -11,7 +11,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
-import tungnn.tutor.java.document.word.WordUtil;
+import tungnn.tutor.java.document.office.word.WordUtil;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.AbstractDocumentTranslator;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.DocumentText;
 import tungnn.tutor.java.starter.infrastructure.translation.v2.document.cache.TextTranslationCache;

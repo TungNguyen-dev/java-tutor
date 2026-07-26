@@ -1,15 +1,13 @@
-package tungnn.tutor.java.document.powerpoint;
+package tungnn.tutor.java.document.office.powerpoint;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import org.apache.poi.sl.extractor.SlideShowExtractor;
 import org.apache.poi.xslf.usermodel.*;
 
 public final class PowerPointUtil {
@@ -52,11 +50,7 @@ public final class PowerPointUtil {
   }
 
   public static String extractAllText(XMLSlideShow presentation) {
-    try (var extractor = new SlideShowExtractor<>(presentation)) {
-      return extractor.getText().strip();
-    } catch (IOException e) {
-      throw new UncheckedIOException("Failed to extract text from PowerPoint presentation", e);
-    }
+    throw new UnsupportedOperationException("Use TextExtractorUtil#extractext() instead.");
   }
 
   private static void collectShape(

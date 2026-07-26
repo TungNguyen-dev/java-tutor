@@ -2,6 +2,7 @@ package tungnn.tutor.java.document.powerpoint;
 
 import java.io.IOException;
 import tungnn.tutor.java.core.lib.io.resource.ResourceUtil;
+import tungnn.tutor.java.document.office.powerpoint.PowerPointUtil;
 
 public class PowerPointUtilTests {
 

@@ -20,7 +20,6 @@ public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestr
 
   public DefaultTextTranslatorOrchestrator(
       TextTranslator textTranslator, int chunkSize, Executor executor, int maxConcurrency) {
-
     this.textTranslator = textTranslator;
     this.chunkSize = chunkSize;
     this.executor = executor;
@@ -35,19 +34,36 @@ public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestr
       return TranslationResult.empty();
     }
 
+    var idToReferences = new HashMap<String, List<TextReference>>();
+    var textToId = new HashMap<String, String>();
+    var units = new ArrayList<TextTranslationRequest.TextUnit>();
+
+    for (var reference : textReferences) {
+      var text = reference.getText();
+      var id =
+          textToId.computeIfAbsent(
+              text,
+              t -> {
+                var newId = generateId();
+                units.add(new TextTranslationRequest.TextUnit(newId, t));
+                return newId;
+              });
+      idToReferences.computeIfAbsent(id, k -> new ArrayList<>()).add(reference);
+    }
+
     var futures =
-        CollectionChunks.chunkStream(textReferences, chunkSize)
+        CollectionChunks.chunkStream(units, chunkSize)
             .map(chunk -> translateChunkAsync(chunk, context))
             .toList();
 
     CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
 
-    var entries = new ArrayList<TranslationResult.Entry>();
+    var translations = new HashMap<String, String>();
     var failures = new ArrayList<Throwable>();
     for (var future : futures) {
       var result = future.join();
       if (result.isSuccess()) {
-        entries.addAll(result.entries());
+        translations.putAll(result.translations());
       } else {
         failures.add(result.error());
       }
@@ -58,41 +74,26 @@ public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestr
       failures.forEach(ex::addSuppressed);
       throw ex;
     }
-    return new TranslationResult(entries);
+
+    return new TranslationResult(buildEntries(idToReferences, translations));
   }
 
   private CompletableFuture<ChunkTranslateResult> translateChunkAsync(
-      List<TextReference> chunk, TranslationContext context) {
+      List<TextTranslationRequest.TextUnit> chunk, TranslationContext context) {
     return CompletableFuture.supplyAsync(() -> translateChunk(chunk, context), executor);
   }
 
   private ChunkTranslateResult translateChunk(
-      List<TextReference> chunk, TranslationContext context) {
+      List<TextTranslationRequest.TextUnit> chunk, TranslationContext context) {
+
     boolean acquired = false;
     try {
       semaphore.acquire();
       acquired = true;
 
-      var idToReferences = new HashMap<String, List<TextReference>>();
-      var textToId = new HashMap<String, String>();
-      var units = new ArrayList<TextTranslationRequest.TextUnit>();
-
-      for (var reference : chunk) {
-        var text = reference.getText();
-        var id =
-            textToId.computeIfAbsent(
-                text,
-                t -> {
-                  var newId = generateId();
-                  units.add(new TextTranslationRequest.TextUnit(newId, t));
-                  return newId;
-                });
-        idToReferences.computeIfAbsent(id, k -> new ArrayList<>()).add(reference);
-      }
-
-      var request = new TextTranslationRequest(units, context.targetLanguage());
+      var request = new TextTranslationRequest(chunk, context.targetLanguage());
       var response = textTranslator.translate(request);
-      return ChunkTranslateResult.success(buildResult(idToReferences, response));
+      return ChunkTranslateResult.success(extractTranslations(response));
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       return ChunkTranslateResult.fail(e);
@@ -105,14 +106,22 @@ public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestr
     }
   }
 
-  private List<TranslationResult.Entry> buildResult(
-      Map<String, List<TextReference>> idToReferences, TextTranslationResponse response) {
-    var entries = new ArrayList<TranslationResult.Entry>();
+  private Map<String, String> extractTranslations(TextTranslationResponse response) {
+    var translations = new HashMap<String, String>();
     for (var translated : response.translations()) {
-      var references = idToReferences.get(translated.textId());
+      translations.put(translated.textId(), translated.translatedText());
+    }
+    return translations;
+  }
+
+  private List<TranslationResult.Entry> buildEntries(
+      Map<String, List<TextReference>> idToReferences, Map<String, String> translations) {
+    var entries = new ArrayList<TranslationResult.Entry>();
+    for (var entry : translations.entrySet()) {
+      var references = idToReferences.get(entry.getKey());
       if (references != null) {
         for (var reference : references) {
-          entries.add(new TranslationResult.Entry(reference, translated.translatedText()));
+          entries.add(new TranslationResult.Entry(reference, entry.getValue()));
         }
       }
     }
@@ -123,22 +132,18 @@ public class DefaultTextTranslatorOrchestrator implements TextTranslatorOrchestr
     return UUID.randomUUID().toString().substring(0, 8);
   }
 
-  private record ChunkTranslateResult(List<TranslationResult.Entry> entries, Throwable error) {
+  private record ChunkTranslateResult(Map<String, String> translations, Throwable error) {
 
-    public static ChunkTranslateResult success(List<TranslationResult.Entry> entries) {
-      return new ChunkTranslateResult(List.copyOf(entries), null);
+    static ChunkTranslateResult success(Map<String, String> translations) {
+      return new ChunkTranslateResult(Map.copyOf(translations), null);
     }
 
-    public static ChunkTranslateResult fail(Throwable error) {
-      return new ChunkTranslateResult(List.of(), error);
+    static ChunkTranslateResult fail(Throwable error) {
+      return new ChunkTranslateResult(Map.of(), error);
     }
 
-    public boolean isSuccess() {
+    boolean isSuccess() {
       return error == null;
-    }
-
-    public boolean isFailure() {
-      return error != null;
     }
   }
 }

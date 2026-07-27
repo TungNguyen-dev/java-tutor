@@ -51,7 +51,7 @@ public abstract class AbstractDocumentTranslator<D extends AutoCloseable>
     var fileName = documentPath.getFileName().toString();
     var fileNameNew =
         FileNameUtil.appendFilenameSuffix(
-            fileName, targetCountryCode + "_" + Instant.now().getEpochSecond());
+            fileName, "_" + targetCountryCode + "_" + Instant.now().getEpochSecond());
     return documentPath.getParent().resolve(fileNameNew);
   }
 

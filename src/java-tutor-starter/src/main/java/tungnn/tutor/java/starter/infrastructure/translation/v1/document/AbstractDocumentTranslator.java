@@ -21,7 +21,7 @@ public abstract class AbstractDocumentTranslator<D extends AutoCloseable>
   public DocumentTranslationResponse translate(DocumentTranslationRequest request) {
     D document = openDocument(request);
     try {
-      var textReferences = collectTextReferences(document);
+      var textReferences = refineTextReferences(collectTextReferences(document));
       var translationContext = new TranslationContext(request.targetLanguage());
       var translationResult = translatorOrchestrator.translate(textReferences, translationContext);
 
@@ -33,7 +33,7 @@ public abstract class AbstractDocumentTranslator<D extends AutoCloseable>
       var translationPath = buildTranslationPath(request);
       saveDocument(document, translationPath);
 
-      return buildResponse(request);
+      return buildResponse(translationPath);
     } finally {
       closeDocument(document);
     }
@@ -44,6 +44,12 @@ public abstract class AbstractDocumentTranslator<D extends AutoCloseable>
   protected abstract List<TextReference> collectTextReferences(D document);
 
   protected abstract void saveDocument(D document, Path translationPath);
+
+  protected List<TextReference> refineTextReferences(List<TextReference> textReferences) {
+    return textReferences.stream()
+        .filter(textReference -> !textReference.getText().isBlank())
+        .toList();
+  }
 
   protected Path buildTranslationPath(DocumentTranslationRequest request) {
     var documentPath = request.documentPath();
@@ -65,7 +71,7 @@ public abstract class AbstractDocumentTranslator<D extends AutoCloseable>
     }
   }
 
-  protected DocumentTranslationResponse buildResponse(DocumentTranslationRequest request) {
-    return new DocumentTranslationResponse(buildTranslationPath(request));
+  protected DocumentTranslationResponse buildResponse(Path translationPath) {
+    return new DocumentTranslationResponse(translationPath);
   }
 }

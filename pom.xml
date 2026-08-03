@@ -26,8 +26,6 @@
 
     <modules>
         <module>src/java-core</module>
-        <module>src/java-architecture-pattern</module>
-        <module>src/java-design-pattern</module>
         <module>src/java-flink</module>
         <module>src/java-kafka</module>
         <module>src/java-jackson</module>
@@ -41,7 +39,7 @@
         <module>src/java-aws</module>
         <module>src/java-mime</module>
         <module>src/java-ini</module>
-        <module>src/java-tutor-starter</module>
         <module>src/java-ocr</module>
+        <module>src/java-tutor-starter</module>
     </modules>
 </project>

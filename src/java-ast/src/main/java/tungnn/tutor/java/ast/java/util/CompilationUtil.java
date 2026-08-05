@@ -1,13 +1,14 @@
-package tungnn.tutor.java.ast.java;
+package tungnn.tutor.java.ast.java.util;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;
 import java.nio.file.Path;
+import tungnn.tutor.java.ast.java.JavaParsingException;
 
-public final class JavaParserUtil {
+public final class CompilationUtil {
 
-  private JavaParserUtil() {}
+  private CompilationUtil() {}
 
   public static CompilationUnit parseCompilationUnit(JavaParser parser, Path path) {
     try {

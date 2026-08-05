@@ -1,4 +1,4 @@
-package tungnn.tutor.java.jackson;
+package tungnn.tutor.java.jackson.v2;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import tungnn.tutor.java.jackson.JsonException;
 
 public final class JsonUtil {
 

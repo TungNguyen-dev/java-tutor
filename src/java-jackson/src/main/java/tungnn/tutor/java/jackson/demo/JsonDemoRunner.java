@@ -8,8 +8,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import tungnn.tutor.java.jackson.JsonException;
-import tungnn.tutor.java.jackson.JsonUtil;
-import tungnn.tutor.java.jackson.ObjectMapperCreator;
+import tungnn.tutor.java.jackson.v2.JsonUtil;
+import tungnn.tutor.java.jackson.v2.ObjectMapperCreator;
 
 public class JsonDemoRunner {
 

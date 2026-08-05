@@ -1,4 +1,4 @@
-package tungnn.tutor.java.jackson;
+package tungnn.tutor.java.jackson.v2;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.*;

@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import tungnn.tutor.java.core.lib.multithread.ThreadUtil;
+import tungnn.tutor.java.selenium.util.ElementUtil;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawlResult;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawler;
 
@@ -34,11 +35,12 @@ public class CourseraPage extends BasePage implements PageCrawler {
     var buttonTranscriptLocator =
         By.cssSelector("[data-testid='item-tool-panel-button-transcript']");
 
-    var buttonTranscript = $(buttonTranscriptLocator);
+    var buttonTranscript =
+        ElementUtil.waitUntil(
+            driver, ExpectedConditions.elementToBeClickable(buttonTranscriptLocator), timeout());
 
-    buttonTranscript.waitClickable();
-
-    if (!"true".equalsIgnoreCase(buttonTranscript.attribute("aria-pressed"))) {
+    var attr = ElementUtil.getAttribute(buttonTranscript, "aria-pressed");
+    if (!"true".equalsIgnoreCase(attr)) {
       buttonTranscript.click();
       ThreadUtil.sleep(1000);
     }
@@ -47,17 +49,20 @@ public class CourseraPage extends BasePage implements PageCrawler {
   }
 
   private String getLessonTitle() {
-    return wait.until(
-            ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.video-name")))
-        .getText()
-        .strip();
+    return ElementUtil.waitUntil(
+            driver,
+            ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.video-name")),
+            timeout())
+        .getText();
   }
 
   private String getLessonContent() {
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.phrases")));
-    return wait
-        .until(driver -> driver.findElements(By.cssSelector("div.phrases span[data-cue]")))
-        .stream()
+    ElementUtil.waitUntil(
+        driver,
+        ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.phrases")),
+        timeout());
+
+    return ElementUtil.findElements(driver, By.cssSelector("div.phrases span[data-cue]")).stream()
         .map(WebElement::getText)
         .map(String::trim)
         .filter(text -> !text.isEmpty())

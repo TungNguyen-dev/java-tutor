@@ -1,4 +1,4 @@
-package tungnn.tutor.java.selenium.element;
+package tungnn.tutor.java.selenium.util;
 
 import java.io.File;
 import java.nio.file.Path;

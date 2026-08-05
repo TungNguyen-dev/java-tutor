@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.*;
 import org.openqa.selenium.*;
-import tungnn.tutor.java.selenium.element.ElementUtil;
+import tungnn.tutor.java.selenium.util.ElementUtil;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawlResult;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawler;
 

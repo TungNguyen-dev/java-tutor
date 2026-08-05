@@ -46,7 +46,7 @@ public class YoutubePage extends BasePage implements PageCrawler {
 
     navigateTo(VIDEO_SUMMARIZER);
     ThreadUtil.sleep(1000);
-    waitTitleContains("YouTube Video Summarizer");
+    waitTitleContains();
 
     sendUrl(url);
     submit();

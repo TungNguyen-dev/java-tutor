@@ -3,6 +3,7 @@ package tungnn.tutor.java.starter.infrastructure.webpage;
 import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import tungnn.tutor.java.selenium.util.ElementUtil;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawlResult;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawler;
 
@@ -29,10 +30,12 @@ public class AwsDocSdkPage extends BasePage implements PageCrawler {
   }
 
   private String getTitle() {
-    return $(By.id("skip-link")).text();
+    var locator = By.id("skip-link");
+    return ElementUtil.findElement(driver, locator).getText();
   }
 
   private String getContent() {
-    return $(By.id("main-col-body")).text();
+    var locator = By.id("main-col-body");
+    return ElementUtil.findElement(driver, locator).getText();
   }
 }

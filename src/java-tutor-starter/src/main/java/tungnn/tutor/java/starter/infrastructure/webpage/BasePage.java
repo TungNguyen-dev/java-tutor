@@ -1,40 +1,23 @@
 package tungnn.tutor.java.starter.infrastructure.webpage;
 
 import java.time.Duration;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import tungnn.tutor.java.core.lib.multithread.ThreadUtil;
-import tungnn.tutor.java.selenium.element.Element;
-import tungnn.tutor.java.selenium.element.Elements;
+import tungnn.tutor.java.selenium.util.ElementUtil;
 
 public abstract class BasePage {
 
   protected WebDriver driver;
-  protected WebDriverWait wait;
 
   public BasePage(WebDriver driver) {
     this.driver = driver;
-    this.wait = new WebDriverWait(driver, timeout());
   }
 
   protected abstract Duration timeout();
 
   protected abstract String homeUrl();
-
-  // =========================================================
-  // ================= ELEMENT HELPERS =======================
-  // =========================================================
-
-  protected Element $(By locator) {
-    return Element.$(driver, locator, timeout()); // [cite: 4]
-  }
-
-  protected Elements $$(By locator) {
-    return Elements.$$(driver, locator, timeout());
-  }
 
   // =========================================================
   // ================= NAVIGATION HELPERS ====================
@@ -76,13 +59,14 @@ public abstract class BasePage {
   // =========================================================
 
   /** Chờ cho Title của trang chứa một đoạn text mong muốn. */
-  protected boolean waitTitleContains(String titlePart) {
-    return wait.until(ExpectedConditions.titleContains(titlePart));
+  protected void waitTitleContains() {
+    ElementUtil.waitUntil(
+        driver, ExpectedConditions.titleContains("YouTube Video Summarizer"), timeout());
   }
 
   /** Chờ cho URL của trang chứa một đoạn text mong muốn (Hữu ích khi verify chuyển trang). */
   protected boolean waitUrlContains(String urlPart) {
-    return wait.until(ExpectedConditions.urlContains(urlPart));
+    return ElementUtil.waitUntil(driver, ExpectedConditions.urlContains(urlPart), timeout());
   }
 
   // =========================================================
@@ -96,7 +80,8 @@ public abstract class BasePage {
 
   /** Chờ cho trang và tất cả các request Ajax/Network (nếu có) được load xong hoàn toàn. */
   protected void waitPageLoadComplete() {
-    wait.until(d -> executeJs("return document.readyState").equals("complete"));
+    ElementUtil.waitUntil(
+        driver, ExpectedConditions.jsReturnsValue("return document.readyState"), timeout());
   }
 
   // =========================================================
@@ -105,12 +90,14 @@ public abstract class BasePage {
 
   /** Chấp nhận (Accept) một cửa sổ Alert Pop-up. */
   protected void acceptAlert() {
-    wait.until(ExpectedConditions.alertIsPresent()).accept();
+    ElementUtil.waitUntil(driver, ExpectedConditions.alertIsPresent(), timeout());
+    driver.switchTo().alert().accept();
   }
 
   /** Hủy (Dismiss) một cửa sổ Alert Pop-up. */
   protected void dismissAlert() {
-    wait.until(ExpectedConditions.alertIsPresent()).dismiss();
+    ElementUtil.waitUntil(driver, ExpectedConditions.alertIsPresent(), timeout());
+    driver.switchTo().alert().dismiss();
   }
 
   public WebDriver webDriver() {

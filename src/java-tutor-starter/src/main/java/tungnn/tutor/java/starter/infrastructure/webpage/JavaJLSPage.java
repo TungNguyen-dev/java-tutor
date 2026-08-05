@@ -3,7 +3,8 @@ package tungnn.tutor.java.starter.infrastructure.webpage;
 import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.selenium.element.Element;
+import org.openqa.selenium.WebElement;
+import tungnn.tutor.java.selenium.util.ElementUtil;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawlResult;
 import tungnn.tutor.java.starter.infrastructure.webpage.crawler.PageCrawler;
 
@@ -34,21 +35,21 @@ public class JavaJLSPage extends BasePage implements PageCrawler {
       id = url.substring(url.lastIndexOf('/') + 1).replace(".html", "");
     }
 
-    var root = $(By.id(id));
+    var root = ElementUtil.findElement(driver, By.id(id), timeout());
 
     return new PageCrawlResult(url, getTitle(root), getContent(root, id));
   }
 
-  private String getTitle(Element root) {
-    return root.$(By.className("titlepage")).text();
+  private String getTitle(WebElement root) {
+    return ElementUtil.findChildElement(root, By.className("titlepage")).getText();
   }
 
-  private String getContent(Element root, String id) {
-    var paragraphs = root.$$(By.cssSelector("p[id^='" + id + "']"));
+  private String getContent(WebElement root, String id) {
+    var paragraphs = ElementUtil.findElements(root, By.cssSelector("p[id^='" + id + "']"));
 
     var content = new StringBuilder();
     for (var paragraph : paragraphs) {
-      content.append(paragraph.text()).append("\n\n");
+      content.append(paragraph.getText()).append("\n\n");
     }
 
     return content.toString();

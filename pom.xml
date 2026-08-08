@@ -16,30 +16,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <version>2.12.1</version>
-        </dependency>
-    </dependencies>
-
     <modules>
         <module>src/java-core</module>
-        <module>src/java-flink</module>
-        <module>src/java-kafka</module>
-        <module>src/java-jackson</module>
-        <module>src/java-jasper</module>
-        <module>src/java-jol</module>
-        <module>src/java-ast</module>
-        <module>src/java-document</module>
-        <module>src/java-selenium</module>
-        <module>src/java-mail</module>
-        <module>src/java-csv</module>
-        <module>src/java-aws</module>
-        <module>src/java-mime</module>
-        <module>src/java-ini</module>
-        <module>src/java-ocr</module>
+        <module>src/java-infrastructure</module>
         <module>src/java-tutor-starter</module>
     </modules>
 </project>

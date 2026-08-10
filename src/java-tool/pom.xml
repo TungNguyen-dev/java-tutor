@@ -3,14 +3,17 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>tungnn.tutor.java</groupId>
-        <artifactId>java-infrastructure</artifactId>
+        <artifactId>java-tutor</artifactId>
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>java-ocr</artifactId>
+    <artifactId>java-tool</artifactId>
+
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -18,12 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>net.sourceforge.tess4j</groupId>
-            <artifactId>tess4j</artifactId>
-            <version>5.18.0</version>
-        </dependency>
-    </dependencies>
-
+    <modules>
+        <module>src/database-diff-tool</module>
+    </modules>
 </project>

@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>tungnn.tutor.java</groupId>
-        <artifactId>java-tutor</artifactId>
+        <artifactId>java-infrastructure</artifactId>
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>java-tutor-starter</artifactId>
+    <artifactId>java-infrastructure-starter</artifactId>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -84,7 +84,7 @@
         <dependency>
             <groupId>tungnn.tutor.java</groupId>
             <artifactId>java-ocr</artifactId>
-            <version>1.0.0</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 </project>

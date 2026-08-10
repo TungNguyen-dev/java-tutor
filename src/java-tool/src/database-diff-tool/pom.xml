@@ -6,11 +6,10 @@
 
     <parent>
         <groupId>tungnn.tutor.java</groupId>
-        <artifactId>java-tutor</artifactId>
+        <artifactId>java-tool</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <groupId>tungnn.tutor.java.tool</groupId>
     <artifactId>database-diff-tool</artifactId>
 
     <properties>
@@ -22,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>tungnn.tutor.java</groupId>
-            <artifactId>java-tutor-starter</artifactId>
+            <artifactId>java-infrastructure-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

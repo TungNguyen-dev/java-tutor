@@ -19,6 +19,6 @@
     <modules>
         <module>src/java-core</module>
         <module>src/java-infrastructure</module>
-        <module>src/java-tutor-starter</module>
+        <module>src/java-tool</module>
     </modules>
 </project>

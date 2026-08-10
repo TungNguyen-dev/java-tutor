@@ -36,5 +36,8 @@
         <module>src/java-mime</module>
         <module>src/java-ini</module>
         <module>src/java-ocr</module>
+
+        <!-- Starter -->
+        <module>starter/java-infrastructure-starter</module>
     </modules>
 </project>

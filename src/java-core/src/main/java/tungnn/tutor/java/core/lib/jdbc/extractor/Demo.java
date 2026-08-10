@@ -2,157 +2,253 @@ package tungnn.tutor.java.core.lib.jdbc.extractor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Map;
-import tungnn.tutor.java.core.lib.jdbc.extractor.dto.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import tungnn.tutor.java.core.lib.jdbc.extractor.model.DatabaseSchema;
 
 public class Demo {
 
-  static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     String url = System.getenv("DB_URL");
     String user = System.getenv("DB_USER");
     String password = System.getenv("DB_PASS");
 
-    /*
-     * Lưu ý với MySQL: Nếu muốn DatabaseMetaData trả về comment của Table/Column trong REMARKS, chuỗi JDBC URL của MySQL cần bổ sung parameter: jdbc:mysql://localhost:3306/db?useInformationSchema=true
-     */
-
-    if (url == null || user == null || password == null) {
-      System.err.println(
-          "Vui lòng cấu hình biến môi trường DB_URL, DB_USER, DB_PASS trước khi chạy!");
+    if (url == null || url.isBlank()) {
+      System.err.println("Lỗi: Chưa cấu hình biến môi trường DB_URL");
+      System.err.println("Hãy thiết lập: DB_URL, DB_USER, DB_PASS trước khi chạy.");
       return;
     }
 
-    try (Connection conn = DriverManager.getConnection(url, user, password)) {
-      DefaultSchemaExtractor extractorService = new DefaultSchemaExtractor();
+    // Đổi catalog/schema phù hợp với Database target
+    // PostgreSQL: catalog = null / database_name, schema = "public"
+    // Oracle    : catalog = null, schema = "USERNAME" (viết hoa)
+    String catalog = null;
+    String schema = "HR";
 
-      // Extractor tự động kích hoạt Strategy tương ứng (OracleSchemaStrategy /
-      // GenericJdbcSchemaStrategy)
-      SchemaMetadataDto schemaMetadata = extractorService.extractSchema(conn, null, "HR");
+    System.out.println("Connecting to Database...");
 
-      printSchemaDetails(schemaMetadata);
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      System.out.println("Connected successfully!");
+
+      MetadataExtractor extractor = new DefaultMetadataExtractor();
+
+      // -----------------------------------------------------------------
+      // DEMO 1: Trích xuất toàn bộ Schema (Mặc định)
+      // -----------------------------------------------------------------
+      System.out.println("\n>>> Running Full Metadata Extraction...");
+      long startTime = System.currentTimeMillis();
+      DatabaseSchema dbSchema = extractor.extract(connection, catalog, schema);
+      long duration = System.currentTimeMillis() - startTime;
+
+      System.out.printf("Extractor completed in %d ms%n%n", duration);
+
+      // In thông tin đã extract
+      printSchemaOverview(dbSchema);
+      printDetailedSchema(dbSchema);
+
+    } catch (SQLException e) {
+      System.err.println("Database Connection / Extraction Error: " + e.getMessage());
+      e.printStackTrace();
     }
   }
 
-  /** In toàn bộ chi tiết thông tin Schema -> Tables -> Columns / PKs / FKs / Indexes */
-  private static void printSchemaDetails(SchemaMetadataDto schema) {
-    System.out.println(
-        "================================================================================");
-    System.out.println(
-        "                              DETAILED SCHEMA REPORT                            ");
-    System.out.println(
-        "================================================================================");
-    System.out.printf("Catalog     : %s%n", schema.catalog() != null ? schema.catalog() : "N/A");
-    System.out.printf("Schema Name : %s%n", schema.schemaName());
-    System.out.printf("Total Tables: %d%n", schema.tables().size());
-    System.out.println(
-        "================================================================================");
+  // =========================================================================
+  // PRINT HELPERS
+  // =========================================================================
 
-    if (schema.tables().isEmpty()) {
-      System.out.println(" Không tìm thấy table nào trong schema này.");
+  private static void printSchemaOverview(DatabaseSchema schema) {
+    if (schema == null) {
+      System.out.println("Schema is null!");
       return;
     }
 
-    int tableIndex = 1;
-    for (Map.Entry<String, TableMetadataDto> entry : schema.tables().entrySet()) {
-      TableMetadataDto table = entry.getValue();
-
-      System.out.println();
+    System.out.println("==================================================");
+    System.out.println("               SCHEMA OVERVIEW                    ");
+    System.out.println("==================================================");
+    if (schema.meta() != null) {
+      System.out.printf("Database Name  : %s%n", schema.meta().databaseName());
+      System.out.printf("Schema Name    : %s%n", schema.meta().schemaName());
       System.out.printf(
-          "[%d/%d] TABLE: %s%n",
-          tableIndex++, schema.tables().size(), table.tableName().toUpperCase());
-      System.out.printf("   ├── Type   : %s%n", table.tableType());
-      System.out.printf(
-          "   ├── Remarks: %s%n",
-          table.remarks() != null ? table.remarks().replaceAll("\\R", "") : "N/A");
-
-      // 1. In danh sách Columns
-      printColumns(table.columns());
-
-      // 2. In Primary Keys
-      printPrimaryKeys(table.primaryKeys());
-
-      // 3. In Foreign Keys
-      printForeignKeys(table.foreignKeys());
-
-      // 4. In Indexes
-      printIndexes(table.indexes());
-
-      System.out.println(
-          "   -----------------------------------------------------------------------------");
+          "Engine         : %s (v%s)%n", schema.meta().engineName(), schema.meta().engineVersion());
+      System.out.printf("Extracted At   : %s%n", schema.meta().extractedAt());
     }
-  }
-
-  private static void printColumns(Map<String, ColumnDto> columns) {
-    System.out.printf("   ├── Columns (%d):%n", columns.size());
-    if (columns.isEmpty()) {
-      System.out.println("   │     (Không có dữ liệu cột)");
-      return;
-    }
-
+    System.out.println("--------------------------------------------------");
     System.out.printf(
-        "   │     %-4s | %-25s | %-15s | %-6s | %-8s | %-8s | %-15s | %-25s%n",
-        "#", "COLUMN NAME", "DATA TYPE", "SIZE", "NULLABLE", "AUTO INC", "DEFAULT", "REMARKS");
-    System.out.println(
-        "   │     -----+---------------------------+-----------------+--------+----------+----------+-----------------+--------------------------");
+        "Tables Count    : %d%n", schema.tables() != null ? schema.tables().size() : 0);
+    System.out.printf("Views Count     : %d%n", schema.views() != null ? schema.views().size() : 0);
+    System.out.printf(
+        "Procedures Count: %d%n", schema.procedures() != null ? schema.procedures().size() : 0);
+    System.out.printf(
+        "Functions Count : %d%n", schema.functions() != null ? schema.functions().size() : 0);
+    System.out.printf(
+        "Triggers Count  : %d%n", schema.triggers() != null ? schema.triggers().size() : 0);
+    System.out.printf(
+        "Sequences Count : %d%n", schema.sequences() != null ? schema.sequences().size() : 0);
+    System.out.printf(
+        "Custom Types    : %d%n", schema.customTypes() != null ? schema.customTypes().size() : 0);
+    System.out.println("==================================================\n");
+  }
 
-    for (ColumnDto col : columns.values()) {
-      String remarks = col.remarks() != null ? col.remarks().trim() : "";
+  private static void printDetailedSchema(DatabaseSchema schema) {
+    if (schema == null) return;
 
-      // Rút gọn comment nếu dài quá 25 ký tự để tránh vỡ khung console
-      if (remarks.length() > 25) {
-        remarks = remarks.substring(0, 22) + "...";
-      }
+    // 1. Tables & Columns
+    if (schema.tables() != null && !schema.tables().isEmpty()) {
+      System.out.println("### 1. TABLES & COLUMNS");
+      schema
+          .tables()
+          .forEach(
+              (tableName, table) -> {
+                System.out.printf(
+                    "%n[Table]: %s (Engine: %s, Comment: %s)%n",
+                    tableName,
+                    table.engine() != null ? table.engine() : "",
+                    formatComment(table.comment()));
 
-      System.out.printf(
-          "   │     %-4d | %-25s | %-15s | %-6d | %-8b | %-8b | %-15s | %-25s%n",
-          col.ordinalPosition(),
-          col.columnName(),
-          col.dataType(),
-          col.columnSize(),
-          col.isNullable(),
-          col.isAutoIncrement(),
-          col.defaultValue() != null ? col.defaultValue() : "NULL",
-          remarks.isEmpty() ? "NULL" : remarks);
+                // Gom tất cả item thuộc table vào danh sách để xác định chính xác phần tử cuối cùng
+                List<String> items = new ArrayList<>();
+
+                // 1.1 Columns (In trước)
+                if (table.columns() != null) {
+                  table
+                      .columns()
+                      .forEach(
+                          (colName, col) -> {
+                            items.add(
+                                String.format(
+                                    "Column: %-20s | Raw Type: %-15s | Nullable: %-5b | Default: %-10s | Comment: %s",
+                                    col.name(),
+                                    col.rawType(),
+                                    col.isNullable(),
+                                    col.defaultValue(),
+                                    formatComment(col.comment())));
+                          });
+                }
+
+                // 1.2 Primary Key
+                if (table.primaryKey() != null) {
+                  items.add(
+                      String.format(
+                          "PK: %s %s", table.primaryKey().name(), table.primaryKey().columns()));
+                }
+
+                // 1.3 Foreign Keys
+                if (table.foreignKeys() != null && !table.foreignKeys().isEmpty()) {
+                  table
+                      .foreignKeys()
+                      .forEach(
+                          (fkName, fk) -> {
+                            items.add(
+                                String.format(
+                                    "FK: %s %s -> %s%s [onDelete: %s]",
+                                    fkName,
+                                    fk.columns(),
+                                    fk.referencedTable(),
+                                    fk.referencedColumns(),
+                                    fk.onDelete()));
+                          });
+                }
+
+                // 1.4 Check Constraints
+                if (table.checkConstraints() != null && !table.checkConstraints().isEmpty()) {
+                  table
+                      .checkConstraints()
+                      .forEach(
+                          (chkName, chk) -> {
+                            items.add(
+                                String.format(
+                                    "CHECK: %s (%s)", chkName, chk.predicateExpression()));
+                          });
+                }
+
+                // In các items ra console với tiền tố nhánh (├─ hoặc └─)
+                for (int i = 0; i < items.size(); i++) {
+                  boolean isLast = (i == items.size() - 1);
+                  String prefix = isLast ? "  └─ " : "  ├─ ";
+                  System.out.println(prefix + items.get(i));
+                }
+              });
+      System.out.println();
+    }
+
+    // 2. Views
+    if (schema.views() != null && !schema.views().isEmpty()) {
+      System.out.println("### 2. VIEWS");
+      schema
+          .views()
+          .forEach(
+              (viewName, view) -> {
+                System.out.printf(
+                    "- [View]: %s (Comment: %s)%n", viewName, formatComment(view.comment()));
+              });
+      System.out.println();
+    }
+
+    // 3. Routines (Functions & Procedures)
+    if (schema.functions() != null && !schema.functions().isEmpty()) {
+      System.out.println("### 3. FUNCTIONS");
+      schema
+          .functions()
+          .forEach(
+              (funcName, func) -> {
+                System.out.printf(
+                    "- [Function]: %s | ReturnType: %s%n", funcName, func.rawReturnType());
+              });
+      System.out.println();
+    }
+
+    // 4. Triggers
+    if (schema.triggers() != null && !schema.triggers().isEmpty()) {
+      System.out.println("### 4. TRIGGERS");
+      schema
+          .triggers()
+          .forEach(
+              (trigName, trig) -> {
+                System.out.printf(
+                    "- [Trigger]: %s | Target: %s | Timing: %s | Event: %s%n",
+                    trigName, trig.targetTable(), trig.timing(), trig.event());
+              });
+      System.out.println();
+    }
+
+    // 5. Sequences
+    if (schema.sequences() != null && !schema.sequences().isEmpty()) {
+      System.out.println("### 5. SEQUENCES");
+      schema
+          .sequences()
+          .forEach(
+              (seqName, seq) -> {
+                System.out.printf(
+                    "- [Sequence]: %s | Start: %s | Increment: %s%n",
+                    seqName, seq.startValue(), seq.increment());
+              });
+      System.out.println();
+    }
+
+    // 6. Custom Types (ENUMs, Composite, etc.)
+    if (schema.customTypes() != null && !schema.customTypes().isEmpty()) {
+      System.out.println("### 6. CUSTOM TYPES");
+      schema
+          .customTypes()
+          .forEach(
+              (typeName, type) -> {
+                System.out.printf(
+                    "- [Type]: %s | Category: %s | Values: %s%n",
+                    typeName, type.category(), type.enumValues());
+              });
+      System.out.println();
     }
   }
 
-  private static void printPrimaryKeys(java.util.List<String> primaryKeys) {
-    System.out.print("   ├── Primary Key(s): ");
-    if (primaryKeys.isEmpty()) {
-      System.out.println("[ NONE ]");
-    } else {
-      System.out.println(String.join(", ", primaryKeys));
+  /**
+   * Chuyển đổi comment về chuỗi an toàn: null-check và replace tất cả ký tự xuống dòng (\r\n, \n,
+   * \r) bằng khoảng trắng.
+   */
+  private static String formatComment(String comment) {
+    if (comment == null) {
+      return "";
     }
-  }
-
-  private static void printForeignKeys(java.util.List<ForeignKeyDto> foreignKeys) {
-    System.out.printf("   ├── Foreign Keys (%d):%n", foreignKeys.size());
-    if (foreignKeys.isEmpty()) {
-      System.out.println("   │     [ NONE ]");
-      return;
-    }
-
-    for (ForeignKeyDto fk : foreignKeys) {
-      System.out.printf(
-          "   │     • %s: %s -> %s(%s)%n",
-          fk.fkName() != null ? fk.fkName() : "FK_UNNAMED",
-          fk.fkColumnName(),
-          fk.pkTableName(),
-          fk.pkColumnName());
-    }
-  }
-
-  private static void printIndexes(java.util.List<IndexDto> indexes) {
-    System.out.printf("   └── Indexes (%d):%n", indexes.size());
-    if (indexes.isEmpty()) {
-      System.out.println("         [ NONE ]");
-      return;
-    }
-
-    for (IndexDto idx : indexes) {
-      String uniqueness = idx.isUnique() ? "UNIQUE" : "NON-UNIQUE";
-      String columnsStr = String.join(", ", idx.columnNames());
-      System.out.printf("         • %s [%s] -> (%s)%n", idx.indexName(), uniqueness, columnsStr);
-    }
+    return comment.replaceAll("\\r?\\n|\\r", " ");
   }
 }

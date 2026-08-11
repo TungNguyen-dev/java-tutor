@@ -23,5 +23,6 @@
 
     <modules>
         <module>src/database-diff-tool</module>
+        <module>src/excel-tool</module>
     </modules>
 </project>

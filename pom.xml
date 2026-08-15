@@ -13,6 +13,7 @@
         <module>src/java-core</module>
         <module>src/java-infrastructure</module>
         <module>src/java-tool</module>
+        <module>src/java-benchmark</module>
     </modules>
 
     <properties>

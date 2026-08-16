@@ -12,8 +12,13 @@
     </parent>
 
     <artifactId>java-tool</artifactId>
-
     <packaging>pom</packaging>
+
+    <modules>
+        <module>src/database-diff-tool</module>
+        <module>src/crawler-tool</module>
+        <module>src/document-translation-tool</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -29,8 +34,4 @@
         </dependency>
     </dependencies>
 
-    <modules>
-        <module>src/database-diff-tool</module>
-        <module>src/crawler-tool</module>
-    </modules>
 </project>

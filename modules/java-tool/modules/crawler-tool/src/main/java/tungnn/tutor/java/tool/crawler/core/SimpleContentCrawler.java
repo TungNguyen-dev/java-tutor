@@ -23,8 +23,8 @@ public class SimpleContentCrawler implements ContentCrawler {
       var page = pageType.createPageInstance(driver);
 
       page.navigateTo(url);
-      var content = page.articleContentAsHtml();
       var metadata = Map.of("title", page.articleTitleAsHtml());
+      var content = page.articleContentAsHtml();
 
       return ContentCrawlResult.success(url, content, metadata);
     } catch (Exception e) {

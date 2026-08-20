@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 import tungnn.tutor.java.core.lib.io.filesystem.FileUtil;
 import tungnn.tutor.java.document.markdown.MarkdownWriterUtils;
+import tungnn.tutor.java.mime.FileMimeUtil;
 import tungnn.tutor.java.tool.crawler.config.AppConfig;
 import tungnn.tutor.java.tool.crawler.core.ContentCrawlRequest;
 import tungnn.tutor.java.tool.crawler.core.ContentCrawlResult;
@@ -46,6 +47,7 @@ public class ContentCrawlerServiceImpl implements ContentCrawlerService {
   private List<CourseSource> loadCourseSources() {
     return FileUtil.walk(appConfig.inputDir()).stream()
         .filter(Files::isRegularFile)
+        .filter(p -> FileMimeUtil.getExtension(FileMimeUtil.getMimeType(p)).equals(".txt"))
         .map(this::parseCourseSource)
         .toList();
   }
@@ -110,7 +112,7 @@ public class ContentCrawlerServiceImpl implements ContentCrawlerService {
   private void writeResultToFile(
       Path outputDir, int unitNumber, ContentCrawlResult result, int zeroPaddingWidth) {
 
-    String sanitizedTitle = FileNameUtil.sanitize(result.title());
+    String sanitizedTitle = FileNameUtil.sanitize(result.title()).replace("_", " ");
     String formatPattern = "%0" + zeroPaddingWidth + "d - %s.md";
     String fileName = String.format(formatPattern, unitNumber, sanitizedTitle);
 
@@ -118,7 +120,7 @@ public class ContentCrawlerServiceImpl implements ContentCrawlerService {
 
     ObsidianNote note =
         new ObsidianNote(
-            result.title(),
+            sanitizedTitle,
             MarkdownWriterUtils.convertHtmlToMarkdown(result.content()),
             List.of(result.url()));
 

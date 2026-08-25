@@ -124,6 +124,8 @@ public class ContentCrawlerServiceImpl implements ContentCrawlerService {
             MarkdownWriterUtils.convertHtmlToMarkdown(result.content()),
             List.of(result.url()));
 
+    // TODO: Enhance note by AI
+
     FileUtil.writeString(destinationFile, note.toMarkdown());
   }
 

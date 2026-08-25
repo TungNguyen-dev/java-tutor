@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>tungnn.tutor.java</groupId>
+        <artifactId>java-tutor</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>tungnn.tutor.java.infrastructure</groupId>
+    <artifactId>java-infrastructure</artifactId>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <revision>1.0.0</revision>
+    </properties>
+
+    <modules>
+        <module>modules/java-ast</module>
+        <module>modules/java-aws</module>
+        <module>modules/java-flink</module>
+        <module>modules/java-kafka</module>
+        <module>modules/java-jackson</module>
+        <module>modules/java-jasper</module>
+        <module>modules/java-jol</module>
+        <module>modules/java-document</module>
+        <module>modules/java-selenium</module>
+        <module>modules/java-mail</module>
+        <module>modules/java-csv</module>
+        <module>modules/java-mime</module>
+        <module>modules/java-ini</module>
+        <module>modules/java-ocr</module>
+
+        <!-- Starter -->
+        <module>starters/java-infrastructure-starter</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>tungnn.tutor.java</groupId>
+            <artifactId>java-core</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+</project>

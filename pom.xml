@@ -10,10 +10,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>src/java-core</module>
-        <module>src/java-infrastructure</module>
-        <module>src/java-tool</module>
-        <module>src/java-benchmark</module>
+        <module>modules/java-core</module>
+        <module>modules/java-infrastructure</module>
+        <module>modules/java-tool</module>
+        <module>modules/java-benchmark</module>
     </modules>
 
     <properties>

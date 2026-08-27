@@ -107,7 +107,8 @@ public final class SocketUtils {
    * @return a bound {@link DatagramSocket}
    * @throws UncheckedIOException if an I/O error occurs
    */
-  public static DatagramSocket createUdpSocketOnFreePort() {
+  public static DatagramSocket createUdpSocketOnEphemeralPort() {
+    // Port 0 tells the OS to automatically assign an available ephemeral port.
     return createUdpSocket(0);
   }
 

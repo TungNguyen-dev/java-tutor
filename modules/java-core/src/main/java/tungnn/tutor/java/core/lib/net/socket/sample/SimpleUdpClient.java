@@ -16,8 +16,8 @@ public class SimpleUdpClient {
 
     System.out.println("Starting UDP Client targeting " + serverHost + ":" + serverPort);
 
-    // Tạo unbound/ephemeral UDP socket trên free port bằng SocketUtils
-    try (DatagramSocket clientSocket = SocketUtils.createUdpSocketOnFreePort();
+    // Tạo UDP socket với local ephemeral port do OS tự động cấp
+    try (DatagramSocket clientSocket = SocketUtils.createUdpSocketOnEphemeralPort();
         BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
 
       System.out.println("Ready! Type messages to send. Type 'exit' to quit.");

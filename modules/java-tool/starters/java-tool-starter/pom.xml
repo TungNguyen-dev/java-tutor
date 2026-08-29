@@ -3,6 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>tungnn.tutor.java.tool</groupId>
         <artifactId>java-tool</artifactId>
@@ -13,23 +14,25 @@
     <artifactId>java-tool-starter</artifactId>
 
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>1.0.0</revision>
     </properties>
 
     <dependencies>
+        <!-- Crawler Tool: Web Crawling and Content Extraction -->
         <dependency>
             <groupId>tungnn.tutor.java.tool</groupId>
             <artifactId>crawler-tool</artifactId>
             <version>${revision}</version>
         </dependency>
+
+        <!-- Database Diff Tool: Database Schema Comparison -->
         <dependency>
             <groupId>tungnn.tutor.java.tool</groupId>
             <artifactId>database-diff-tool</artifactId>
             <version>${revision}</version>
         </dependency>
+
+        <!-- Document Translation Tool: Document Translation -->
         <dependency>
             <groupId>tungnn.tutor.java.tool</groupId>
             <artifactId>document-translation-tool</artifactId>

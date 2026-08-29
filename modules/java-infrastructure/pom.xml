@@ -13,15 +13,19 @@
 
     <groupId>tungnn.tutor.java.infrastructure</groupId>
     <artifactId>java-infrastructure</artifactId>
-
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>1.0.0</revision>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>tungnn.tutor.java</groupId>
+            <artifactId>java-core</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 
     <modules>
         <module>modules/java-ast</module>
@@ -44,11 +48,4 @@
         <module>starters/java-infrastructure-starter</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>tungnn.tutor.java</groupId>
-            <artifactId>java-core</artifactId>
-            <version>${revision}</version>
-        </dependency>
-    </dependencies>
 </project>

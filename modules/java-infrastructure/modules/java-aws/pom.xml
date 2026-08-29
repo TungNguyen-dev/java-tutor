@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-    <!-- =========================
-         Project Metadata
-    ========================== -->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -18,20 +12,8 @@
 
     <artifactId>java-aws</artifactId>
 
-    <!-- =========================
-         Build Configuration
-    ========================== -->
     <properties>
-        <!-- Java -->
-        <java.version>25</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- Versions -->
         <aws.sdk.version>2.46.14</aws.sdk.version>
-        <slf4j.version>2.0.13</slf4j.version>
-        <log4j.version>2.25.4</log4j.version>
     </properties>
 
     <!-- =========================
@@ -47,14 +29,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-bom</artifactId>
-                <version>${log4j.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -66,12 +40,10 @@
         <!-- ===== AWS SDK: Core ===== -->
         <!-- sdk-core thường không cần khai báo explicit -->
         <!-- chỉ giữ nếu bạn thực sự dùng trực tiếp -->
-        <!--
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sdk-core</artifactId>
         </dependency>
-        -->
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -164,32 +136,6 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sesv2</artifactId>
-        </dependency>
-
-        <!-- ===== Logging (SLF4J + Log4j2) ===== -->
-
-        <!-- SLF4J API (abstraction layer) -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- Log4j2 Implementation -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-        </dependency>
-
-        <!-- Bridge: SLF4J → Log4j2 -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j2-impl</artifactId>
         </dependency>
 
         <!-- Ini for config file -->

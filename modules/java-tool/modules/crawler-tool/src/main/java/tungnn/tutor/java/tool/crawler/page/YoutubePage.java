@@ -76,7 +76,7 @@ public class YoutubePage extends AbstractPage {
   private String extractSummary() {
     ElementUtil.waitUntil(
         driver,
-        ExpectedConditions.presenceOfNestedElementLocatedBy(
+        ExpectedConditions.visibilityOfNestedElementsLocatedBy(
             TRANSCRIPT_LOCATOR, TRANSCRIPT_ITEM_LOCATOR),
         timeout());
 

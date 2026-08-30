@@ -3,7 +3,9 @@ package tungnn.tutor.java.selenium.driver.options;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public final class ChromeOptionUtil {
@@ -79,9 +81,19 @@ public final class ChromeOptionUtil {
         "--no-default-browser-check",
         "--no-sandbox",
         "--disable-dev-shm-usage",
-        "--disable-notifications");
+        "--disable-notifications",
+        "--disable-blink-features=AutomationControlled");
+
+    options.setExperimentalOption("excludeSwitches", List.of("enable-automation"));
+    options.setExperimentalOption("useAutomationExtension", false);
 
     options.setExperimentalOption(
         "prefs", Map.of("profile.default_content_setting_values.notifications", 2));
+  }
+
+  public static void removeWebdriverAttribute(ChromeDriver driver) {
+    driver.executeCdpCommand(
+        "Page.addScriptToEvaluateOnNewDocument",
+        Map.of("source", "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"));
   }
 }

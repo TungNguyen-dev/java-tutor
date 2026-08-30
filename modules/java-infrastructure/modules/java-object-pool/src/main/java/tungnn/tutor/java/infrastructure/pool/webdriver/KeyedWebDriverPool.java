@@ -7,7 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import tungnn.tutor.java.selenium.driver.WebDriverFactory;
+import tungnn.tutor.java.selenium.driver.options.ChromeOptionUtil;
 
 public class KeyedWebDriverPool implements WebDriverPool {
 
@@ -39,6 +41,7 @@ public class KeyedWebDriverPool implements WebDriverPool {
 
       // 2. Mượn driver từ Keyed Pool
       WebDriver driver = pool.borrowObject(profileKey);
+      ChromeOptionUtil.removeWebdriverAttribute((ChromeDriver) driver);
 
       // 3. Ghi nhớ profileKey của driver này
       driverProfileMap.put(driver, profileKey);
@@ -55,24 +58,46 @@ public class KeyedWebDriverPool implements WebDriverPool {
       return;
     }
 
-    // 1. Lấy profileKey đã lưu và xóa khỏi Map
+    // Lấy profileKey tương ứng và xóa khỏi Map
     String profileKey = driverProfileMap.remove(driver);
+    returnDriver(profileKey, driver);
+  }
+
+  /** Overload hỗ trợ trả driver khi biết trước profileKey hoặc gọi từ returnDriver(driver) */
+  public void returnDriver(String profileKey, WebDriver driver) {
+    if (driver == null) {
+      return;
+    }
+
+    // Dọn dẹp map nếu gọi trực tiếp hàm overload này
+    if (profileKey == null) {
+      profileKey = driverProfileMap.remove(driver);
+    } else {
+      driverProfileMap.remove(driver);
+    }
 
     if (profileKey != null) {
       try {
-        // Dọn dẹp session trước khi trả về pool
-        driver.manage().deleteAllCookies();
-      } catch (Exception ignored) {
-        // Tránh throw exception nếu driver đã bị crash/đóng
+        // Trả driver về pool theo đúng profileKey
+        pool.returnObject(profileKey, driver);
+      } catch (Exception e) {
+        // Nếu trả lại pool lỗi (ví dụ driver bị chết/unresponsive), hủy bỏ object để tránh rò rỉ
+        try {
+          pool.invalidateObject(profileKey, driver);
+        } catch (Exception ignored) {
+          safelyQuitDriver(driver);
+        }
       }
-      // 2. Trả driver về đúng profileKey trong pool
-      pool.returnObject(profileKey, driver);
     } else {
-      // Trường hợp driver không thuộc pool quản lý -> ép đóng để tránh rò rỉ tài nguyên
-      try {
-        driver.quit();
-      } catch (Exception ignored) {
-      }
+      // Driver không do pool này quản lý
+      safelyQuitDriver(driver);
+    }
+  }
+
+  private void safelyQuitDriver(WebDriver driver) {
+    try {
+      driver.quit();
+    } catch (Exception ignored) {
     }
   }
 

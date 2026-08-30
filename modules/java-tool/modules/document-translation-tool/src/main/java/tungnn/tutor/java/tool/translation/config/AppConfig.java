@@ -9,7 +9,7 @@ import tungnn.tutor.java.core.lib.io.resource.ResourceUtil;
 public record AppConfig(int chunkSize, int maxConcurrency, int apiTimeoutSeconds) {
 
   public static AppConfig load() {
-    return load("application.properties");
+    return load("translation-tool.properties");
   }
 
   public static AppConfig load(String resourceName) {

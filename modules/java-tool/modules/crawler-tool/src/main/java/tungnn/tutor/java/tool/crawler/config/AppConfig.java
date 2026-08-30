@@ -11,7 +11,7 @@ import tungnn.tutor.java.core.lib.io.resource.ResourceUtil;
 public record AppConfig(Path baseDir, Path inputDir, Path outputDir, Path doneDir, int poolSize) {
 
   public static AppConfig load() {
-    return load("application.properties");
+    return load("crawler-tool.properties");
   }
 
   public static AppConfig load(String resourceName) {

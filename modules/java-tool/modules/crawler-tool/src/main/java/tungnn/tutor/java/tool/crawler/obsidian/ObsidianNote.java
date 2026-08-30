@@ -3,6 +3,7 @@ package tungnn.tutor.java.tool.crawler.obsidian;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 
 public record ObsidianNote(String title, String content, List<String> references) {
 
@@ -10,7 +11,7 @@ public record ObsidianNote(String title, String content, List<String> references
       """
       ---
       id: {{id}}
-      title: {{title}}
+      title: {{titleInProperties}}
       author: TungNN
       email: tungnn.hn@gmail.com
       date: {{date}}
@@ -36,6 +37,7 @@ public record ObsidianNote(String title, String content, List<String> references
     sb.append(
         TEMPLATE
             .replace("{{id}}", id)
+            .replace("{{titleInProperties}}", FileNameUtil.sanitize(title))
             .replace("{{date}}", date)
             .replace("{{title}}", title)
             .replace("{{content}}", content));

@@ -15,20 +15,20 @@ import tungnn.tutor.java.core.lib.io.filesystem.FileUtil;
 import tungnn.tutor.java.document.markdown.MarkdownWriterUtils;
 import tungnn.tutor.java.mime.FileMimeUtil;
 import tungnn.tutor.java.tool.crawler.config.AppConfig;
+import tungnn.tutor.java.tool.crawler.core.BatchCrawlExecutor;
 import tungnn.tutor.java.tool.crawler.core.ContentCrawlRequest;
 import tungnn.tutor.java.tool.crawler.core.ContentCrawlResult;
-import tungnn.tutor.java.tool.crawler.core.ContentCrawler;
 import tungnn.tutor.java.tool.crawler.obsidian.ObsidianNote;
 import tungnn.tutor.java.tool.crawler.service.ContentCrawlerService;
 
 public class ContentCrawlerServiceImpl implements ContentCrawlerService {
 
   private final AppConfig appConfig;
-  private final ContentCrawler contentCrawler;
+  private final BatchCrawlExecutor batchCrawlExecutor;
 
-  public ContentCrawlerServiceImpl(AppConfig appConfig, ContentCrawler contentCrawler) {
+  public ContentCrawlerServiceImpl(AppConfig appConfig, BatchCrawlExecutor batchCrawlExecutor) {
     this.appConfig = appConfig;
-    this.contentCrawler = contentCrawler;
+    this.batchCrawlExecutor = batchCrawlExecutor;
   }
 
   @Override
@@ -74,7 +74,7 @@ public class ContentCrawlerServiceImpl implements ContentCrawlerService {
             .map(ContentCrawlRequest::new)
             .toList();
 
-    return contentCrawler.crawlBatch(crawlRequests).stream()
+    return batchCrawlExecutor.crawlBatch(crawlRequests).stream()
         .collect(
             Collectors.toMap(
                 ContentCrawlResult::url,

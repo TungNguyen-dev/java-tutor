@@ -20,14 +20,13 @@ public class PooledContentCrawler implements ContentCrawler {
   @Override
   public ContentCrawlResult crawl(ContentCrawlRequest request) {
     var url = request.url();
-    LOGGER.info("Starting crawl request for URL: {}", url);
-
     WebDriver driver = null;
 
     try {
       // 1. Mượn driver từ pool
-      LOGGER.debug("Borrowing WebDriver from pool for URL: {}", url);
       driver = driverPool.getDriver();
+      LOGGER.info("Starting crawl request for URL: {}", url);
+      LOGGER.debug("Borrowing WebDriver from pool for URL: {}", url);
 
       // 2. Thực hiện nghiệp vụ crawl
       var pageType =
@@ -41,7 +40,6 @@ public class PooledContentCrawler implements ContentCrawler {
       LOGGER.debug("Resolved page type: {} for URL: {}", pageType, url);
       var page = pageType.createPageInstance(driver);
 
-      LOGGER.info("Navigating to URL: {}", url);
       page.navigateTo(url);
 
       LOGGER.debug("Extracting metadata and content for URL: {}", url);

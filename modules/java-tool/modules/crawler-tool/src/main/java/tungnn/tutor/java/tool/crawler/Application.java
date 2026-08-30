@@ -3,6 +3,7 @@ package tungnn.tutor.java.tool.crawler;
 import tungnn.tutor.java.selenium.driver.ChromeWebDriverFactory;
 import tungnn.tutor.java.selenium.driver.options.ChromeOptionsFactory;
 import tungnn.tutor.java.tool.crawler.config.AppConfig;
+import tungnn.tutor.java.tool.crawler.core.BatchCrawlExecutor;
 import tungnn.tutor.java.tool.crawler.core.SimpleContentCrawler;
 import tungnn.tutor.java.tool.crawler.service.impl.ContentCrawlerServiceImpl;
 
@@ -14,7 +15,8 @@ public class Application {
     var driver = driverFactory.getWebDriver("profile_0");
     try {
       var contentCrawler = new SimpleContentCrawler(driver);
-      var contentCrawlerService = new ContentCrawlerServiceImpl(appConfig, contentCrawler);
+      var batchCrawlExecutor = new BatchCrawlExecutor(contentCrawler);
+      var contentCrawlerService = new ContentCrawlerServiceImpl(appConfig, batchCrawlExecutor);
       contentCrawlerService.crawlContent();
     } finally {
       driver.quit();

@@ -83,5 +83,10 @@
             <artifactId>java-liquibase</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>tungnn.tutor.java.infrastructure</groupId>
+            <artifactId>java-object-pool</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 </project>

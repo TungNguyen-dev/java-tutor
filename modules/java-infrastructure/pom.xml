@@ -43,6 +43,7 @@
         <module>modules/java-ini</module>
         <module>modules/java-ocr</module>
         <module>modules/java-liquibase</module>
+        <module>modules/java-object-pool</module>
 
         <!-- Starter -->
         <module>starters/java-infrastructure-starter</module>

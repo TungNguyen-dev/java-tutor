@@ -24,7 +24,8 @@ void main(String[] args) {
   // Tiến hành duyệt qua tất cả các file trong thư mục
   try (Stream<Path> stream = Files.walk(dirPath)) {
     stream
-        .filter(Files::isRegularFile) // Chỉ xử lý file thông thường, bỏ qua thư mục
+        .filter(Files::isRegularFile)
+        .filter(p -> p.toString().endsWith(".md"))
         .forEach(file -> extractUrlsFromFile(file));
   } catch (IOException e) {
     System.err.println("Lỗi khi duyệt thư mục: " + e.getMessage());
@@ -43,6 +44,8 @@ void extractUrlsFromFile(Path filePath) {
     while (matcher.find()) {
       urls.add(matcher.group());
     }
+    urls =
+        urls.stream().filter(url -> url.contains("youtube") || url.contains("coursera")).toList();
 
     if (!urls.isEmpty()) {
       System.out.println("\n[File]: " + filePath.toAbsolutePath());

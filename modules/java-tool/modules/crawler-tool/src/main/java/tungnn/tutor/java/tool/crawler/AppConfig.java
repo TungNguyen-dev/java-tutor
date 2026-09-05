@@ -1,7 +1,6 @@
-package tungnn.tutor.java.tool.crawler.config;
+package tungnn.tutor.java.tool.crawler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,9 +14,9 @@ public record AppConfig(Path baseDir, Path inputDir, Path outputDir, Path doneDi
   }
 
   public static AppConfig load(String resourceName) {
-    Properties props = new Properties();
+    var props = new Properties();
 
-    try (InputStream input = ResourceUtil.getResourceAsStream(resourceName)) {
+    try (var input = ResourceUtil.getResourceAsStream(resourceName)) {
       if (input == null) {
         throw new IllegalArgumentException("Resource file not found: " + resourceName);
       }
@@ -26,11 +25,11 @@ public record AppConfig(Path baseDir, Path inputDir, Path outputDir, Path doneDi
       throw new UncheckedIOException("Failed to load properties file: " + resourceName, e);
     }
 
-    Path baseDir = Paths.get(props.getProperty("crawler.storage.base"));
-    Path inputDir = baseDir.resolve(props.getProperty("crawler.dir.input"));
-    Path outputDir = baseDir.resolve(props.getProperty("crawler.dir.output"));
-    Path doneDir = baseDir.resolve(props.getProperty("crawler.dir.done"));
-    int poolSize = Integer.parseInt(props.getProperty("crawler.pool.size"));
+    var baseDir = Paths.get(props.getProperty("crawler.storage.base"));
+    var inputDir = baseDir.resolve(props.getProperty("crawler.dir.input"));
+    var outputDir = baseDir.resolve(props.getProperty("crawler.dir.output"));
+    var doneDir = baseDir.resolve(props.getProperty("crawler.dir.done"));
+    var poolSize = Integer.parseInt(props.getProperty("crawler.pool.size"));
 
     return new AppConfig(baseDir, inputDir, outputDir, doneDir, poolSize);
   }

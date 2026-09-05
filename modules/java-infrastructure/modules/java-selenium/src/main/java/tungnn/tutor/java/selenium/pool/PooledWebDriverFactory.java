@@ -1,4 +1,4 @@
-package tungnn.tutor.java.infrastructure.pool.webdriver;
+package tungnn.tutor.java.selenium.pool;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;

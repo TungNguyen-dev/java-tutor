@@ -1,4 +1,4 @@
-package tungnn.tutor.java.infrastructure.pool.webdriver;
+package tungnn.tutor.java.selenium.pool;
 
 import java.time.Duration;
 import org.apache.commons.pool2.impl.GenericObjectPool;
@@ -26,7 +26,7 @@ public class PooledWebDriverPool implements WebDriverPool {
   }
 
   @Override
-  public WebDriver getDriver() {
+  public WebDriver borrowDriver() {
     try {
       WebDriver driver = pool.borrowObject();
       if (driver instanceof ChromeDriver chromeDriver) {

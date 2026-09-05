@@ -1,10 +1,10 @@
-package tungnn.tutor.java.infrastructure.pool.webdriver;
+package tungnn.tutor.java.selenium.pool;
 
 import org.openqa.selenium.WebDriver;
 
 public interface WebDriverPool extends AutoCloseable {
 
-  WebDriver getDriver();
+  WebDriver borrowDriver();
 
   void returnDriver(WebDriver driver);
 }

@@ -85,7 +85,7 @@
         </dependency>
         <dependency>
             <groupId>tungnn.tutor.java.infrastructure</groupId>
-            <artifactId>java-object-pool</artifactId>
+            <artifactId>java-cron-expression</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

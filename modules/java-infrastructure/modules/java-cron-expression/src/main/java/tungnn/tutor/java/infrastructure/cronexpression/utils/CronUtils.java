@@ -49,9 +49,13 @@ public final class CronUtils {
   }
 
   // 2. DESCRIBE
+  public static String describe(Cron cron, Locale locale) {
+    return CronDescriptor.instance(locale).describe(cron);
+  }
+
   public static String describe(String cronExpression, CronType cronType, Locale locale) {
     Cron cron = parseAndValidate(cronExpression, cronType);
-    return CronDescriptor.instance(locale).describe(cron);
+    return describe(cron, locale);
   }
 
   public static String describe(String cronExpression, CronType cronType) {
@@ -88,6 +92,9 @@ public final class CronUtils {
     Cron cron = parseAndValidate(cronExpression, cronType);
     return ExecutionTime.forCron(cron).timeFromLastExecution(fromTime);
   }
+
+  // 4.1 HDateTimeFormatBuilder for describe execution time
+  // TODO:
 
   // 5. COMPLEX
 

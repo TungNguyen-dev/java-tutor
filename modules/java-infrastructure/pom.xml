@@ -39,7 +39,6 @@
         <module>modules/java-selenium</module>
         <module>modules/java-mail</module>
         <module>modules/java-csv</module>
-        <module>modules/java-mime</module>
         <module>modules/java-ini</module>
         <module>modules/java-ocr</module>
         <module>modules/java-liquibase</module>

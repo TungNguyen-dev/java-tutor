@@ -15,7 +15,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.mime.FileMimeUtil;
 import tungnn.tutor.java.selenium.driver.ChromeWebDriverFactory;
 import tungnn.tutor.java.selenium.driver.options.ChromeOptionsFactory;
 import tungnn.tutor.java.starter.application.model.CrawlResult;
@@ -55,7 +54,14 @@ public class CrawlApplication {
         Stream<Path> stream = Files.walk(INPUT_DIR)) {
       stream
           .filter(Files::isRegularFile)
-          .filter(CrawlApplication::isTextFile)
+          .filter(
+              p -> {
+                try {
+                  return Files.isHidden(p);
+                } catch (IOException e) {
+                  throw new RuntimeException(e);
+                }
+              })
           .forEach(course -> processCourse(crawlService, course));
     } finally {
       drivers.forEach(WebDriver::quit);
@@ -65,10 +71,6 @@ public class CrawlApplication {
   private static BlockingQueue<PageCrawler> newPool(
       List<WebDriver> drivers, Function<WebDriver, PageCrawler> crawlerFactory) {
     return new LinkedBlockingDeque<>(drivers.stream().map(crawlerFactory).toList());
-  }
-
-  private static boolean isTextFile(Path path) {
-    return FileMimeUtil.getExtension(FileMimeUtil.getMimeType(path)).contains(TEXT_EXTENSION);
   }
 
   private static void processCourse(CrawlService crawlService, Path course) {

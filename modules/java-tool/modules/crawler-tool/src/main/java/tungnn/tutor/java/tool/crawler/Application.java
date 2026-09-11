@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
-import tungnn.tutor.java.mime.FileMimeUtil;
 import tungnn.tutor.java.selenium.driver.ChromeWebDriverFactory;
 import tungnn.tutor.java.selenium.driver.options.ChromeOptionsFactory;
 import tungnn.tutor.java.selenium.pool.PooledWebDriverPool;
@@ -104,7 +103,14 @@ public class Application {
     try (var stream = Files.walk(inputDir)) {
       return stream
           .filter(Files::isRegularFile)
-          .filter(p -> ".txt".equals(FileMimeUtil.getExtension(FileMimeUtil.getMimeType(p))))
+          .filter(
+              p -> {
+                try {
+                  return Files.isHidden(p);
+                } catch (IOException e) {
+                  throw new RuntimeException(e);
+                }
+              })
           .toList();
     } catch (IOException e) {
       LOGGER.log(System.Logger.Level.ERROR, "Error scanning input directory: " + e.getMessage(), e);

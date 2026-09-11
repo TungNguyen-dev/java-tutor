@@ -60,11 +60,6 @@
         </dependency>
         <dependency>
             <groupId>tungnn.tutor.java.infrastructure</groupId>
-            <artifactId>java-mime</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>tungnn.tutor.java.infrastructure</groupId>
             <artifactId>java-aws</artifactId>
             <version>${revision}</version>
         </dependency>

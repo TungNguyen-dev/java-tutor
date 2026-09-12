@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import org.apache.tika.mime.MediaType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,13 +22,13 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("TikaUtils Unit Tests")
-class TikaMimeTypeDetectorUtilTest {
+class TikaFormatDetectorUtilTest {
 
   @Test
   @DisplayName("Utility class instantiation should throw UnsupportedOperationException")
   void testPrivateConstructor() throws NoSuchMethodException {
-    Constructor<TikaMimeTypeDetectorUtil> constructor =
-        TikaMimeTypeDetectorUtil.class.getDeclaredConstructor();
+    Constructor<TikaFormatDetectorUtil> constructor =
+        TikaFormatDetectorUtil.class.getDeclaredConstructor();
     constructor.setAccessible(true);
 
     InvocationTargetException exception =
@@ -38,49 +39,49 @@ class TikaMimeTypeDetectorUtilTest {
   }
 
   @Nested
-  @DisplayName("detectMimeType Tests")
-  class DetectMimeTypeTests {
+  @DisplayName("detectMediaType Tests")
+  class DetectMediaTypeTests {
 
     @Test
-    @DisplayName("Should detect text/plain MIME type successfully")
-    void detectMimeType_ValidTextFile_ReturnsTextPlain(@TempDir Path tempDir) throws IOException {
+    @DisplayName("Should detect text/plain MediaType successfully")
+    void detectMediaType_ValidTextFile_ReturnsTextPlain(@TempDir Path tempDir) throws IOException {
       Path sampleFile = tempDir.resolve("sample.txt");
       Files.writeString(sampleFile, "Hello World Tika Test");
 
-      String mimeType = TikaMimeTypeDetectorUtil.detectMimeType(sampleFile);
+      MediaType mediaType = TikaFormatDetectorUtil.detectMediaType(sampleFile);
 
-      assertEquals("text/plain", mimeType);
+      assertEquals(MediaType.TEXT_PLAIN, mediaType);
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when path is null")
-    void detectMimeType_NullPath_ThrowsNullPointerException() {
+    void detectMediaType_NullPath_ThrowsNullPointerException() {
       NullPointerException exception =
           assertThrows(
-              NullPointerException.class, () -> TikaMimeTypeDetectorUtil.detectMimeType(null));
+              NullPointerException.class, () -> TikaFormatDetectorUtil.detectMediaType(null));
 
       assertEquals("Path must not be null", exception.getMessage());
     }
 
     @Test
     @DisplayName("Should throw RuntimeException when path does not exist")
-    void detectMimeType_NonExistentFile_ThrowsRuntimeException(@TempDir Path tempDir) {
+    void detectMediaType_NonExistentFile_ThrowsRuntimeException(@TempDir Path tempDir) {
       Path nonExistentPath = tempDir.resolve("non-existent-file.pdf");
 
       RuntimeException exception =
           assertThrows(
               RuntimeException.class,
-              () -> TikaMimeTypeDetectorUtil.detectMimeType(nonExistentPath));
+              () -> TikaFormatDetectorUtil.detectMediaType(nonExistentPath));
 
       assertTrue(exception.getMessage().contains("Failed to detect MIME type for path"));
     }
   }
 
   @Nested
-  @DisplayName("findExtensionByMimeType Tests")
-  class FindExtensionByMimeTypeTests {
+  @DisplayName("findExtensionByMediaType Tests")
+  class FindExtensionByMediaTypeTests {
 
-    @ParameterizedTest(name = "MIME type \"{0}\" should resolve to extension \"{1}\"")
+    @ParameterizedTest(name = "MediaType \"{0}\" should resolve to extension \"{1}\"")
     @CsvSource({
       "application/pdf, pdf",
       "image/jpeg, jpg",
@@ -88,28 +89,54 @@ class TikaMimeTypeDetectorUtilTest {
       "text/plain, txt",
       "application/json, json"
     })
-    void findExtensionByMimeType_ValidMimeTypes_ReturnsExpectedExtension(
+    void findExtensionByMediaType_ValidMediaType_ReturnsExpectedExtension(
         String mimeType, String expectedExt) {
-      Optional<String> extension = TikaMimeTypeDetectorUtil.findExtensionByMimeType(mimeType);
+      MediaType mediaType = MediaType.parse(mimeType);
+
+      Optional<String> extension = TikaFormatDetectorUtil.findExtensionByMediaType(mediaType);
 
       assertTrue(extension.isPresent());
       assertEquals(expectedExt, extension.get());
     }
 
-    @ParameterizedTest(name = "Input \"{0}\" should return Optional.empty()")
+    @ParameterizedTest(name = "MIME string \"{0}\" should resolve to extension \"{1}\"")
+    @CsvSource({
+      "application/pdf, pdf",
+      "image/jpeg, jpg",
+      "image/png, png",
+      "text/plain, txt",
+      "application/json, json"
+    })
+    void findExtensionByMediaType_ValidStringMimeType_ReturnsExpectedExtension(
+        String mimeType, String expectedExt) {
+      Optional<String> extension = TikaFormatDetectorUtil.findExtensionByMimeType(mimeType);
+
+      assertTrue(extension.isPresent());
+      assertEquals(expectedExt, extension.get());
+    }
+
+    @Test
+    @DisplayName("Should return Optional.empty() when MediaType input is null")
+    void findExtensionByMediaType_NullMediaType_ReturnsEmptyOptional() {
+      Optional<String> result = TikaFormatDetectorUtil.findExtensionByMediaType(null);
+
+      assertTrue(result.isEmpty());
+    }
+
+    @ParameterizedTest(name = "Input string \"{0}\" should return Optional.empty()")
     @NullAndEmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
-    void findExtensionByMimeType_NullOrBlankInput_ReturnsEmptyOptional(String invalidInput) {
-      Optional<String> result = TikaMimeTypeDetectorUtil.findExtensionByMimeType(invalidInput);
+    void findExtensionByMediaType_NullOrBlankStringInput_ReturnsEmptyOptional(String invalidInput) {
+      Optional<String> result = TikaFormatDetectorUtil.findExtensionByMimeType(invalidInput);
 
       assertTrue(result.isEmpty());
     }
 
     @Test
     @DisplayName("Should return Optional.empty() for unknown or invalid MIME type")
-    void findExtensionByMimeType_UnknownMimeType_ReturnsEmptyOptional() {
+    void findExtensionByMediaType_UnknownMimeType_ReturnsEmptyOptional() {
       Optional<String> result =
-          TikaMimeTypeDetectorUtil.findExtensionByMimeType("invalid/mime-type-x");
+          TikaFormatDetectorUtil.findExtensionByMimeType("invalid/mime-type-x");
 
       assertTrue(result.isEmpty());
     }

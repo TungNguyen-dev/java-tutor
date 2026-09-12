@@ -33,10 +33,11 @@ LOCAL_REPOSITORY="${LOCAL_REPOSITORY:-$HOME/.m2/repository}"
 clean_local_repository() {
     echo "==> Cleaning local Maven repository..."
 
-    rm -rf "$LOCAL_REPOSITORY/tungnn/java/tutor/core"
-    rm -rf "$LOCAL_REPOSITORY/tungnn/java/tutor/infrastructure"
-    rm -rf "$LOCAL_REPOSITORY/tungnn/java/tutor/tool"
-    rm -rf "$LOCAL_REPOSITORY/tungnn/java/tutor/benchmark"
+    rm -rf "$LOCAL_REPOSITORY/tungnn/tutor/java/java-tutor"
+    rm -rf "$LOCAL_REPOSITORY/tungnn/tutor/java/java-core"
+    rm -rf "$LOCAL_REPOSITORY/tungnn/tutor/java/java-benchmark"
+    rm -rf "$LOCAL_REPOSITORY/tungnn/tutor/java/infrastructure"
+    rm -rf "$LOCAL_REPOSITORY/tungnn/tutor/java/tool"
 }
 
 package_project() {

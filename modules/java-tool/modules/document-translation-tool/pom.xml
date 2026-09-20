@@ -60,7 +60,7 @@
                                 <!-- Thiết lập Main-Class -->
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>tungnn.tutor.java.tool.translation.Application</mainClass>
+                                    <mainClass>tungnn.tutor.java.tool.translation_old.Application</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

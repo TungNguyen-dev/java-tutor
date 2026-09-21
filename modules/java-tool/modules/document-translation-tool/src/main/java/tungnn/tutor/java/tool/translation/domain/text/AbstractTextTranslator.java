@@ -9,11 +9,10 @@ public abstract class AbstractTextTranslator implements TextTranslator {
 
   @Override
   public TextTranslationResult translate(TextTranslationRequest request) {
-
     try {
-      var originalTextUnits = request.texts();
-
       validateRequest(request);
+
+      var originalTextUnits = request.texts();
 
       var originalTextUnitMap = createTextUnitMap(originalTextUnits);
 

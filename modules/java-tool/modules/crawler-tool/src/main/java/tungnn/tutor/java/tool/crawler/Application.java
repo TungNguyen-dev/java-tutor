@@ -106,7 +106,7 @@ public class Application {
           .filter(
               p -> {
                 try {
-                  return Files.isHidden(p);
+                  return !Files.isHidden(p);
                 } catch (IOException e) {
                   throw new RuntimeException(e);
                 }

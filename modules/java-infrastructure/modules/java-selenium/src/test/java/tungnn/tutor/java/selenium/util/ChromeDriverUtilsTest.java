@@ -140,7 +140,7 @@ class ChromeDriverUtilsTest {
     assertThatThrownBy(
             () -> ChromeDriverUtils.buildOptions((ChromeDriverUtils.ChromeDriverConfig) null))
         .isInstanceOf(NullPointerException.class)
-        .hasMessage("config");
+        .hasMessage("config must not be null");
   }
 
   @Test

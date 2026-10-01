@@ -4,17 +4,12 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import tungnn.tutor.java.core.lib.multithread.ConcurrentUtils;
 
 public final class ChromeDriverUtils {
 
@@ -72,11 +67,11 @@ public final class ChromeDriverUtils {
   }
 
   public static ChromeOptions buildOptions(ChromeDriverConfig config) {
-    Objects.requireNonNull(config, "config");
+    Objects.requireNonNull(config, "config must not be null");
 
     var options = new ChromeOptions();
 
-    // Chrome binary
+    // Configure Chrome binary path with environment variable override
     var binaryPath = System.getenv(BINARY_PATH_ENV);
     if (binaryPath == null || binaryPath.isBlank()) {
       options.setBinary(DEFAULT_BINARY_PATH);
@@ -139,7 +134,6 @@ public final class ChromeDriverUtils {
       }
 
       options.addArguments("--user-data-dir=" + profilePath.toAbsolutePath());
-
       options.addArguments("--profile-directory=Default");
     }
 
@@ -176,7 +170,7 @@ public final class ChromeDriverUtils {
   // =========================================================================
 
   public static ChromeDriver createDriver() {
-    return new ChromeDriver();
+    return new ChromeDriver(buildOptions(ChromeDriverConfig.defaults()));
   }
 
   public static ChromeDriver createDriver(String profileName) {
@@ -192,50 +186,32 @@ public final class ChromeDriverUtils {
       return List.of();
     }
 
-    try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-      // Submit all tasks first before joining to ensure true asynchronous execution
-      List<CompletableFuture<ChromeDriver>> futures =
-          Arrays.stream(profileNames)
-              .map(profile -> CompletableFuture.supplyAsync(() -> createDriver(profile), executor))
-              .toList();
+    var validProfiles = Arrays.stream(profileNames).filter(Objects::nonNull).toList();
 
-      return joinAll(futures);
+    if (validProfiles.isEmpty()) {
+      return List.of();
     }
+
+    // Delegate multithreaded execution to ConcurrentUtils
+    return ConcurrentUtils.executeConcurrently(validProfiles, ChromeDriverUtils::createDriver);
   }
 
   // =========================================================================
   // HELPERS
   // =========================================================================
 
-  private static List<ChromeDriver> joinAll(List<CompletableFuture<ChromeDriver>> futures) {
-    List<ChromeDriver> created = new ArrayList<>(futures.size());
-    RuntimeException failure = null;
-
-    for (CompletableFuture<ChromeDriver> future : futures) {
-      try {
-        created.add(future.join());
-      } catch (CompletionException | CancellationException e) {
-        if (failure == null) {
-          failure = e;
-        }
-      }
+  public static void quitQuietly(List<ChromeDriver> drivers) {
+    if (drivers == null || drivers.isEmpty()) {
+      return;
     }
 
-    // Perform cleanup if any error occurred during driver initialization
-    if (failure != null) {
-      quitQuietly(created);
-      throw failure;
-    }
-
-    return List.copyOf(created);
-  }
-
-  private static void quitQuietly(List<ChromeDriver> drivers) {
     for (ChromeDriver driver : drivers) {
-      try {
-        driver.quit();
-      } catch (RuntimeException ignored) {
-        // Best-effort cleanup
+      if (driver != null) {
+        try {
+          driver.quit();
+        } catch (RuntimeException ignored) {
+          // Best-effort cleanup without obscuring initial exception
+        }
       }
     }
   }

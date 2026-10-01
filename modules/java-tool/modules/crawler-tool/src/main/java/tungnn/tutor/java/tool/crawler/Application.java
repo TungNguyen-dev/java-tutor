@@ -45,7 +45,7 @@ public class Application {
     var chromeOptionsFactory = new ChromeOptionsFactory();
     var webDriverFactory = new ChromeWebDriverFactory(chromeOptionsFactory);
 
-    try (var webDriverPool = new PooledWebDriverPool(webDriverFactory, appConfig.poolSize());
+    try (var webDriverPool = new PooledWebDriverPool(appConfig.poolSize());
         PageCrawlerPool pageCrawlerPool =
             new KeyedPooledPageCrawlerPool(new KeyedPooledPageCrawlerFactory(webDriverPool))) {
 

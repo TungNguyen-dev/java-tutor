@@ -5,15 +5,14 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import tungnn.tutor.java.selenium.driver.WebDriverFactory;
 import tungnn.tutor.java.selenium.driver.options.ChromeOptionUtil;
 
 public class PooledWebDriverPool implements WebDriverPool {
 
   private final GenericObjectPool<WebDriver> pool;
 
-  public PooledWebDriverPool(WebDriverFactory driverFactory, int maxTotal) {
-    PooledWebDriverFactory factory = new PooledWebDriverFactory(driverFactory, maxTotal);
+  public PooledWebDriverPool(int maxTotal) {
+    PooledWebDriverFactory factory = new PooledWebDriverFactory(maxTotal);
 
     GenericObjectPoolConfig<WebDriver> config = new GenericObjectPoolConfig<>();
     config.setMaxTotal(maxTotal);

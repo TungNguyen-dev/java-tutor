@@ -8,15 +8,14 @@ import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.openqa.selenium.WebDriver;
-import tungnn.tutor.java.selenium.driver.WebDriverFactory;
+import tungnn.tutor.java.selenium.util.ChromeDriverUtils;
 
 public class PooledWebDriverFactory extends BasePooledObjectFactory<WebDriver> {
-  private final WebDriverFactory driverFactory;
+
   private final BlockingQueue<String> availableProfiles;
   private final Map<WebDriver, String> driverProfileMap;
 
-  public PooledWebDriverFactory(WebDriverFactory driverFactory, int maxTotal) {
-    this.driverFactory = driverFactory;
+  public PooledWebDriverFactory(int maxTotal) {
     this.availableProfiles = new LinkedBlockingQueue<>();
     this.driverProfileMap = new ConcurrentHashMap<>();
 
@@ -29,7 +28,7 @@ public class PooledWebDriverFactory extends BasePooledObjectFactory<WebDriver> {
   public WebDriver create() throws InterruptedException {
     String profileKey = availableProfiles.take();
     try {
-      WebDriver driver = driverFactory.getWebDriver(profileKey);
+      WebDriver driver = ChromeDriverUtils.createDriver(profileKey);
       driverProfileMap.put(driver, profileKey);
       return driver;
     } catch (Exception e) {

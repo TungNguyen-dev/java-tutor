@@ -45,7 +45,7 @@ public class Application {
     var chromeOptionsFactory = new ChromeOptionsFactory();
     var webDriverFactory = new ChromeWebDriverFactory(chromeOptionsFactory);
 
-    try (var webDriverPool = new PooledWebDriverPool(webDriverFactory, appConfig.poolSize());
+    try (var webDriverPool = new PooledWebDriverPool(appConfig.poolSize());
         PageCrawlerPool pageCrawlerPool =
             new KeyedPooledPageCrawlerPool(new KeyedPooledPageCrawlerFactory(webDriverPool))) {
 
@@ -106,7 +106,7 @@ public class Application {
           .filter(
               p -> {
                 try {
-                  return Files.isHidden(p);
+                  return !Files.isHidden(p);
                 } catch (IOException e) {
                   throw new RuntimeException(e);
                 }

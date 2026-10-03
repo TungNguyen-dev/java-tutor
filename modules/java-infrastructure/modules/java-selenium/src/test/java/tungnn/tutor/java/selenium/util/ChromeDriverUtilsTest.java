@@ -13,6 +13,33 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 class ChromeDriverUtilsTest {
 
+  @SuppressWarnings("unchecked")
+  private static Map<String, Object> chromeOptions(ChromeOptions options) {
+
+    return (Map<String, Object>) options.asMap().get("goog:chromeOptions");
+  }
+
+  private static void deleteDirectory(Path directory) {
+    if (!Files.exists(directory)) {
+      return;
+    }
+
+    try (var paths = Files.walk(directory)) {
+      paths
+          .sorted(Comparator.reverseOrder())
+          .forEach(
+              path -> {
+                try {
+                  Files.deleteIfExists(path);
+                } catch (Exception e) {
+                  throw new RuntimeException("Failed to delete: " + path, e);
+                }
+              });
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to delete directory: " + directory, e);
+    }
+  }
+
   @Test
   void shouldBuildDefaultOptions() {
     var options = ChromeDriverUtils.buildOptions(ChromeDriverUtils.ChromeDriverConfig.defaults());
@@ -171,32 +198,5 @@ class ChromeDriverUtilsTest {
     assertThat(driver.getCurrentUrl()).isEqualTo("https://www.google.com/");
 
     driver.quit();
-  }
-
-  @SuppressWarnings("unchecked")
-  private static Map<String, Object> chromeOptions(ChromeOptions options) {
-
-    return (Map<String, Object>) options.asMap().get("goog:chromeOptions");
-  }
-
-  private static void deleteDirectory(Path directory) {
-    if (!Files.exists(directory)) {
-      return;
-    }
-
-    try (var paths = Files.walk(directory)) {
-      paths
-          .sorted(Comparator.reverseOrder())
-          .forEach(
-              path -> {
-                try {
-                  Files.deleteIfExists(path);
-                } catch (Exception e) {
-                  throw new RuntimeException("Failed to delete: " + path, e);
-                }
-              });
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to delete directory: " + directory, e);
-    }
   }
 }

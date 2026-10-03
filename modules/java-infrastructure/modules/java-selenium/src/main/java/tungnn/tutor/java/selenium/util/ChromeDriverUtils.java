@@ -50,22 +50,6 @@ public final class ChromeDriverUtils {
   // 1. BUILD OPTIONS (CORE METHOD)
   // =========================================================================
 
-  public record ChromeDriverConfig(
-      String profileName, boolean enableBidi, boolean acceptInsecureCerts, boolean headless) {
-
-    public static ChromeDriverConfig defaults() {
-      return new ChromeDriverConfig(null, false, false, false);
-    }
-
-    public static ChromeDriverConfig profile(String profileName) {
-      return new ChromeDriverConfig(profileName, false, false, false);
-    }
-
-    public static ChromeDriverConfig bidi(String profileName) {
-      return new ChromeDriverConfig(profileName, true, false, false);
-    }
-  }
-
   public static ChromeOptions buildOptions(ChromeDriverConfig config) {
     Objects.requireNonNull(config, "config must not be null");
 
@@ -165,13 +149,13 @@ public final class ChromeDriverUtils {
     return buildOptions(new ChromeDriverConfig(profileName, enableBidi, false, false));
   }
 
-  // =========================================================================
-  // 2. CREATE DRIVER
-  // =========================================================================
-
   public static ChromeDriver createDriver() {
     return new ChromeDriver(buildOptions(ChromeDriverConfig.defaults()));
   }
+
+  // =========================================================================
+  // 2. CREATE DRIVER
+  // =========================================================================
 
   public static ChromeDriver createDriver(String profileName) {
     return new ChromeDriver(buildOptions(profileName, false));
@@ -196,10 +180,6 @@ public final class ChromeDriverUtils {
     return ConcurrentUtils.executeConcurrently(validProfiles, ChromeDriverUtils::createDriver);
   }
 
-  // =========================================================================
-  // HELPERS
-  // =========================================================================
-
   public static void quitQuietly(List<ChromeDriver> drivers) {
     if (drivers == null || drivers.isEmpty()) {
       return;
@@ -213,6 +193,26 @@ public final class ChromeDriverUtils {
           // Best-effort cleanup without obscuring initial exception
         }
       }
+    }
+  }
+
+  // =========================================================================
+  // HELPERS
+  // =========================================================================
+
+  public record ChromeDriverConfig(
+      String profileName, boolean enableBidi, boolean acceptInsecureCerts, boolean headless) {
+
+    public static ChromeDriverConfig defaults() {
+      return new ChromeDriverConfig(null, false, false, false);
+    }
+
+    public static ChromeDriverConfig profile(String profileName) {
+      return new ChromeDriverConfig(profileName, false, false, false);
+    }
+
+    public static ChromeDriverConfig bidi(String profileName) {
+      return new ChromeDriverConfig(profileName, true, false, false);
     }
   }
 }

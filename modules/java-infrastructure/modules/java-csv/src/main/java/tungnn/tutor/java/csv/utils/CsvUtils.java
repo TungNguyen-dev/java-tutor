@@ -20,37 +20,24 @@ import tungnn.tutor.java.core.lib.reflection.ReflectionUtil;
 
 public final class CsvUtils {
 
-  private CsvUtils() {
-    throw new UnsupportedOperationException("cannot instantiate utility class");
-  }
+  private static final Map<Class<?>, Function<String, Object>> CONVERTERS =
+      Map.of(
+          String.class, s -> s,
+          int.class, Integer::parseInt,
+          Integer.class, Integer::valueOf,
+          long.class, Long::parseLong,
+          Long.class, Long::valueOf,
+          double.class, Double::parseDouble,
+          Double.class, Double::valueOf,
+          boolean.class, Boolean::parseBoolean,
+          Boolean.class, Boolean::valueOf);
 
   // ==========================================
   // CSV CONFIG RECORD
   // ==========================================
 
-  public record CsvConfig(Charset charset, CSVFormat csvFormat) {
-
-    /** Default configuration for reading and writing CSV files. */
-    public static final CsvConfig DEFAULT =
-        of(
-            StandardCharsets.UTF_8,
-            CSVFormat.DEFAULT
-                .builder()
-                // Automatically uses the first record as column headers for name-based mapping
-                .setHeader()
-                // Treats header matching as case-insensitive to handle variations in column casing
-                .setIgnoreHeaderCase(true)
-                // Skips the header row so it is not processed as a data record in the stream
-                .setSkipHeaderRecord(true)
-                // Ignores blank lines to prevent processing empty records
-                .setIgnoreEmptyLines(true)
-                // Trims leading and trailing whitespaces from header names and field values
-                .setTrim(true)
-                .build());
-
-    public static CsvConfig of(Charset charset, CSVFormat csvFormat) {
-      return new CsvConfig(charset, csvFormat);
-    }
+  private CsvUtils() {
+    throw new UnsupportedOperationException("cannot instantiate utility class");
   }
 
   // ==========================================
@@ -229,18 +216,6 @@ public final class CsvUtils {
     return null;
   }
 
-  private static final Map<Class<?>, Function<String, Object>> CONVERTERS =
-      Map.of(
-          String.class, s -> s,
-          int.class, Integer::parseInt,
-          Integer.class, Integer::valueOf,
-          long.class, Long::parseLong,
-          Long.class, Long::valueOf,
-          double.class, Double::parseDouble,
-          Double.class, Double::valueOf,
-          boolean.class, Boolean::parseBoolean,
-          Boolean.class, Boolean::valueOf);
-
   private static Object convert(String value, Class<?> type) {
     if (value == null || value.isBlank()) {
       if (type.isPrimitive()) {
@@ -266,6 +241,31 @@ public final class CsvUtils {
         } catch (Exception _) {
         }
       }
+    }
+  }
+
+  public record CsvConfig(Charset charset, CSVFormat csvFormat) {
+
+    /** Default configuration for reading and writing CSV files. */
+    public static final CsvConfig DEFAULT =
+        of(
+            StandardCharsets.UTF_8,
+            CSVFormat.DEFAULT
+                .builder()
+                // Automatically uses the first record as column headers for name-based mapping
+                .setHeader()
+                // Treats header matching as case-insensitive to handle variations in column casing
+                .setIgnoreHeaderCase(true)
+                // Skips the header row so it is not processed as a data record in the stream
+                .setSkipHeaderRecord(true)
+                // Ignores blank lines to prevent processing empty records
+                .setIgnoreEmptyLines(true)
+                // Trims leading and trailing whitespaces from header names and field values
+                .setTrim(true)
+                .build());
+
+    public static CsvConfig of(Charset charset, CSVFormat csvFormat) {
+      return new CsvConfig(charset, csvFormat);
     }
   }
 }

@@ -34,7 +34,6 @@
     <modules>
         <module>modules/java-core</module>
         <module>modules/java-infrastructure</module>
-        <module>modules/java-tool</module>
         <module>modules/java-benchmark</module>
     </modules>
 

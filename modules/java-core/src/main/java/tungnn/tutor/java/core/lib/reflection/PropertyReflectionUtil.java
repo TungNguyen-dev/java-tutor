@@ -13,9 +13,6 @@ import java.util.stream.Stream;
 
 public final class PropertyReflectionUtil {
 
-  public record PropertyMetadata(
-      Field field, Method accessor, Method mutator, boolean readable, boolean writable) {}
-
   private PropertyReflectionUtil() {}
 
   public static List<PropertyMetadata> resolveProperties(Class<?> clazz) {
@@ -127,4 +124,7 @@ public final class PropertyReflectionUtil {
       throw new IllegalStateException("Cannot resolve record field: " + component.getName(), e);
     }
   }
+
+  public record PropertyMetadata(
+      Field field, Method accessor, Method mutator, boolean readable, boolean writable) {}
 }

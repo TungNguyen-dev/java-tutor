@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
-import tungnn.tutor.java.spring.tool.crawler.domain.CrawlRequest;
-import tungnn.tutor.java.spring.tool.crawler.domain.CrawlResult;
-import tungnn.tutor.java.spring.tool.crawler.domain.WebCrawler;
-import tungnn.tutor.java.spring.tool.crawler.domain.WebCrawlerType;
-import tungnn.tutor.java.spring.tool.crawler.infrastructure.pool.WebCrawlerPool;
+import tungnn.tutor.java.tool.crawler.core.domain.CrawlRequest;
+import tungnn.tutor.java.tool.crawler.core.domain.CrawlResult;
+import tungnn.tutor.java.tool.crawler.core.domain.WebCrawler;
+import tungnn.tutor.java.tool.crawler.core.domain.WebCrawlerType;
+import tungnn.tutor.java.tool.crawler.core.infrastructure.pool.WebCrawlerPool;
 
 public class BatchCrawlExecutor {
 

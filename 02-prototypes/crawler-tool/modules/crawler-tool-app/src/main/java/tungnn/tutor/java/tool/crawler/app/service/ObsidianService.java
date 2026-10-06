@@ -1,6 +1,6 @@
 package tungnn.tutor.java.tool.crawler.app.service;
 
-import tungnn.tutor.java.spring.tool.crawler.app.model.CrawlCourseResult;
+import tungnn.tutor.java.tool.crawler.app.model.CrawlCourseResult;
 
 public interface ObsidianService {
 

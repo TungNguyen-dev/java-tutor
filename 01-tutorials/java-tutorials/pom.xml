@@ -82,22 +82,28 @@
 
         <!-- ===== Logging (SLF4J + Log4j2) ===== -->
 
-        <!-- SLF4J API -->
+        <!-- 1. SLF4J API -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-        </dependency> <!-- Log4j2 API -->
+        </dependency>
+
+        <!-- 2. Log4j2 API -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${log4j2.version}</version>
-        </dependency> <!-- Log4j2 Implementation -->
+        </dependency>
+
+        <!-- 3. Log4j2 Implementation -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j2.version}</version>
-        </dependency> <!-- SLF4J → Log4j2 Binding -->
+        </dependency>
+
+        <!-- 4. SLF4J → Log4j2 Binding -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>

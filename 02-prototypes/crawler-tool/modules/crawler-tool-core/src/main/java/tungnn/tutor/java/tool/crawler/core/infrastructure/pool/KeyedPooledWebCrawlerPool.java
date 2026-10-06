@@ -7,8 +7,8 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import tungnn.tutor.java.spring.tool.crawler.domain.WebCrawler;
-import tungnn.tutor.java.spring.tool.crawler.domain.WebCrawlerType;
+import tungnn.tutor.java.tool.crawler.core.domain.WebCrawler;
+import tungnn.tutor.java.tool.crawler.core.domain.WebCrawlerType;
 
 public class KeyedPooledWebCrawlerPool implements WebCrawlerPool {
 

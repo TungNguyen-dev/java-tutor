@@ -3,8 +3,8 @@ package tungnn.tutor.java.tool.crawler.core.infrastructure.crawler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import tungnn.tutor.java.selenium.util.ElementUtil;
-import tungnn.tutor.java.spring.tool.crawler.domain.AbstractWebCrawler;
-import tungnn.tutor.java.spring.tool.crawler.domain.CrawlRequest;
+import tungnn.tutor.java.tool.crawler.core.domain.AbstractWebCrawler;
+import tungnn.tutor.java.tool.crawler.core.domain.CrawlRequest;
 
 public class GenericWebCrawler extends AbstractWebCrawler {
 

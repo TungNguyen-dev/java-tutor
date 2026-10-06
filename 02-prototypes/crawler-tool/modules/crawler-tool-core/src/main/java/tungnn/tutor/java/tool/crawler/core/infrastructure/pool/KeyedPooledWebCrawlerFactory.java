@@ -4,9 +4,9 @@ import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import tungnn.tutor.java.selenium.pool.WebDriverPool;
-import tungnn.tutor.java.spring.tool.crawler.domain.AbstractWebCrawler;
-import tungnn.tutor.java.spring.tool.crawler.domain.WebCrawler;
-import tungnn.tutor.java.spring.tool.crawler.domain.WebCrawlerType;
+import tungnn.tutor.java.tool.crawler.core.domain.AbstractWebCrawler;
+import tungnn.tutor.java.tool.crawler.core.domain.WebCrawler;
+import tungnn.tutor.java.tool.crawler.core.domain.WebCrawlerType;
 
 public class KeyedPooledWebCrawlerFactory
     extends BaseKeyedPooledObjectFactory<WebCrawlerType, WebCrawler> {

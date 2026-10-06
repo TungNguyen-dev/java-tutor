@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import tungnn.tutor.java.core.lib.io.filesystem.FileNameUtil;
 import tungnn.tutor.java.core.lib.io.filesystem.FileUtil;
-import tungnn.tutor.java.spring.tool.crawler.app.model.CrawlCourseResult;
-import tungnn.tutor.java.spring.tool.crawler.config.CrawlerConfig;
-import tungnn.tutor.java.spring.tool.crawler.domain.CrawlResult;
+import tungnn.tutor.java.tool.crawler.app.config.CrawlerConfig;
+import tungnn.tutor.java.tool.crawler.app.model.CrawlCourseResult;
+import tungnn.tutor.java.tool.crawler.core.domain.CrawlResult;
 
 @Service
 public class ObsidianServiceImpl implements ObsidianService {

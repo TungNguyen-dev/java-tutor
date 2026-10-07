@@ -7,7 +7,7 @@ set -euo pipefail
 # ------------------------------------------------------------------------------
 # Configuration & Defaults
 # ------------------------------------------------------------------------------
-ENV_FILE="${ENV_FILE:-.env}"
+ENV_FILE="${ENV_FILE:-dev.env}"
 
 # Generate dynamic timestamp (Format: YYYYMMDD-HHMMSS, e.g., 20261002-001251)
 TIMESTAMP="$(date +'%Y%m%d-%H%M%S')"
